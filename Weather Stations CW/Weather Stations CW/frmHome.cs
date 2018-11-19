@@ -10,9 +10,12 @@ using System.Windows.Forms;
 
 namespace Weather_Stations_CW
 {
-    public partial class WeatherInformation : Form
+    //TO DO LIST
+    //Exception handling inside properties
+
+    public partial class frmHome : Form
     {
-        public WeatherInformation()
+        public frmHome()
         {
             InitializeComponent();
         }

@@ -1,0 +1,5 @@
+D:\git\soft152CW\Weather Stations CW\Weather Stations CW\obj\Debug\Weather Stations CW.csprojAssemblyReference.cache
+D:\git\soft152CW\Weather Stations CW\Weather Stations CW\obj\Debug\Weather_Stations_CW.frmHome.resources
+D:\git\soft152CW\Weather Stations CW\Weather Stations CW\obj\Debug\Weather_Stations_CW.Properties.Resources.resources
+D:\git\soft152CW\Weather Stations CW\Weather Stations CW\obj\Debug\Weather Stations CW.csproj.GenerateResource.cache
+D:\git\soft152CW\Weather Stations CW\Weather Stations CW\obj\Debug\Weather Stations CW.csproj.CoreCompileInputs.cache

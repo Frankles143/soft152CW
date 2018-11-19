@@ -1,6 +1,6 @@
 ﻿namespace Weather_Stations_CW
 {
-    partial class WeatherInformation
+    partial class frmHome
     {
         /// <summary>
         /// Required designer variable.
@@ -30,12 +30,12 @@
         {
             this.SuspendLayout();
             // 
-            // WeatherInformation
+            // frmHome
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(843, 552);
-            this.Name = "WeatherInformation";
+            this.Name = "frmHome";
             this.Text = "Weather Information";
             this.ResumeLayout(false);
 

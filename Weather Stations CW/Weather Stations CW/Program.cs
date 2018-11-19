@@ -16,7 +16,7 @@ namespace Weather_Stations_CW
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new WeatherInformation());
+            Application.Run(new frmHome());
         }
     }
 }
