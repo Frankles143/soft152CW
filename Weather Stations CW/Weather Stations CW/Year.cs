@@ -13,11 +13,17 @@ namespace Weather_Stations_CW
         private MonthlyObservations[] monthlyObservationsArray;
 
         //Constructor
-        public Year(int theYearDate, string theYearDescription, MonthlyObservations[] theMonthlyObservationsArray)
+        public Year(string theYearDescription, int theYearDate, MonthlyObservations[] theMonthlyObservationsArray)
         {
             YearDate = theYearDate;
             YearDescription = theYearDescription;
             MonthlyObservationsArray = theMonthlyObservationsArray;
+        }
+
+        public Year(string theYearDescription, int theYearDate)
+        {
+            YearDate = theYearDate;
+            YearDescription = theYearDescription;
         }
 
         //Properties

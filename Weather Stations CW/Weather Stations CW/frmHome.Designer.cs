@@ -28,7 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.dlgOpenData = new System.Windows.Forms.OpenFileDialog();
             this.SuspendLayout();
+            // 
+            // dlgOpenData
+            // 
+            this.dlgOpenData.FileName = "inputEXTENDED";
             // 
             // frmHome
             // 
@@ -42,6 +47,8 @@
         }
 
         #endregion
+
+        private System.Windows.Forms.OpenFileDialog dlgOpenData;
     }
 }
 
