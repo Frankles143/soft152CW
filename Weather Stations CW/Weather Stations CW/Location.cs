@@ -16,7 +16,7 @@ namespace Weather_Stations_CW
         public Location(string theLocationName, string theStreetNameAndNumber, string theCounty, string thePostCode, string theLatitude, string theLongtitude, Year[] theYearsOfObservationsArray)
         {
             LocationName = theLocationName;
-            StreetNameAndNumber = theStreetNameAndNumber;
+            StreetNumberAndName = theStreetNameAndNumber;
             County = theCounty;
             PostCode = thePostCode;
             Latitude = theLatitude;
@@ -27,7 +27,7 @@ namespace Weather_Stations_CW
         public Location(string theLocationName, string theStreetNameAndNumber, string theCounty, string thePostCode, string theLatitude, string theLongtitude)
         {
             LocationName = theLocationName;
-            StreetNameAndNumber = theStreetNameAndNumber;
+            StreetNumberAndName = theStreetNameAndNumber;
             County = theCounty;
             PostCode = thePostCode;
             Latitude = theLatitude;
@@ -47,7 +47,7 @@ namespace Weather_Stations_CW
             }
         }
 
-        public string StreetNameAndNumber
+        public string StreetNumberAndName
         {
             set
             {
@@ -117,6 +117,17 @@ namespace Weather_Stations_CW
             {
                 return yearsOfObservationsArray;
             }
+        }
+
+        //string locationName, streetNumberAndName, county, postCode, latitude, longtitude;
+        //Outputting
+        public string OutputLocation()
+        {
+            string messageOut = "";
+
+            messageOut = string.Format($"Name and address: {LocationName}, {StreetNumberAndName}, {County}, {PostCode}. Latitude and longtitude: {Latitude},{Longtitude}");
+
+            return messageOut;
         }
     }
 }

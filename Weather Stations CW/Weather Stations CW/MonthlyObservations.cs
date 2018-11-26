@@ -8,10 +8,11 @@ namespace Weather_Stations_CW
 {
     class MonthlyObservations
     {
-        private int monthID, maxTemp, minTemp, daysAirFrost, mmRain, hrsSun;
+        private int monthID,  daysAirFrost;
+        private double maxTemp, minTemp, mmRain, hrsSun;
 
         //Constructor
-        public MonthlyObservations(int theMonthId, int theMaxTemp, int theMinTemp, int theDaysAirFrost, int theMmRain, int theHrsSun)
+        public MonthlyObservations(int theMonthId, double theMaxTemp, double theMinTemp, int theDaysAirFrost, double theMmRain, double theHrsSun)
         {
             MonthId = theMonthId;
             MaxTemp = theMaxTemp;
@@ -41,7 +42,7 @@ namespace Weather_Stations_CW
             }
         }
 
-        public int MaxTemp
+        public double MaxTemp
         {
             set
             {
@@ -60,7 +61,7 @@ namespace Weather_Stations_CW
             }
         }
 
-        public int MinTemp
+        public double MinTemp
         {
             set
             {
@@ -98,7 +99,7 @@ namespace Weather_Stations_CW
             }
         }
 
-        public int MmRain
+        public double MmRain
         {
             set
             {
@@ -117,7 +118,7 @@ namespace Weather_Stations_CW
             }
         }
 
-        public int HrsSun
+        public double HrsSun
         {
             set
             {
@@ -134,6 +135,17 @@ namespace Weather_Stations_CW
             {
                 return hrsSun;
             }
+        }
+
+        // (int theMonthId, double theMaxTemp, double theMinTemp, int theDaysAirFrost, double theMmRain, double theHrsSun)
+        //Outputting
+        public string OutputMonth()
+        {
+            string messageOut = "";
+
+            messageOut = string.Format($"Month ID: {MonthId}. Max temp this month was {MaxTemp}, and min temp was {MinTemp}. Days of air frost: {DaysAirFrost}. Rain in MM: {MmRain}. Hours of sunlight: {HrsSun}");
+
+            return messageOut;
         }
     }
 }

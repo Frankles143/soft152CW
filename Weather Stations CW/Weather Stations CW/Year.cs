@@ -13,6 +13,10 @@ namespace Weather_Stations_CW
         private MonthlyObservations[] monthlyObservationsArray;
 
         //Constructor
+        public Year()
+        {
+
+        }
         public Year(string theYearDescription, int theYearDate, MonthlyObservations[] theMonthlyObservationsArray)
         {
             YearDate = theYearDate;
@@ -68,6 +72,16 @@ namespace Weather_Stations_CW
             {
                 return monthlyObservationsArray;
             }
+        }
+
+        //Outputting
+        public string OutputYear()
+        {
+            string messageOut = "";
+
+            messageOut = string.Format($"Year: {YearDate}, description of this year: {YearDescription}.");
+
+            return messageOut;
         }
     }
 }
