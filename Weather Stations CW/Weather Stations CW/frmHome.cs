@@ -14,13 +14,14 @@ namespace Weather_Stations_CW
     //TO DO LIST
     //GUI
     //Outputting data in a good way
+    //Polymorphism for outputting specific data - shouldn't be too hard, read in the index from the user
 
     //Problems
-    //My Location array is not adding new locations to the array, everything is just being overwritten in index[0]
-    //I have 737 years in my years array - need to make sure it's filling the next index of the location array, not just increasing in years
+    //If I don't add any code, I can't break it?
 
     public partial class frmHome : Form
     {
+        //Arrays that can be accessed by all my methods
         Location[] locationArray;
         Year[] yearArray;
         MonthlyObservations[] monthlyArray;
@@ -40,7 +41,7 @@ namespace Weather_Stations_CW
             {
                 //Create and call Output Location
                 lstMainBox.Items.Add(locationArray[location].OutputLocation());
-                for (int year = 0; year < yearArray.Length; year++)
+                for (int year = 0; year < locationArray[location].YearsOfObservationsArray.Length; year++)
                 {
                     //Create and call Output Year
                     lstMainBox.Items.Add(locationArray[location].YearsOfObservationsArray[year].OutputYear());
@@ -60,7 +61,7 @@ namespace Weather_Stations_CW
             //Declare variables
 
             string filename;
-            int numberOfLocations;
+            int numberOfLocations, locationIndex = 0, yearIndex = 0;
 
             //Choosing file
             dlgOpenData.ShowDialog();
@@ -80,25 +81,26 @@ namespace Weather_Stations_CW
             //While loop to continue until no more data
             while (!fileInput.EndOfStream)
             {
-                //Gather location data and store appropriately - 6 lines
+                //Gather location data and store - 6 lines
                 //Number of years from that location - 1 line
-                //Create index for that location
                 //Year data - 2 lines
                 //Month data - 6 lines (12 times)
+                //Back up to year data until done
+                //Back up to location to start again until done
 
                 //Call methods (which calls the next method)
-                ReadLocation(ref locationArray, ref yearArray, ref monthlyArray, fileInput);
+                ReadLocation(ref locationArray, ref yearArray, ref monthlyArray, fileInput, ref locationIndex, ref yearIndex);
 
             }
+            //Closes the filereader when there is no more data
             fileInput.Close();
         }
 
         //Method to read in location data
-        private void ReadLocation(ref Location[] locationArray, ref Year[] yearArray, ref MonthlyObservations[] monthlyArray, StreamReader inputData)
+        private void ReadLocation(ref Location[] locationArray, ref Year[] yearArray, ref MonthlyObservations[] monthlyArray, StreamReader inputData, ref int locationIndex, ref int yearIndex)
         {
             //Delcare vars
             string locationName, streetNumberAndName, county, postCode, latitude, longtitude;
-            int locationIndex = 0;
 
             //Grab the location data
             locationName = inputData.ReadLine();
@@ -108,8 +110,8 @@ namespace Weather_Stations_CW
             latitude = inputData.ReadLine();
             longtitude = inputData.ReadLine();
 
-            //Call the other methods, passing the arrays in by ref so that I can input all the data from this method
-            ReadYear(ref yearArray, ref monthlyArray, inputData);
+            //Call the other methods, passing the arrays in by ref so that I can input all the data into the object
+            ReadYear(ref yearArray, ref monthlyArray, inputData, ref locationIndex);
 
             //New location object to put into array, then increase the index for the next time around
             Location tempLocation = new Location(locationName, streetNumberAndName, county, postCode, latitude, longtitude, yearArray);
@@ -119,17 +121,20 @@ namespace Weather_Stations_CW
         }
 
         //Method to read in year data
-        private void ReadYear(ref Year[] yearArray, ref MonthlyObservations[] monthlyArray, StreamReader inputData)
+        private void ReadYear(ref Year[] yearArray, ref MonthlyObservations[] monthlyArray, StreamReader inputData, ref int locationIndex)
         {
             //Delcare vars
             string yearDescription;
-            int numberOfYears, yearDate, yearIndex = 0;
+            int numberOfYears, yearDate;
 
             //Get number of years in this location
             numberOfYears = Convert.ToInt32(inputData.ReadLine());
+            yearArray = new Year[numberOfYears];
 
-            for (int i = 1; i <= numberOfYears; i++)
+            for (int year = 1; year <= numberOfYears; year++)
             {
+                //GrowArray(ref yearArray);
+
                 //Read in data
                 yearDescription = inputData.ReadLine();
                 yearDate = Convert.ToInt32(inputData.ReadLine());
@@ -140,11 +145,7 @@ namespace Weather_Stations_CW
                 //Create temp year object to pass data into year array, grow the array and increase the index for the next time around
                 Year tempYear = new Year(yearDescription, yearDate, monthlyArray);
 
-                GrowArray(ref yearArray);
-
-                yearArray[yearIndex] = tempYear;
-
-                yearIndex++;
+                yearArray[year - 1] = tempYear;
             }
         }
 

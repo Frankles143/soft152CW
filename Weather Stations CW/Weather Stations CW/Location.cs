@@ -24,16 +24,6 @@ namespace Weather_Stations_CW
             YearsOfObservationsArray = theYearsOfObservationsArray;
         }
 
-        public Location(string theLocationName, string theStreetNameAndNumber, string theCounty, string thePostCode, string theLatitude, string theLongtitude)
-        {
-            LocationName = theLocationName;
-            StreetNumberAndName = theStreetNameAndNumber;
-            County = theCounty;
-            PostCode = thePostCode;
-            Latitude = theLatitude;
-            Longtitude = theLongtitude;
-        }
-
         //Properties
         public string LocationName
         {
