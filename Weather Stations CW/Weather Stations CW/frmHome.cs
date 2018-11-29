@@ -59,41 +59,57 @@ namespace Weather_Stations_CW
         public void ReadInData()
         {
             //Declare variables
-
-            string filename;
+            string filename = "";
             int numberOfLocations, locationIndex = 0;
 
-            //Choosing file
-            dlgOpenData.ShowDialog();
-            filename = dlgOpenData.FileName;
-
-            //Reading in file
-            StreamReader fileInput = new StreamReader(filename);
-
-            //Number of locations - 1st line
-            numberOfLocations = Convert.ToInt32(fileInput.ReadLine());
-
-            //Create arrays
-            locationArray = new Location[numberOfLocations];
-            yearArray = new Year[0];
-            monthlyArray = new MonthlyObservations[12];
-
-            //While loop to continue until no more data
-            while (!fileInput.EndOfStream)
+            //exception handling
+            try
             {
-                //Gather location data and store - 6 lines
-                //Number of years from that location - 1 line
-                //Year data - 2 lines
-                //Month data - 6 lines (12 times)
-                //Back up to year data until done
-                //Back up to location to start again until done
+                //Choosing file
+                dlgOpenData.ShowDialog();
+                filename = dlgOpenData.FileName;
 
-                //Call methods (which calls the next method)
-                ReadLocation(ref locationArray, ref yearArray, ref monthlyArray, fileInput, ref locationIndex);
+                //Reading in file
 
+                //Old, inefficient
+                //StreamReader fileInput = new StreamReader(filename);
+
+                //Opens streamreader and clears it from memory once done
+                using (StreamReader fileInput = new StreamReader(filename))
+                {
+                    //Number of locations - 1st line
+                    numberOfLocations = Convert.ToInt32(fileInput.ReadLine());
+
+                    //Create arrays
+                    locationArray = new Location[numberOfLocations];
+                    yearArray = new Year[0];
+                    monthlyArray = new MonthlyObservations[12];
+
+                    //While loop to continue until no more data
+                    while (!fileInput.EndOfStream)
+                    {
+                        //Gather location data and store - 6 lines
+                        //Number of years from that location - 1 line
+                        //Year data - 2 lines
+                        //Month data - 6 lines (12 times)
+                        //Back up to year data until done
+                        //Back up to location to start again until done
+
+                        //Call methods (which calls the next method)
+                        ReadLocation(ref locationArray, ref yearArray, ref monthlyArray, fileInput, ref locationIndex);
+
+                    }
+                    //Close using streamreader
+                }
             }
-            //Closes the filereader when there is no more data
-            fileInput.Close();
+            catch (FileNotFoundException ex)
+            {
+                MessageBox.Show("Please choose a valid file " + ex.Message);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
         }
 
         //Method to read in location data

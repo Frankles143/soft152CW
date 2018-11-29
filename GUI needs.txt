@@ -1,0 +1,16 @@
+LOCATION:
+SEARCH for a location (have to create a search function with a bar? - I would have just had a drop down tbh)
+Edit the location data
+Add a new location
+Display location data appropriately
+
+
+YEAR: 
+Select and display a year of data
+Edit the year description
+Add an additional year of data (only 12 full months) - This might need to be an additional form
+
+
+MONTHLY OBSERVATIONS:
+Select and display monthly observation data 
+Edit an existing monthly observation - Another form?
