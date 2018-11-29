@@ -61,7 +61,7 @@ namespace Weather_Stations_CW
             //Declare variables
 
             string filename;
-            int numberOfLocations, locationIndex = 0, yearIndex = 0;
+            int numberOfLocations, locationIndex = 0;
 
             //Choosing file
             dlgOpenData.ShowDialog();
@@ -89,7 +89,7 @@ namespace Weather_Stations_CW
                 //Back up to location to start again until done
 
                 //Call methods (which calls the next method)
-                ReadLocation(ref locationArray, ref yearArray, ref monthlyArray, fileInput, ref locationIndex, ref yearIndex);
+                ReadLocation(ref locationArray, ref yearArray, ref monthlyArray, fileInput, ref locationIndex);
 
             }
             //Closes the filereader when there is no more data
@@ -97,7 +97,7 @@ namespace Weather_Stations_CW
         }
 
         //Method to read in location data
-        private void ReadLocation(ref Location[] locationArray, ref Year[] yearArray, ref MonthlyObservations[] monthlyArray, StreamReader inputData, ref int locationIndex, ref int yearIndex)
+        private void ReadLocation(ref Location[] locationArray, ref Year[] yearArray, ref MonthlyObservations[] monthlyArray, StreamReader inputData, ref int locationIndex)
         {
             //Delcare vars
             string locationName, streetNumberAndName, county, postCode, latitude, longtitude;
@@ -111,7 +111,7 @@ namespace Weather_Stations_CW
             longtitude = inputData.ReadLine();
 
             //Call the other methods, passing the arrays in by ref so that I can input all the data into the object
-            ReadYear(ref yearArray, ref monthlyArray, inputData, ref locationIndex);
+            ReadYear(ref yearArray, ref monthlyArray, inputData);
 
             //New location object to put into array, then increase the index for the next time around
             Location tempLocation = new Location(locationName, streetNumberAndName, county, postCode, latitude, longtitude, yearArray);
@@ -121,7 +121,7 @@ namespace Weather_Stations_CW
         }
 
         //Method to read in year data
-        private void ReadYear(ref Year[] yearArray, ref MonthlyObservations[] monthlyArray, StreamReader inputData, ref int locationIndex)
+        private void ReadYear(ref Year[] yearArray, ref MonthlyObservations[] monthlyArray, StreamReader inputData)
         {
             //Delcare vars
             string yearDescription;
