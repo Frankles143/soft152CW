@@ -12,12 +12,19 @@ using System.IO;
 namespace Weather_Stations_CW
 {
     //TO DO LIST
-    //GUI
+    //GUI - WIP
+        //Do I even need the month group box?
+    //Do I need to format postcodes correctly? 
     //Outputting data in a good way
-    //Polymorphism for outputting specific data - shouldn't be too hard, read in the index from the user
+        //Get search function working for location, then output location data and years in that location e.g 1997-2017 - bubble search?
+        //Use .Contains
+        //use this System.StringComparison.CurrentCultureIgnoreCase to ignore case in search
+        //Once location is working be able to type in a year of data from that location and output year description and 12 months of data
+        //Polymorphism for outputting specific data - shouldn't be too hard, read in the index from the user
+    //Get editing data working - Read in selected index and edit that specific index (depending on what you click on)
 
     //Problems
-    //If I don't add any code, I can't break it?
+    //None yet (that I know of)
 
     public partial class frmHome : Form
     {
@@ -32,6 +39,47 @@ namespace Weather_Stations_CW
             
             //ReadInData();
             //Outputting();
+        }
+
+        private void txtLocationSearch_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnSelectLocation_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnSelectYear_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnSelectMonth_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnExit_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        public void SearchLocations()
+        {
+            //Foreach (or for) to search through the index's, compare each index in a formatted string (so they can search for name/long/lat/postcode?)
+            //Save any hits (if compare.... == true then add to output array?)
         }
 
         public void Outputting()

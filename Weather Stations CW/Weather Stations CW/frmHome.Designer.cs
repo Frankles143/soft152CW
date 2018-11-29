@@ -69,6 +69,7 @@
             this.txtLocationSearch.Size = new System.Drawing.Size(288, 26);
             this.txtLocationSearch.TabIndex = 1;
             this.txtLocationSearch.Text = "";
+            this.txtLocationSearch.TextChanged += new System.EventHandler(this.txtLocationSearch_TextChanged);
             // 
             // btnSelectLocation
             // 
@@ -78,6 +79,7 @@
             this.btnSelectLocation.TabIndex = 2;
             this.btnSelectLocation.Text = "Select Location";
             this.btnSelectLocation.UseVisualStyleBackColor = true;
+            this.btnSelectLocation.Click += new System.EventHandler(this.btnSelectLocation_Click);
             // 
             // groupBox1
             // 
@@ -111,6 +113,7 @@
             this.btnSelectYear.TabIndex = 2;
             this.btnSelectYear.Text = "Select Year";
             this.btnSelectYear.UseVisualStyleBackColor = true;
+            this.btnSelectYear.Click += new System.EventHandler(this.btnSelectYear_Click);
             // 
             // groupBox3
             // 
@@ -132,6 +135,7 @@
             this.btnSelectMonth.TabIndex = 2;
             this.btnSelectMonth.Text = "Select Month";
             this.btnSelectMonth.UseVisualStyleBackColor = true;
+            this.btnSelectMonth.Click += new System.EventHandler(this.btnSelectMonth_Click);
             // 
             // btnAdd
             // 
@@ -142,6 +146,7 @@
             this.btnAdd.TabIndex = 6;
             this.btnAdd.Text = "Add";
             this.btnAdd.UseVisualStyleBackColor = true;
+            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
             // 
             // btnEdit
             // 
@@ -152,6 +157,7 @@
             this.btnEdit.TabIndex = 7;
             this.btnEdit.Text = "Edit";
             this.btnEdit.UseVisualStyleBackColor = true;
+            this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
             // 
             // txtYearSearch
             // 
@@ -179,6 +185,7 @@
             this.btnExit.TabIndex = 8;
             this.btnExit.Text = "Exit";
             this.btnExit.UseVisualStyleBackColor = true;
+            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
             // frmHome
             // 
