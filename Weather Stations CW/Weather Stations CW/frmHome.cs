@@ -29,9 +29,9 @@ namespace Weather_Stations_CW
         public frmHome()
         {
             InitializeComponent();
-            ReadInData();
-
-            Outputting();
+            
+            //ReadInData();
+            //Outputting();
         }
 
         public void Outputting()
@@ -239,6 +239,5 @@ namespace Weather_Stations_CW
             }
             Array.Resize(ref arrayToChange, arraySize + 1);
         }
-
     }
 }
