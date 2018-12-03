@@ -14,17 +14,17 @@ namespace Weather_Stations_CW
     //TO DO LIST
     //GUI - WIP
         //Do I even need the month group box?
-    //Do I need to format postcodes correctly? 
     //Outputting data in a good way
-        //Get search function working for location, then output location data and years in that location e.g 1997-2017 - bubble search?
-        //Use .Contains
-        //use this System.StringComparison.CurrentCultureIgnoreCase to ignore case in search
+        //Have select location work through the search method, pass in the index of the location selected
         //Once location is working be able to type in a year of data from that location and output year description and 12 months of data
         //Polymorphism for outputting specific data - shouldn't be too hard, read in the index from the user
     //Get editing data working - Read in selected index and edit that specific index (depending on what you click on)
 
     //Problems
-    //None yet (that I know of)
+    //Postcodes don't output in a regular way
+    //Waddington prints out streetnum weirdly - add exception that if left default like that it just "" that field?
+    //Need to be able to figure out which location has been chosen by user - either use the search function again or assign each location it's own index variable?
+    //Make sure when outputting months, the month ID is changed into January, February etc.
 
     public partial class frmHome : Form
     {
@@ -37,18 +37,25 @@ namespace Weather_Stations_CW
         {
             InitializeComponent();
             
-            //ReadInData();
-            //Outputting();
+            ReadInData();
+            Outputting(ref locationArray);
         }
 
         private void txtLocationSearch_TextChanged(object sender, EventArgs e)
         {
-
+            SearchLocations();
         }
 
         private void btnSelectLocation_Click(object sender, EventArgs e)
         {
+            int selectedIndex;
+            string locationString;
+            selectedIndex = lstMainBox.SelectedIndex;
+            locationString = lstMainBox.SelectedItem.ToString();
 
+            //Do a custom search when passing in this location string?
+            //This search could compare the output of location[i] to the location string instead of the custom string in the other one
+            //SearchLocations();
         }
 
         private void btnSelectYear_Click(object sender, EventArgs e)
@@ -73,38 +80,98 @@ namespace Weather_Stations_CW
 
         private void btnExit_Click(object sender, EventArgs e)
         {
-
+            this.Close();
         }
 
-        public void SearchLocations()
+        private void SearchLocations()
         {
-            //Foreach (or for) to search through the index's, compare each index in a formatted string (so they can search for name/long/lat/postcode?)
-            //Save any hits (if compare.... == true then add to output array?)
+            //Declare vars
+            string searchTerm, tempLocationData = "", searchTermCapitals, tempLocationDataCapitals;
+            int[] indexHit = new int[locationArray.Length];
+
+            //Get user input
+            searchTerm = txtLocationSearch.Text;
+            
+            //Clear first
+            lstMainBox.Items.Clear();
+            //locationName, streetNumberAndName, county, postCode, latitude, longtitude;
+            for (int location = 0; location < locationArray.Length; location++)
+            {
+                //Take the location index and put all of the data into a formatted string
+                tempLocationData = ($"{locationArray[location].LocationName} {locationArray[location].StreetNumberAndName} {locationArray[location].County} {locationArray[location].PostCode} {locationArray[location].Latitude} {locationArray[location].Longtitude}");
+
+                //Make that that and the searchTerm capitals
+                tempLocationDataCapitals = tempLocationData.ToUpper();
+                searchTermCapitals = searchTerm.ToUpper();
+
+                //Compare that formatted string to the searchTerm for hits, if there are hits then add that location index to the listbox
+                if (tempLocationDataCapitals.Contains(searchTermCapitals))
+                {
+                    lstMainBox.Items.Add(locationArray[location].OutputLocation());
+                }
+            }
         }
 
-        public void Outputting()
+        private void SearchLocations(string locationInfo)
         {
+            //custom search to get index of location
+        }
+
+        //Outputting with polymorphism
+        //Output everything
+        private void Outputting()
+        {
+            //Clear first
+            lstMainBox.Items.Clear();
             //Triple for loop to output everything
             for (int location = 0; location < locationArray.Length; location++)
             {
-                //Create and call Output Location
+                //Call Output Location
                 lstMainBox.Items.Add(locationArray[location].OutputLocation());
                 for (int year = 0; year < locationArray[location].YearsOfObservationsArray.Length; year++)
                 {
-                    //Create and call Output Year
+                    //Call Output Year
                     lstMainBox.Items.Add(locationArray[location].YearsOfObservationsArray[year].OutputYear());
                     for (int month = 0; month < monthlyArray.Length; month++)
                     {
+                        //Call Output month
                         lstMainBox.Items.Add(yearArray[year].MonthlyObservationsArray[month].OutputMonth());
                     }
                 }
             }
-
-
+        }
+        
+        //Output locations
+        private void Outputting(ref Location[] locationArray)
+        {
+            for (int location = 0; location < locationArray.Length; location++)
+            {
+                //Calls output location for every location
+                lstMainBox.Items.Add(locationArray[location].OutputLocation());
+            }
         }
 
-        //Method to pull in data
-        public void ReadInData()
+        //Output all years for a specific location
+        private void Outputting(ref Year[] yearArray, int locationIndex)
+        {
+            for (int year = 0; year < locationArray[locationIndex].YearsOfObservationsArray.Length; year++)
+            {
+                //call Output Year
+                lstMainBox.Items.Add(locationArray[locationIndex].YearsOfObservationsArray[year].OutputYear());
+            }
+        }
+
+        //Output all months, for a specific location, in a specific year
+        private void Outputting(ref MonthlyObservations[] monthlyArray, int locationIndex, int yearIndex)
+        {
+            for (int month = 0; month < monthlyArray.Length; month++)
+            {
+                lstMainBox.Items.Add(locationArray[locationIndex].YearsOfObservationsArray[yearIndex].MonthlyObservationsArray[month].OutputMonth());
+            }
+        }
+
+        //Method to pull in data from text file
+        private void ReadInData()
         {
             //Declare variables
             string filename = "";
@@ -118,11 +185,7 @@ namespace Weather_Stations_CW
                 filename = dlgOpenData.FileName;
 
                 //Reading in file
-
-                //Old, inefficient
-                //StreamReader fileInput = new StreamReader(filename);
-
-                //Opens streamreader and clears it from memory once done
+                //Opens streamreader
                 using (StreamReader fileInput = new StreamReader(filename))
                 {
                     //Number of locations - 1st line
@@ -147,7 +210,7 @@ namespace Weather_Stations_CW
                         ReadLocation(ref locationArray, ref yearArray, ref monthlyArray, fileInput, ref locationIndex);
 
                     }
-                    //Close using streamreader
+                    //Close streamreader
                 }
             }
             catch (FileNotFoundException ex)
