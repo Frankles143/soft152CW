@@ -183,6 +183,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "frmHome";
             this.Text = "Weather Information";
+            this.Load += new System.EventHandler(this.frmHome_Load);
             this.groupBox1.ResumeLayout(false);
             this.grpSelectYear.ResumeLayout(false);
             this.grpSelectMonth.ResumeLayout(false);

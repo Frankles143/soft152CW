@@ -186,7 +186,7 @@ namespace Weather_Stations_CW
                     break;
             }
 
-            messageOut = string.Format($"Month ID: {monthName}. Max temp this month was {MaxTemp}, and min temp was {MinTemp}. Days of air frost: {DaysAirFrost}. Rain in MM: {MmRain}. Hours of sunlight: {HrsSun}");
+            messageOut = string.Format($"{monthName}: Max temp this month was {MaxTemp}, and min temp was {MinTemp}. Days of air frost: {DaysAirFrost}. Rain in MM: {MmRain}. Hours of sunlight: {HrsSun}");
 
             return messageOut;
         }

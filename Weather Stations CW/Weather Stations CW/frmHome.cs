@@ -13,10 +13,21 @@ namespace Weather_Stations_CW
 {
     //TO DO LIST
     //GUI - WIP
-        //Do I even need the month group box?
+        //Completely re-do with picture on phone
+        //everytime I click on an index it will update the other listboxes?
+        //Search bar and small box for location - maybe just select index instead of hiding them (no worries for index numbers)
+        //A different listbox for years
+        //a data grid for month data
+        //Graphics on same screen on the other side
     //Outputting data in a good way
-        //Done ish?
+        //NOPE. See above
+    //Get adding done - new form?
     //Get editing data working - Read in selected index and edit that specific index (depending on what you click on)
+
+    //ASK LIZ
+    //Do I need to edit the text file when adding or editing? - Yes, cry.
+    //Can I have class level variables? - See comments
+    //GUI opinion? - Shite, re-do
 
     //Problems
     //Postcodes don't output in a regular way
@@ -26,22 +37,31 @@ namespace Weather_Stations_CW
     {
         //Arrays that can be accessed by all my methods
         Location[] locationArray;
+        //These shouldn't be here - I will get marked down
         Year[] yearArray;
         MonthlyObservations[] monthlyArray;
+        //This one is probably okay?
         Location locationMatch;
 
         public frmHome()
         {
             InitializeComponent();
-            
-            ReadInData();
-            Outputting(ref locationArray);
         }
 
+        //Reads in data, spits out location data for user to choose from and then brings the form into focus
+        private void frmHome_Load(object sender, EventArgs e)
+        {
+            ReadInData();
+            Outputting(ref locationArray);
+            this.Activate();
+        }
+
+        //Runs this everytime the text box is changed
         private void txtLocationSearch_TextChanged(object sender, EventArgs e)
         {
             lstMainBox.SelectedIndex = -1;
             btnSelectLocation.Enabled = true;
+            btnSelectYear.Enabled = false;
             SearchLocations();
         }
 
@@ -76,13 +96,12 @@ namespace Weather_Stations_CW
                 btnSelectYear.Enabled = true;
             }
 
-            txtLocationSearch.Clear();
+            //Dettach the event handler, clear the box and then reattach handler
+            txtLocationSearch.TextChanged -= txtLocationSearch_TextChanged;  
+            txtLocationSearch.Clear(); 
+            txtLocationSearch.TextChanged += txtLocationSearch_TextChanged; 
+            
 
-            //Grab the first year and the last year and output them in a formatted string
-            //int firstYear, lastYear;
-            //firstYear = locationMatch.YearsOfObservationsArray[0].YearDate;
-            //lastYear = locationMatch.YearsOfObservationsArray[locationMatch.YearsOfObservationsArray.Length - 1].YearDate;
-            //lstMainBox.Items.Add($"Please pick a year between {firstYear} and {lastYear} or enter 'all'");s
         }
 
         private void btnSelectYear_Click(object sender, EventArgs e)
@@ -114,13 +133,12 @@ namespace Weather_Stations_CW
                 }
                 btnSelectYear.Enabled = false;
             }
-
-            txtLocationSearch.Clear();
         }
 
+        //Might not need this?
         private void btnSelectMonth_Click(object sender, EventArgs e)
         {
-            //Might not need
+            
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
@@ -187,6 +205,7 @@ namespace Weather_Stations_CW
             return matchedLocation;
         }
 
+        //Why did I do this? Just use the fucking selected index you idiot-faced twat
         private Year getYearFromString(string yearInput)
         {
             Year matchedYear = null;
@@ -206,7 +225,7 @@ namespace Weather_Stations_CW
             return matchedYear;
         }
 
-        //Outputting with polymorphism
+        
         //Output everything
         private void Outputting()
         {
@@ -426,19 +445,19 @@ namespace Weather_Stations_CW
             Array.Resize(ref arrayToChange, arraySize + 1);
         }
 
-        private void GrowArray(ref MonthlyObservations[] arrayToChange)
-        {
-            int arraySize;
+        //private void GrowArray(ref MonthlyObservations[] arrayToChange)
+        //{
+        //    int arraySize;
 
-            if (arrayToChange == null)
-            {
-                arraySize = 0;
-            }
-            else
-            {
-                arraySize = arrayToChange.Length;
-            }
-            Array.Resize(ref arrayToChange, arraySize + 1);
-        }
+        //    if (arrayToChange == null)
+        //    {
+        //        arraySize = 0;
+        //    }
+        //    else
+        //    {
+        //        arraySize = arrayToChange.Length;
+        //    }
+        //    Array.Resize(ref arrayToChange, arraySize + 1);
+        //}
     }
 }
