@@ -33,18 +33,16 @@
             this.txtLocationSearch = new System.Windows.Forms.RichTextBox();
             this.btnSelectLocation = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.txtYearSearch = new System.Windows.Forms.RichTextBox();
+            this.grpSelectYear = new System.Windows.Forms.GroupBox();
             this.btnSelectYear = new System.Windows.Forms.Button();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.cmbMonthCombo = new System.Windows.Forms.ComboBox();
+            this.grpSelectMonth = new System.Windows.Forms.GroupBox();
             this.btnSelectMonth = new System.Windows.Forms.Button();
             this.btnAdd = new System.Windows.Forms.Button();
             this.btnEdit = new System.Windows.Forms.Button();
             this.btnExit = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            this.groupBox3.SuspendLayout();
+            this.grpSelectYear.SuspendLayout();
+            this.grpSelectMonth.SuspendLayout();
             this.SuspendLayout();
             // 
             // dlgOpenData
@@ -93,30 +91,21 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Search for location";
             // 
-            // groupBox2
+            // grpSelectYear
             // 
-            this.groupBox2.Controls.Add(this.txtYearSearch);
-            this.groupBox2.Controls.Add(this.btnSelectYear);
-            this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox2.Location = new System.Drawing.Point(9, 147);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(325, 97);
-            this.groupBox2.TabIndex = 4;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Select a year";
-            // 
-            // txtYearSearch
-            // 
-            this.txtYearSearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtYearSearch.Location = new System.Drawing.Point(15, 19);
-            this.txtYearSearch.Name = "txtYearSearch";
-            this.txtYearSearch.Size = new System.Drawing.Size(288, 26);
-            this.txtYearSearch.TabIndex = 3;
-            this.txtYearSearch.Text = "";
+            this.grpSelectYear.Controls.Add(this.btnSelectYear);
+            this.grpSelectYear.Enabled = false;
+            this.grpSelectYear.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grpSelectYear.Location = new System.Drawing.Point(9, 147);
+            this.grpSelectYear.Name = "grpSelectYear";
+            this.grpSelectYear.Size = new System.Drawing.Size(325, 81);
+            this.grpSelectYear.TabIndex = 4;
+            this.grpSelectYear.TabStop = false;
+            this.grpSelectYear.Text = "Select a year";
             // 
             // btnSelectYear
             // 
-            this.btnSelectYear.Location = new System.Drawing.Point(66, 51);
+            this.btnSelectYear.Location = new System.Drawing.Point(66, 31);
             this.btnSelectYear.Name = "btnSelectYear";
             this.btnSelectYear.Size = new System.Drawing.Size(190, 36);
             this.btnSelectYear.TabIndex = 2;
@@ -124,29 +113,21 @@
             this.btnSelectYear.UseVisualStyleBackColor = true;
             this.btnSelectYear.Click += new System.EventHandler(this.btnSelectYear_Click);
             // 
-            // groupBox3
+            // grpSelectMonth
             // 
-            this.groupBox3.Controls.Add(this.cmbMonthCombo);
-            this.groupBox3.Controls.Add(this.btnSelectMonth);
-            this.groupBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox3.Location = new System.Drawing.Point(12, 250);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(325, 101);
-            this.groupBox3.TabIndex = 5;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Select a month";
-            // 
-            // cmbMonthCombo
-            // 
-            this.cmbMonthCombo.FormattingEnabled = true;
-            this.cmbMonthCombo.Location = new System.Drawing.Point(12, 21);
-            this.cmbMonthCombo.Name = "cmbMonthCombo";
-            this.cmbMonthCombo.Size = new System.Drawing.Size(288, 24);
-            this.cmbMonthCombo.TabIndex = 3;
+            this.grpSelectMonth.Controls.Add(this.btnSelectMonth);
+            this.grpSelectMonth.Enabled = false;
+            this.grpSelectMonth.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grpSelectMonth.Location = new System.Drawing.Point(12, 234);
+            this.grpSelectMonth.Name = "grpSelectMonth";
+            this.grpSelectMonth.Size = new System.Drawing.Size(325, 86);
+            this.grpSelectMonth.TabIndex = 5;
+            this.grpSelectMonth.TabStop = false;
+            this.grpSelectMonth.Text = "Select a month";
             // 
             // btnSelectMonth
             // 
-            this.btnSelectMonth.Location = new System.Drawing.Point(63, 51);
+            this.btnSelectMonth.Location = new System.Drawing.Point(63, 33);
             this.btnSelectMonth.Name = "btnSelectMonth";
             this.btnSelectMonth.Size = new System.Drawing.Size(193, 36);
             this.btnSelectMonth.TabIndex = 2;
@@ -195,16 +176,16 @@
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.btnEdit);
             this.Controls.Add(this.btnAdd);
-            this.Controls.Add(this.groupBox3);
-            this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.grpSelectMonth);
+            this.Controls.Add(this.grpSelectYear);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.lstMainBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "frmHome";
             this.Text = "Weather Information";
             this.groupBox1.ResumeLayout(false);
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox3.ResumeLayout(false);
+            this.grpSelectYear.ResumeLayout(false);
+            this.grpSelectMonth.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -216,12 +197,10 @@
         private System.Windows.Forms.RichTextBox txtLocationSearch;
         private System.Windows.Forms.Button btnSelectLocation;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox grpSelectYear;
         private System.Windows.Forms.Button btnSelectYear;
-        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.GroupBox grpSelectMonth;
         private System.Windows.Forms.Button btnSelectMonth;
-        private System.Windows.Forms.RichTextBox txtYearSearch;
-        private System.Windows.Forms.ComboBox cmbMonthCombo;
         private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.Button btnEdit;
         private System.Windows.Forms.Button btnExit;

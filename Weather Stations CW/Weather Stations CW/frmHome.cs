@@ -15,16 +15,12 @@ namespace Weather_Stations_CW
     //GUI - WIP
         //Do I even need the month group box?
     //Outputting data in a good way
-        //Have select location work through the search method, pass in the index of the location selected
-        //Once location is working be able to type in a year of data from that location and output year description and 12 months of data
-        //Polymorphism for outputting specific data - shouldn't be too hard, read in the index from the user
+        //Done ish?
     //Get editing data working - Read in selected index and edit that specific index (depending on what you click on)
 
     //Problems
     //Postcodes don't output in a regular way
     //Waddington prints out streetnum weirdly - add exception that if left default like that it just "" that field?
-    //Need to be able to figure out which location has been chosen by user - either use the search function again or assign each location it's own index variable?
-    //Make sure when outputting months, the month ID is changed into January, February etc.
 
     public partial class frmHome : Form
     {
@@ -32,6 +28,7 @@ namespace Weather_Stations_CW
         Location[] locationArray;
         Year[] yearArray;
         MonthlyObservations[] monthlyArray;
+        Location locationMatch;
 
         public frmHome()
         {
@@ -43,34 +40,87 @@ namespace Weather_Stations_CW
 
         private void txtLocationSearch_TextChanged(object sender, EventArgs e)
         {
+            lstMainBox.SelectedIndex = -1;
+            btnSelectLocation.Enabled = true;
             SearchLocations();
         }
 
         private void btnSelectLocation_Click(object sender, EventArgs e)
         {
-
             int selectedIndex;
             string locationString;
+
             selectedIndex = lstMainBox.SelectedIndex;
-            locationString = lstMainBox.SelectedItem.ToString();
 
-            //This will return the object with the year and month data for that location inside it
-            Location match = getLocationFromString(locationString);
+            if (selectedIndex == -1)
+            {
+                MessageBox.Show("Please select a location");
+            }
+            else
+            {
+                locationString = lstMainBox.SelectedItem.ToString();
 
+                //This will return the object with the year and month data for that location inside it
+                locationMatch = getLocationFromString(locationString);
 
-            match.YearsOfObservationsArray[0];
+                lstMainBox.Items.Clear();
+                grpSelectYear.Enabled = true;
+
+                //Output all years
+                for (int year = 0; year < locationMatch.YearsOfObservationsArray.Length; year++)
+                {
+                    //call Output Year
+                    lstMainBox.Items.Add(locationMatch.YearsOfObservationsArray[year].OutputYear());
+                }
+                btnSelectLocation.Enabled = false;
+                btnSelectYear.Enabled = true;
+            }
+
+            txtLocationSearch.Clear();
+
+            //Grab the first year and the last year and output them in a formatted string
+            //int firstYear, lastYear;
+            //firstYear = locationMatch.YearsOfObservationsArray[0].YearDate;
+            //lastYear = locationMatch.YearsOfObservationsArray[locationMatch.YearsOfObservationsArray.Length - 1].YearDate;
+            //lstMainBox.Items.Add($"Please pick a year between {firstYear} and {lastYear} or enter 'all'");s
         }
-
-
 
         private void btnSelectYear_Click(object sender, EventArgs e)
         {
+            int selectedIndex;
+            string yearString;
 
+            selectedIndex = lstMainBox.SelectedIndex;
+
+            if (selectedIndex == -1)
+            {
+                MessageBox.Show("Please select a year");
+            }
+            else
+            {
+                yearString = lstMainBox.SelectedItem.ToString();
+
+                //This will return the object with the year and month data for that location inside it
+                Year yearMatch = getYearFromString(yearString);
+
+                lstMainBox.Items.Clear();
+                grpSelectMonth.Enabled = true;
+
+                //Output all years
+                for (int month = 0; month < yearMatch.MonthlyObservationsArray.Length; month++)
+                {
+                    //call Output Year
+                    lstMainBox.Items.Add(yearMatch.MonthlyObservationsArray[month].OutputMonth());
+                }
+                btnSelectYear.Enabled = false;
+            }
+
+            txtLocationSearch.Clear();
         }
 
         private void btnSelectMonth_Click(object sender, EventArgs e)
         {
-
+            //Might not need
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
@@ -135,6 +185,25 @@ namespace Weather_Stations_CW
                 }
             }
             return matchedLocation;
+        }
+
+        private Year getYearFromString(string yearInput)
+        {
+            Year matchedYear = null;
+            string yearToCheck;
+            //loop through locations, find a match and return that object
+            for (int i = 0; i < locationMatch.YearsOfObservationsArray.Length; i++)
+            {
+                //Output every location into a string, with the exact same formatting as the input
+                yearToCheck = locationMatch.YearsOfObservationsArray[i].OutputYear();
+
+                if (yearToCheck == yearInput)
+                {
+                    matchedYear = locationMatch.YearsOfObservationsArray[i];
+                    break;
+                }
+            }
+            return matchedYear;
         }
 
         //Outputting with polymorphism
