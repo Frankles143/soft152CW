@@ -48,15 +48,20 @@ namespace Weather_Stations_CW
 
         private void btnSelectLocation_Click(object sender, EventArgs e)
         {
+
             int selectedIndex;
             string locationString;
             selectedIndex = lstMainBox.SelectedIndex;
             locationString = lstMainBox.SelectedItem.ToString();
 
-            //Do a custom search when passing in this location string?
-            //This search could compare the output of location[i] to the location string instead of the custom string in the other one
-            //SearchLocations();
+            //This will return the object with the year and month data for that location inside it
+            Location match = getLocationFromString(locationString);
+
+
+            match.YearsOfObservationsArray[0];
         }
+
+
 
         private void btnSelectYear_Click(object sender, EventArgs e)
         {
@@ -83,6 +88,7 @@ namespace Weather_Stations_CW
             this.Close();
         }
 
+        //Method to search through the locations
         private void SearchLocations()
         {
             //Declare vars
@@ -112,9 +118,23 @@ namespace Weather_Stations_CW
             }
         }
 
-        private void SearchLocations(string locationInfo)
+        private Location getLocationFromString(string locationInput)
         {
-            //custom search to get index of location
+            Location matchedLocation = null;
+            string locationToCheck;
+            //loop through locations, find a match and return that object
+            for (int i = 0; i < locationArray.Length; i++)
+            {
+                //Output every location into a string, with the exact same formatting as the input
+                locationToCheck = locationArray[i].OutputLocation();
+
+                if (locationToCheck == locationInput)
+                {
+                    matchedLocation = locationArray[i];
+                    break;
+                }
+            }
+            return matchedLocation;
         }
 
         //Outputting with polymorphism
@@ -169,6 +189,7 @@ namespace Weather_Stations_CW
                 lstMainBox.Items.Add(locationArray[locationIndex].YearsOfObservationsArray[yearIndex].MonthlyObservationsArray[month].OutputMonth());
             }
         }
+
 
         //Method to pull in data from text file
         private void ReadInData()

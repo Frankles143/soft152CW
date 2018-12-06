@@ -34,13 +34,13 @@
             this.btnSelectLocation = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.txtYearSearch = new System.Windows.Forms.RichTextBox();
             this.btnSelectYear = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.cmbMonthCombo = new System.Windows.Forms.ComboBox();
             this.btnSelectMonth = new System.Windows.Forms.Button();
             this.btnAdd = new System.Windows.Forms.Button();
             this.btnEdit = new System.Windows.Forms.Button();
-            this.txtYearSearch = new System.Windows.Forms.RichTextBox();
-            this.cmbMonthCombo = new System.Windows.Forms.ComboBox();
             this.btnExit = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -105,6 +105,15 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Select a year";
             // 
+            // txtYearSearch
+            // 
+            this.txtYearSearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtYearSearch.Location = new System.Drawing.Point(15, 19);
+            this.txtYearSearch.Name = "txtYearSearch";
+            this.txtYearSearch.Size = new System.Drawing.Size(288, 26);
+            this.txtYearSearch.TabIndex = 3;
+            this.txtYearSearch.Text = "";
+            // 
             // btnSelectYear
             // 
             this.btnSelectYear.Location = new System.Drawing.Point(66, 51);
@@ -126,6 +135,14 @@
             this.groupBox3.TabIndex = 5;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Select a month";
+            // 
+            // cmbMonthCombo
+            // 
+            this.cmbMonthCombo.FormattingEnabled = true;
+            this.cmbMonthCombo.Location = new System.Drawing.Point(12, 21);
+            this.cmbMonthCombo.Name = "cmbMonthCombo";
+            this.cmbMonthCombo.Size = new System.Drawing.Size(288, 24);
+            this.cmbMonthCombo.TabIndex = 3;
             // 
             // btnSelectMonth
             // 
@@ -158,23 +175,6 @@
             this.btnEdit.Text = "Edit";
             this.btnEdit.UseVisualStyleBackColor = true;
             this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
-            // 
-            // txtYearSearch
-            // 
-            this.txtYearSearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtYearSearch.Location = new System.Drawing.Point(15, 19);
-            this.txtYearSearch.Name = "txtYearSearch";
-            this.txtYearSearch.Size = new System.Drawing.Size(288, 26);
-            this.txtYearSearch.TabIndex = 3;
-            this.txtYearSearch.Text = "";
-            // 
-            // cmbMonthCombo
-            // 
-            this.cmbMonthCombo.FormattingEnabled = true;
-            this.cmbMonthCombo.Location = new System.Drawing.Point(12, 21);
-            this.cmbMonthCombo.Name = "cmbMonthCombo";
-            this.cmbMonthCombo.Size = new System.Drawing.Size(288, 24);
-            this.cmbMonthCombo.TabIndex = 3;
             // 
             // btnExit
             // 
