@@ -35,11 +35,7 @@ namespace Weather_Stations_CW
 
     public partial class frmHome : Form
     {
-        //Arrays that can be accessed by all my methods
-        Location[] locationArray;
-        //These shouldn't be here - I will get marked down
-        Year[] yearArray;
-        MonthlyObservations[] monthlyArray;
+        
         //This one is probably okay?
         Location locationMatch;
 
@@ -52,7 +48,7 @@ namespace Weather_Stations_CW
         private void frmHome_Load(object sender, EventArgs e)
         {
             ReadInData();
-            Outputting(ref locationArray);
+            Outputting(ref Data.locationArray);
             this.Activate();
         }
 
@@ -161,7 +157,7 @@ namespace Weather_Stations_CW
         {
             //Declare vars
             string searchTerm, tempLocationData = "", searchTermCapitals, tempLocationDataCapitals;
-            int[] indexHit = new int[locationArray.Length];
+            int[] indexHit = new int[Data.locationArray.Length];
 
             //Get user input
             searchTerm = txtLocationSearch.Text;
@@ -169,10 +165,10 @@ namespace Weather_Stations_CW
             //Clear first
             lstMainBox.Items.Clear();
             //locationName, streetNumberAndName, county, postCode, latitude, longtitude;
-            for (int location = 0; location < locationArray.Length; location++)
+            for (int location = 0; location < Data.locationArray.Length; location++)
             {
                 //Take the location index and put all of the data into a formatted string
-                tempLocationData = ($"{locationArray[location].LocationName} {locationArray[location].StreetNumberAndName} {locationArray[location].County} {locationArray[location].PostCode} {locationArray[location].Latitude} {locationArray[location].Longtitude}");
+                tempLocationData = ($"{Data.locationArray[location].LocationName} {Data.locationArray[location].StreetNumberAndName} {Data.locationArray[location].County} {Data.locationArray[location].PostCode} {Data.locationArray[location].Latitude} {Data.locationArray[location].Longtitude}");
 
                 //Make that that and the searchTerm capitals
                 tempLocationDataCapitals = tempLocationData.ToUpper();
@@ -181,7 +177,7 @@ namespace Weather_Stations_CW
                 //Compare that formatted string to the searchTerm for hits, if there are hits then add that location index to the listbox
                 if (tempLocationDataCapitals.Contains(searchTermCapitals))
                 {
-                    lstMainBox.Items.Add(locationArray[location].OutputLocation());
+                    lstMainBox.Items.Add(Data.locationArray[location].OutputLocation());
                 }
             }
         }
@@ -191,14 +187,14 @@ namespace Weather_Stations_CW
             Location matchedLocation = null;
             string locationToCheck;
             //loop through locations, find a match and return that object
-            for (int i = 0; i < locationArray.Length; i++)
+            for (int i = 0; i < Data.locationArray.Length; i++)
             {
                 //Output every location into a string, with the exact same formatting as the input
-                locationToCheck = locationArray[i].OutputLocation();
+                locationToCheck = Data.locationArray[i].OutputLocation();
 
                 if (locationToCheck == locationInput)
                 {
-                    matchedLocation = locationArray[i];
+                    matchedLocation = Data.locationArray[i];
                     break;
                 }
             }
@@ -232,18 +228,18 @@ namespace Weather_Stations_CW
             //Clear first
             lstMainBox.Items.Clear();
             //Triple for loop to output everything
-            for (int location = 0; location < locationArray.Length; location++)
+            for (int location = 0; location < Data.locationArray.Length; location++)
             {
                 //Call Output Location
-                lstMainBox.Items.Add(locationArray[location].OutputLocation());
-                for (int year = 0; year < locationArray[location].YearsOfObservationsArray.Length; year++)
+                lstMainBox.Items.Add(Data.locationArray[location].OutputLocation());
+                for (int year = 0; year < Data.locationArray[location].YearsOfObservationsArray.Length; year++)
                 {
                     //Call Output Year
-                    lstMainBox.Items.Add(locationArray[location].YearsOfObservationsArray[year].OutputYear());
-                    for (int month = 0; month < monthlyArray.Length; month++)
+                    lstMainBox.Items.Add(Data.locationArray[location].YearsOfObservationsArray[year].OutputYear());
+                    for (int month = 0; month < Data.monthlyArray.Length; month++)
                     {
                         //Call Output month
-                        lstMainBox.Items.Add(yearArray[year].MonthlyObservationsArray[month].OutputMonth());
+                        lstMainBox.Items.Add(Data.yearArray[year].MonthlyObservationsArray[month].OutputMonth());
                     }
                 }
             }
@@ -262,10 +258,10 @@ namespace Weather_Stations_CW
         //Output all years for a specific location
         private void Outputting(ref Year[] yearArray, int locationIndex)
         {
-            for (int year = 0; year < locationArray[locationIndex].YearsOfObservationsArray.Length; year++)
+            for (int year = 0; year < Data.locationArray[locationIndex].YearsOfObservationsArray.Length; year++)
             {
                 //call Output Year
-                lstMainBox.Items.Add(locationArray[locationIndex].YearsOfObservationsArray[year].OutputYear());
+                lstMainBox.Items.Add(Data.locationArray[locationIndex].YearsOfObservationsArray[year].OutputYear());
             }
         }
 
@@ -274,7 +270,7 @@ namespace Weather_Stations_CW
         {
             for (int month = 0; month < monthlyArray.Length; month++)
             {
-                lstMainBox.Items.Add(locationArray[locationIndex].YearsOfObservationsArray[yearIndex].MonthlyObservationsArray[month].OutputMonth());
+                lstMainBox.Items.Add(Data.locationArray[locationIndex].YearsOfObservationsArray[yearIndex].MonthlyObservationsArray[month].OutputMonth());
             }
         }
 
@@ -301,9 +297,9 @@ namespace Weather_Stations_CW
                     numberOfLocations = Convert.ToInt32(fileInput.ReadLine());
 
                     //Create arrays
-                    locationArray = new Location[numberOfLocations];
-                    yearArray = new Year[0];
-                    monthlyArray = new MonthlyObservations[12];
+                    Data.locationArray = new Location[numberOfLocations];
+                    Data.yearArray = new Year[0];
+                    Data.monthlyArray = new MonthlyObservations[12];
 
                     //While loop to continue until no more data
                     while (!fileInput.EndOfStream)
@@ -316,7 +312,7 @@ namespace Weather_Stations_CW
                         //Back up to location to start again until done
 
                         //Call methods (which calls the next method)
-                        ReadLocation(ref locationArray, ref yearArray, ref monthlyArray, fileInput, ref locationIndex);
+                        ReadLocation(ref Data.locationArray, ref Data.yearArray, ref Data.monthlyArray, fileInput, ref locationIndex);
 
                     }
                     //Close streamreader

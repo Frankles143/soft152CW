@@ -13,3 +13,8 @@ C:\git\soft152CW\Weather Stations CW\Weather Stations CW\obj\Debug\Weather Stati
 C:\git\soft152CW\Weather Stations CW\Weather Stations CW\obj\Debug\Weather Stations CW.csproj.CoreCompileInputs.cache
 C:\git\soft152CW\Weather Stations CW\Weather Stations CW\obj\Debug\Weather Stations CW.exe
 C:\git\soft152CW\Weather Stations CW\Weather Stations CW\obj\Debug\Weather Stations CW.pdb
+D:\git\soft152CW\Weather Stations CW\Weather Stations CW\bin\Debug\Weather Stations CW.exe.config
+D:\git\soft152CW\Weather Stations CW\Weather Stations CW\bin\Debug\Weather Stations CW.exe
+D:\git\soft152CW\Weather Stations CW\Weather Stations CW\bin\Debug\Weather Stations CW.pdb
+D:\git\soft152CW\Weather Stations CW\Weather Stations CW\obj\Debug\Weather Stations CW.exe
+D:\git\soft152CW\Weather Stations CW\Weather Stations CW\obj\Debug\Weather Stations CW.pdb
