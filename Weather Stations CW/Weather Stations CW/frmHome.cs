@@ -14,10 +14,6 @@ namespace Weather_Stations_CW
     //TO DO LIST
     //GUI - WIP
         //Completely re-do with picture on phone
-        //everytime I click on an index it will update the other listboxes?
-        //Search bar and small box for location - maybe just select index instead of hiding them (no worries for index numbers)
-        //A different listbox for years
-        //a data grid for month data
         //Graphics on same screen on the other side
     //Outputting data in a good way
         //NOPE. See above
@@ -55,80 +51,103 @@ namespace Weather_Stations_CW
         //Runs this everytime the text box is changed
         private void txtLocationSearch_TextChanged(object sender, EventArgs e)
         {
-            lstMainBox.SelectedIndex = -1;
-            btnSelectLocation.Enabled = true;
-            btnSelectYear.Enabled = false;
             SearchLocations();
         }
 
-        private void btnSelectLocation_Click(object sender, EventArgs e)
+        private void lstLocations_SelectedIndexChanged(object sender, EventArgs e)
         {
             int selectedIndex;
             string locationString;
 
-            selectedIndex = lstMainBox.SelectedIndex;
+            selectedIndex = lstLocations.SelectedIndex;
 
-            if (selectedIndex == -1)
+
+            locationString = lstLocations.SelectedItem.ToString();
+
+            //This will return the object with the year and month data for that location inside it
+            locationMatch = getLocationFromString(locationString);
+
+            lstYears.Items.Clear();
+
+            //Output all years
+            for (int year = 0; year < locationMatch.YearsOfObservationsArray.Length; year++)
             {
-                MessageBox.Show("Please select a location");
+                //call Output Year
+                lstYears.Items.Add(locationMatch.YearsOfObservationsArray[year].OutputYear());
             }
-            else
-            {
-                locationString = lstMainBox.SelectedItem.ToString();
 
-                //This will return the object with the year and month data for that location inside it
-                locationMatch = getLocationFromString(locationString);
-
-                lstMainBox.Items.Clear();
-                grpSelectYear.Enabled = true;
-
-                //Output all years
-                for (int year = 0; year < locationMatch.YearsOfObservationsArray.Length; year++)
-                {
-                    //call Output Year
-                    lstMainBox.Items.Add(locationMatch.YearsOfObservationsArray[year].OutputYear());
-                }
-                btnSelectLocation.Enabled = false;
-                btnSelectYear.Enabled = true;
-            }
 
             //Dettach the event handler, clear the box and then reattach handler
-            txtLocationSearch.TextChanged -= txtLocationSearch_TextChanged;  
-            txtLocationSearch.Clear(); 
-            txtLocationSearch.TextChanged += txtLocationSearch_TextChanged; 
+            txtLocationSearch.TextChanged -= txtLocationSearch_TextChanged;
+            txtLocationSearch.Clear();
+            txtLocationSearch.TextChanged += txtLocationSearch_TextChanged;
+        }
+
+        private void btnSelectLocation_Click(object sender, EventArgs e)
+        {
+            //int selectedIndex;
+            //string locationString;
+
+            //selectedIndex = lstLocations.SelectedIndex;
+
+            //if (selectedIndex == -1)
+            //{
+            //    MessageBox.Show("Please select a location");
+            //}
+            //else
+            //{
+            //    locationString = lstLocations.SelectedItem.ToString();
+
+            //    //This will return the object with the year and month data for that location inside it
+            //    locationMatch = getLocationFromString(locationString);
+
+            //    lstLocations.Items.Clear();
+
+            //    //Output all years
+            //    for (int year = 0; year < locationMatch.YearsOfObservationsArray.Length; year++)
+            //    {
+            //        //call Output Year
+            //        lstLocations.Items.Add(locationMatch.YearsOfObservationsArray[year].OutputYear());
+            //    }
+            //}
+
+            ////Dettach the event handler, clear the box and then reattach handler
+            //txtLocationSearch.TextChanged -= txtLocationSearch_TextChanged;  
+            //txtLocationSearch.Clear(); 
+            //txtLocationSearch.TextChanged += txtLocationSearch_TextChanged; 
             
 
         }
 
         private void btnSelectYear_Click(object sender, EventArgs e)
         {
-            int selectedIndex;
-            string yearString;
+            //int selectedIndex;
+            //string yearString;
 
-            selectedIndex = lstMainBox.SelectedIndex;
+            //selectedIndex = lstMainBox.SelectedIndex;
 
-            if (selectedIndex == -1)
-            {
-                MessageBox.Show("Please select a year");
-            }
-            else
-            {
-                yearString = lstMainBox.SelectedItem.ToString();
+            //if (selectedIndex == -1)
+            //{
+            //    MessageBox.Show("Please select a year");
+            //}
+            //else
+            //{
+            //    yearString = lstMainBox.SelectedItem.ToString();
 
-                //This will return the object with the year and month data for that location inside it
-                Year yearMatch = getYearFromString(yearString);
+            //    //This will return the object with the year and month data for that location inside it
+            //    Year yearMatch = getYearFromString(yearString);
 
-                lstMainBox.Items.Clear();
-                grpSelectMonth.Enabled = true;
+            //    lstMainBox.Items.Clear();
+            //    grpSelectMonth.Enabled = true;
 
-                //Output all years
-                for (int month = 0; month < yearMatch.MonthlyObservationsArray.Length; month++)
-                {
-                    //call Output Year
-                    lstMainBox.Items.Add(yearMatch.MonthlyObservationsArray[month].OutputMonth());
-                }
-                btnSelectYear.Enabled = false;
-            }
+            //    //Output all years
+            //    for (int month = 0; month < yearMatch.MonthlyObservationsArray.Length; month++)
+            //    {
+            //        //call Output Year
+            //        lstMainBox.Items.Add(yearMatch.MonthlyObservationsArray[month].OutputMonth());
+            //    }
+            //    btnSelectYear.Enabled = false;
+            //}
         }
 
         //Might not need this?
@@ -163,7 +182,7 @@ namespace Weather_Stations_CW
             searchTerm = txtLocationSearch.Text;
             
             //Clear first
-            lstMainBox.Items.Clear();
+            lstLocations.Items.Clear();
             //locationName, streetNumberAndName, county, postCode, latitude, longtitude;
             for (int location = 0; location < Data.locationArray.Length; location++)
             {
@@ -177,7 +196,7 @@ namespace Weather_Stations_CW
                 //Compare that formatted string to the searchTerm for hits, if there are hits then add that location index to the listbox
                 if (tempLocationDataCapitals.Contains(searchTermCapitals))
                 {
-                    lstMainBox.Items.Add(Data.locationArray[location].OutputLocation());
+                    lstLocations.Items.Add(Data.locationArray[location].OutputLocation());
                 }
             }
         }
@@ -226,20 +245,20 @@ namespace Weather_Stations_CW
         private void Outputting()
         {
             //Clear first
-            lstMainBox.Items.Clear();
+            lstLocations.Items.Clear();
             //Triple for loop to output everything
             for (int location = 0; location < Data.locationArray.Length; location++)
             {
                 //Call Output Location
-                lstMainBox.Items.Add(Data.locationArray[location].OutputLocation());
+                lstLocations.Items.Add(Data.locationArray[location].OutputLocation());
                 for (int year = 0; year < Data.locationArray[location].YearsOfObservationsArray.Length; year++)
                 {
                     //Call Output Year
-                    lstMainBox.Items.Add(Data.locationArray[location].YearsOfObservationsArray[year].OutputYear());
+                    lstYears.Items.Add(Data.locationArray[location].YearsOfObservationsArray[year].OutputYear());
                     for (int month = 0; month < Data.monthlyArray.Length; month++)
                     {
                         //Call Output month
-                        lstMainBox.Items.Add(Data.yearArray[year].MonthlyObservationsArray[month].OutputMonth());
+                        //dgdMonths.Items.Add(Data.yearArray[year].MonthlyObservationsArray[month].OutputMonth());
                     }
                 }
             }
@@ -251,7 +270,7 @@ namespace Weather_Stations_CW
             for (int location = 0; location < locationArray.Length; location++)
             {
                 //Calls output location for every location
-                lstMainBox.Items.Add(locationArray[location].OutputLocation());
+                lstLocations.Items.Add(locationArray[location].OutputLocation());
             }
         }
 
@@ -261,7 +280,7 @@ namespace Weather_Stations_CW
             for (int year = 0; year < Data.locationArray[locationIndex].YearsOfObservationsArray.Length; year++)
             {
                 //call Output Year
-                lstMainBox.Items.Add(Data.locationArray[locationIndex].YearsOfObservationsArray[year].OutputYear());
+                lstYears.Items.Add(Data.locationArray[locationIndex].YearsOfObservationsArray[year].OutputYear());
             }
         }
 
@@ -270,7 +289,7 @@ namespace Weather_Stations_CW
         {
             for (int month = 0; month < monthlyArray.Length; month++)
             {
-                lstMainBox.Items.Add(Data.locationArray[locationIndex].YearsOfObservationsArray[yearIndex].MonthlyObservationsArray[month].OutputMonth());
+                //lstMainBox.Items.Add(Data.locationArray[locationIndex].YearsOfObservationsArray[yearIndex].MonthlyObservationsArray[month].OutputMonth());
             }
         }
 
@@ -440,6 +459,8 @@ namespace Weather_Stations_CW
             }
             Array.Resize(ref arrayToChange, arraySize + 1);
         }
+
+
 
         //private void GrowArray(ref MonthlyObservations[] arrayToChange)
         //{

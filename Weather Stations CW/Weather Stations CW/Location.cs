@@ -115,7 +115,7 @@ namespace Weather_Stations_CW
         {
             string messageOut = "";
 
-            messageOut = string.Format($"Name and address: {LocationName}, {StreetNumberAndName}, {County}, {PostCode}. Latitude and longtitude: {Latitude},{Longtitude}");
+            messageOut = string.Format($"{LocationName}: {StreetNumberAndName}, {County}, {PostCode}. Latitude and longtitude: {Latitude},{Longtitude}");
 
             return messageOut;
         }
