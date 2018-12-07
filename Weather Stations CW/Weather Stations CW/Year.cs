@@ -75,7 +75,7 @@ namespace Weather_Stations_CW
         {
             string messageOut = "";
 
-            messageOut = string.Format($"Year: {YearDate}, description of this year: {YearDescription}.");
+            messageOut = string.Format($"{YearDate}: {YearDescription}.");
 
             return messageOut;
         }

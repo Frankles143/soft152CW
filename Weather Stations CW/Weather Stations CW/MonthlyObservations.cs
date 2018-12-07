@@ -143,6 +143,7 @@ namespace Weather_Stations_CW
         {
             string messageOut = "", monthName = "";
 
+            //Changing ID to month name
             switch (MonthId)
             {
                 case 1:
@@ -186,7 +187,7 @@ namespace Weather_Stations_CW
                     break;
             }
 
-            messageOut = string.Format($"{monthName}: Max temp this month was {MaxTemp}, and min temp was {MinTemp}. Days of air frost: {DaysAirFrost}. Rain in MM: {MmRain}. Hours of sunlight: {HrsSun}");
+            messageOut = string.Format($"{monthName}: Max. and min. temp this month was {MaxTemp}°C, {MinTemp}°C. Days of air frost: {DaysAirFrost}. Rain in MM: {MmRain}. Hours of sunlight: {HrsSun}");
 
             return messageOut;
         }

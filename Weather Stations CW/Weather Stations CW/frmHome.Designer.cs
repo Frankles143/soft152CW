@@ -31,8 +31,8 @@
             this.dlgOpenData = new System.Windows.Forms.OpenFileDialog();
             this.txtLocationSearch = new System.Windows.Forms.RichTextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.btnExit = new System.Windows.Forms.Button();
             this.lstLocations = new System.Windows.Forms.ListBox();
+            this.btnExit = new System.Windows.Forms.Button();
             this.grpYear = new System.Windows.Forms.GroupBox();
             this.lstYears = new System.Windows.Forms.ListBox();
             this.grpMonths = new System.Windows.Forms.GroupBox();
@@ -77,17 +77,6 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Search for location";
             // 
-            // btnExit
-            // 
-            this.btnExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnExit.Location = new System.Drawing.Point(1149, 448);
-            this.btnExit.Name = "btnExit";
-            this.btnExit.Size = new System.Drawing.Size(80, 54);
-            this.btnExit.TabIndex = 8;
-            this.btnExit.Text = "Exit";
-            this.btnExit.UseVisualStyleBackColor = true;
-            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
-            // 
             // lstLocations
             // 
             this.lstLocations.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -98,6 +87,17 @@
             this.lstLocations.Size = new System.Drawing.Size(568, 116);
             this.lstLocations.TabIndex = 2;
             this.lstLocations.SelectedIndexChanged += new System.EventHandler(this.lstLocations_SelectedIndexChanged);
+            // 
+            // btnExit
+            // 
+            this.btnExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnExit.Location = new System.Drawing.Point(1149, 448);
+            this.btnExit.Name = "btnExit";
+            this.btnExit.Size = new System.Drawing.Size(80, 54);
+            this.btnExit.TabIndex = 8;
+            this.btnExit.Text = "Exit";
+            this.btnExit.UseVisualStyleBackColor = true;
+            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
             // grpYear
             // 
@@ -119,6 +119,7 @@
             this.lstYears.Name = "lstYears";
             this.lstYears.Size = new System.Drawing.Size(617, 158);
             this.lstYears.TabIndex = 0;
+            this.lstYears.SelectedIndexChanged += new System.EventHandler(this.lstYears_SelectedIndexChanged);
             // 
             // grpMonths
             // 
@@ -133,6 +134,8 @@
             // 
             // dgdMonths
             // 
+            this.dgdMonths.AllowUserToAddRows = false;
+            this.dgdMonths.AllowUserToDeleteRows = false;
             this.dgdMonths.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgdMonths.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.monthId,
@@ -144,6 +147,7 @@
             this.dgdMonths.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgdMonths.Location = new System.Drawing.Point(3, 18);
             this.dgdMonths.Name = "dgdMonths";
+            this.dgdMonths.ReadOnly = true;
             this.dgdMonths.Size = new System.Drawing.Size(567, 246);
             this.dgdMonths.TabIndex = 0;
             // 
