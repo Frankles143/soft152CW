@@ -43,6 +43,9 @@
             this.daysAirFrost = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.mmRain = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.hrsSun = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnEditYear = new System.Windows.Forms.Button();
+            this.btnSave = new System.Windows.Forms.Button();
+            this.btnAddYear = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.grpYear.SuspendLayout();
             this.grpMonths.SuspendLayout();
@@ -90,7 +93,7 @@
             // 
             // btnExit
             // 
-            this.btnExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnExit.Location = new System.Drawing.Point(1149, 448);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(80, 54);
@@ -125,7 +128,7 @@
             // 
             this.grpMonths.Controls.Add(this.dgdMonths);
             this.grpMonths.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grpMonths.Location = new System.Drawing.Point(9, 208);
+            this.grpMonths.Location = new System.Drawing.Point(9, 203);
             this.grpMonths.Name = "grpMonths";
             this.grpMonths.Size = new System.Drawing.Size(573, 267);
             this.grpMonths.TabIndex = 10;
@@ -155,37 +158,78 @@
             // 
             this.monthId.HeaderText = "Month";
             this.monthId.Name = "monthId";
+            this.monthId.ReadOnly = true;
             // 
             // maxTemp
             // 
             this.maxTemp.HeaderText = "Max. Temperature";
             this.maxTemp.Name = "maxTemp";
+            this.maxTemp.ReadOnly = true;
             // 
             // minTemp
             // 
             this.minTemp.HeaderText = "Min. Temperature";
             this.minTemp.Name = "minTemp";
+            this.minTemp.ReadOnly = true;
             // 
             // daysAirFrost
             // 
             this.daysAirFrost.HeaderText = "Days of Air Frost";
             this.daysAirFrost.Name = "daysAirFrost";
+            this.daysAirFrost.ReadOnly = true;
             // 
             // mmRain
             // 
             this.mmRain.HeaderText = "Rain (mm)";
             this.mmRain.Name = "mmRain";
+            this.mmRain.ReadOnly = true;
             // 
             // hrsSun
             // 
             this.hrsSun.HeaderText = "Hours of Sunlight";
             this.hrsSun.Name = "hrsSun";
+            this.hrsSun.ReadOnly = true;
+            // 
+            // btnEditYear
+            // 
+            this.btnEditYear.Enabled = false;
+            this.btnEditYear.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnEditYear.Location = new System.Drawing.Point(151, 476);
+            this.btnEditYear.Name = "btnEditYear";
+            this.btnEditYear.Size = new System.Drawing.Size(108, 33);
+            this.btnEditYear.TabIndex = 11;
+            this.btnEditYear.Text = "Edit this year";
+            this.btnEditYear.UseVisualStyleBackColor = true;
+            // 
+            // btnSave
+            // 
+            this.btnSave.Enabled = false;
+            this.btnSave.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSave.Location = new System.Drawing.Point(281, 476);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Size = new System.Drawing.Size(108, 33);
+            this.btnSave.TabIndex = 12;
+            this.btnSave.Text = "Save";
+            this.btnSave.UseVisualStyleBackColor = true;
+            // 
+            // btnAddYear
+            // 
+            this.btnAddYear.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnAddYear.Location = new System.Drawing.Point(609, 208);
+            this.btnAddYear.Name = "btnAddYear";
+            this.btnAddYear.Size = new System.Drawing.Size(108, 33);
+            this.btnAddYear.TabIndex = 13;
+            this.btnAddYear.Text = "Add year";
+            this.btnAddYear.UseVisualStyleBackColor = true;
             // 
             // frmHome
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1241, 514);
+            this.Controls.Add(this.btnAddYear);
+            this.Controls.Add(this.btnSave);
+            this.Controls.Add(this.btnEditYear);
             this.Controls.Add(this.grpMonths);
             this.Controls.Add(this.grpYear);
             this.Controls.Add(this.btnExit);
@@ -218,6 +262,9 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn daysAirFrost;
         private System.Windows.Forms.DataGridViewTextBoxColumn mmRain;
         private System.Windows.Forms.DataGridViewTextBoxColumn hrsSun;
+        private System.Windows.Forms.Button btnEditYear;
+        private System.Windows.Forms.Button btnSave;
+        private System.Windows.Forms.Button btnAddYear;
     }
 }
 

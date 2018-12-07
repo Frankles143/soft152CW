@@ -21,6 +21,7 @@ namespace Weather_Stations_CW
         //Have an edit button that lets users change the data grid entries and then a save button that makes it readonly again
         //I will need a SAVE DATA method to put the entire locationArray back into the text file
         //dataGridView.Rows[4].Cells["Name"].Value.ToString(); - This will help for outputting from datagrid to array
+    //Need some exception handling for pulling in data - check problems
 
     //ASK LIZ
     //Do I need to edit the text file when adding or editing? - Yes, cry. --Just rewrite the whole damn thing?
@@ -28,6 +29,8 @@ namespace Weather_Stations_CW
     //Problems
     //Postcodes don't output in a regular way
     //Waddington prints out streetnum weirdly - add exception that if left default like that it just "" that field?
+    //Location info goes out of box
+    //One of the location's has an ' that is printed out weirdly
 
     public partial class frmHome : Form
     {
