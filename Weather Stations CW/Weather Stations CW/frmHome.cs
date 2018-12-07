@@ -20,9 +20,10 @@ namespace Weather_Stations_CW
     //Get editing data working - Read in selected index and edit that specific index (depending on what you click on)
         //Have an edit button that lets users change the data grid entries and then a save button that makes it readonly again
         //I will need a SAVE DATA method to put the entire locationArray back into the text file
+        //dataGridView.Rows[4].Cells["Name"].Value.ToString(); - This will help for outputting from datagrid to array
 
     //ASK LIZ
-    //Do I need to edit the text file when adding or editing? - Yes, cry.
+    //Do I need to edit the text file when adding or editing? - Yes, cry. --Just rewrite the whole damn thing?
 
     //Problems
     //Postcodes don't output in a regular way
@@ -39,63 +40,27 @@ namespace Weather_Stations_CW
         private void frmHome_Load(object sender, EventArgs e)
         {
             ReadInData();
-            Outputting(ref Data.locationArray);
+            OutputLocationData();
+            GetMonthName();
             this.Activate();
         }
 
-        //Runs this everytime the text box is changed
         private void txtLocationSearch_TextChanged(object sender, EventArgs e)
         {
+            dgdMonths.Rows.Clear();
+            lstYears.Items.Clear();
             SearchLocations();
         }
 
         private void lstLocations_SelectedIndexChanged(object sender, EventArgs e)
         {
-            int selectedIndex;
-            string locationString;
-
-            dgdMonths.Rows.Clear();
-            selectedIndex = lstLocations.SelectedIndex;
-            locationString = lstLocations.SelectedItem.ToString();
-
-            //This will return the object with the year and month data for that location inside it
-            Location locationMatch = getLocationFromString(locationString);
-
-            lstYears.Items.Clear();
-            //Output all years
-            for (int year = 0; year < locationMatch.YearsOfObservationsArray.Length; year++)
-            {
-                //call Output Year
-                lstYears.Items.Add(locationMatch.YearsOfObservationsArray[year].OutputYear());
-            }
-
-            //Dettach the event handler, clear the box and then reattach handler
-            txtLocationSearch.TextChanged -= txtLocationSearch_TextChanged;
-            txtLocationSearch.Clear();
-            txtLocationSearch.TextChanged += txtLocationSearch_TextChanged;
+            OutputYearData();
         }
 
         private void lstYears_SelectedIndexChanged(object sender, EventArgs e)
         {
             int yearIndex = lstYears.SelectedIndex;
             OutputMonthData(yearIndex);
-        }
-
-        private void OutputMonthData(int selectedYear)
-        {
-            dgdMonths.Rows.Clear();
-            
-            string locationString = lstLocations.SelectedItem.ToString();
-            Location currentLocation = getLocationFromString(locationString);
-            
-            //dataGridView.Rows[4].Cells["Name"].Value.ToString();
-            //Loops through every month
-            for (int i = 0; i < 12; i++)
-            {
-                //Outputs the month data for location and year selected
-                dgdMonths.Rows.Add(currentLocation.YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].MonthId, currentLocation.YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].MaxTemp, currentLocation.YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].MinTemp, currentLocation.YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].DaysAirFrost, currentLocation.YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].MmRain, currentLocation.YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].HrsSun);
-            }
-            dgdMonths.Refresh();
         }
 
         private void btnExit_Click(object sender, EventArgs e)
@@ -151,59 +116,59 @@ namespace Weather_Stations_CW
             }
             return matchedLocation;
         }
-
-        ////Why did I do this? Just use the fucking selected index you idiot-faced twat
-        //private Year getYearFromString(string yearInput)
-        //{
-        //    Year matchedYear = null;
-        //    string yearToCheck;
-        //    //loop through locations, find a match and return that object
-        //    for (int i = 0; i < locationMatch.YearsOfObservationsArray.Length; i++)
-        //    {
-        //        //Output every location into a string, with the exact same formatting as the input
-        //        yearToCheck = locationMatch.YearsOfObservationsArray[i].OutputYear();
-
-        //        if (yearToCheck == yearInput)
-        //        {
-        //            matchedYear = locationMatch.YearsOfObservationsArray[i];
-        //            break;
-        //        }
-        //    }
-        //    return matchedYear;
-        //}
-
-        
-        //Output everything
-        private void Outputting()
-        {
-            //Clear first
-            lstLocations.Items.Clear();
-            //Triple for loop to output everything
-            for (int location = 0; location < Data.locationArray.Length; location++)
-            {
-                //Call Output Location
-                lstLocations.Items.Add(Data.locationArray[location].OutputLocation());
-                for (int year = 0; year < Data.locationArray[location].YearsOfObservationsArray.Length; year++)
-                {
-                    //Call Output Year
-                    lstYears.Items.Add(Data.locationArray[location].YearsOfObservationsArray[year].OutputYear());
-                    for (int month = 0; month < Data.monthlyArray.Length; month++)
-                    {
-                        //Call Output month
-                        //dgdMonths.Items.Add(Data.yearArray[year].MonthlyObservationsArray[month].OutputMonth());
-                    }
-                }
-            }
-        }
         
         //Output locations
-        private void Outputting(ref Location[] locationArray)
+        private void OutputLocationData()
         {
-            for (int location = 0; location < locationArray.Length; location++)
+            for (int location = 0; location < Data.locationArray.Length; location++)
             {
                 //Calls output location for every location
-                lstLocations.Items.Add(locationArray[location].OutputLocation());
+                lstLocations.Items.Add(Data.locationArray[location].OutputLocation());
             }
+        }
+
+        //Output all years for one location
+        private void OutputYearData()
+        {
+            int selectedIndex;
+            string locationString;
+
+            dgdMonths.Rows.Clear();
+            selectedIndex = lstLocations.SelectedIndex;
+            locationString = lstLocations.SelectedItem.ToString();
+
+            //This will return the object with the year and month data for that location inside it
+            Location locationMatch = getLocationFromString(locationString);
+
+            lstYears.Items.Clear();
+            //Output all years
+            for (int year = 0; year < locationMatch.YearsOfObservationsArray.Length; year++)
+            {
+                //call Output Year
+                lstYears.Items.Add(locationMatch.YearsOfObservationsArray[year].OutputYear());
+            }
+
+            //Dettach the event handler, clear the box and then reattach handler
+            txtLocationSearch.TextChanged -= txtLocationSearch_TextChanged;
+            txtLocationSearch.Clear();
+            txtLocationSearch.TextChanged += txtLocationSearch_TextChanged;
+        }
+
+        //Output all months in a year for a specific location
+        private void OutputMonthData(int selectedYear)
+        {
+            dgdMonths.Rows.Clear();
+
+            string locationString = lstLocations.SelectedItem.ToString();
+            Location currentLocation = getLocationFromString(locationString);
+
+            //Loops through every month
+            for (int i = 0; i < 12; i++)
+            {
+                //Outputs the month data for location and year selected
+                dgdMonths.Rows.Add(currentLocation.YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].MonthName, currentLocation.YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].MaxTemp, currentLocation.YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].MinTemp, currentLocation.YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].DaysAirFrost, currentLocation.YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].MmRain, currentLocation.YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].HrsSun);
+            }
+            dgdMonths.Refresh();
         }
 
         //Method to pull in data from text file
@@ -373,21 +338,62 @@ namespace Weather_Stations_CW
             Array.Resize(ref arrayToChange, arraySize + 1);
         }
 
+        private void GetMonthName()
+        {
+            //Triple for loop to catch everything
+            for (int location = 0; location < Data.locationArray.Length; location++)
+            {
+                for (int year = 0; year < Data.locationArray[location].YearsOfObservationsArray.Length; year++)
+                {
+                    for (int month = 0; month < Data.monthlyArray.Length; month++)
+                    {
+                        //Changing ID to month name
+                        switch (Data.locationArray[location].YearsOfObservationsArray[year].MonthlyObservationsArray[month].MonthId)
+                        {
+                            case 1:
+                                Data.locationArray[location].YearsOfObservationsArray[year].MonthlyObservationsArray[month].MonthName = "January";
+                                break;
+                            case 2:
+                                Data.locationArray[location].YearsOfObservationsArray[year].MonthlyObservationsArray[month].MonthName = "February";
+                                break;
+                            case 3:
+                                Data.locationArray[location].YearsOfObservationsArray[year].MonthlyObservationsArray[month].MonthName = "March";
+                                break;
+                            case 4:
+                                Data.locationArray[location].YearsOfObservationsArray[year].MonthlyObservationsArray[month].MonthName = "April";
+                                break;
+                            case 5:
+                                Data.locationArray[location].YearsOfObservationsArray[year].MonthlyObservationsArray[month].MonthName = "May";
+                                break;
+                            case 6:
+                                Data.locationArray[location].YearsOfObservationsArray[year].MonthlyObservationsArray[month].MonthName = "June";
+                                break;
+                            case 7:
+                                Data.locationArray[location].YearsOfObservationsArray[year].MonthlyObservationsArray[month].MonthName = "July";
+                                break;
+                            case 8:
+                                Data.locationArray[location].YearsOfObservationsArray[year].MonthlyObservationsArray[month].MonthName = "August";
+                                break;
+                            case 9:
+                                Data.locationArray[location].YearsOfObservationsArray[year].MonthlyObservationsArray[month].MonthName = "September";
+                                break;
+                            case 10:
+                                Data.locationArray[location].YearsOfObservationsArray[year].MonthlyObservationsArray[month].MonthName = "October";
+                                break;
+                            case 11:
+                                Data.locationArray[location].YearsOfObservationsArray[year].MonthlyObservationsArray[month].MonthName = "November";
+                                break;
+                            case 12:
+                                Data.locationArray[location].YearsOfObservationsArray[year].MonthlyObservationsArray[month].MonthName = "December";
+                                break;
 
+                            default:
+                                break;
+                        }
+                    }
+                }
+            }
+        }
 
-        //private void GrowArray(ref MonthlyObservations[] arrayToChange)
-        //{
-        //    int arraySize;
-
-        //    if (arrayToChange == null)
-        //    {
-        //        arraySize = 0;
-        //    }
-        //    else
-        //    {
-        //        arraySize = arrayToChange.Length;
-        //    }
-        //    Array.Resize(ref arrayToChange, arraySize + 1);
-        //}
     }
 }

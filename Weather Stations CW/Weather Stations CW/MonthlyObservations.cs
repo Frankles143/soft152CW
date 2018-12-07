@@ -10,10 +10,12 @@ namespace Weather_Stations_CW
     {
         private int monthID,  daysAirFrost;
         private double maxTemp, minTemp, mmRain, hrsSun;
+        private string monthName;
 
         //Constructor
         public MonthlyObservations(int theMonthId, double theMaxTemp, double theMinTemp, int theDaysAirFrost, double theMmRain, double theHrsSun)
         {
+            GetMonthName();
             MonthId = theMonthId;
             MaxTemp = theMaxTemp;
             MinTemp = theMinTemp;
@@ -137,12 +139,21 @@ namespace Weather_Stations_CW
             }
         }
 
-        // (int theMonthId, double theMaxTemp, double theMinTemp, int theDaysAirFrost, double theMmRain, double theHrsSun)
-        //Outputting
-        public string OutputMonth()
+        public string MonthName
         {
-            string messageOut = "", monthName = "";
+            set
+            {
+                monthName = value;
+            }
+            get
+            {
+                return monthName;
+            }
+        }
 
+        public void GetMonthName()
+        {
+            
             //Changing ID to month name
             switch (MonthId)
             {
@@ -186,10 +197,17 @@ namespace Weather_Stations_CW
                 default:
                     break;
             }
-
-            messageOut = string.Format($"{monthName}: Max. and min. temp this month was {MaxTemp}°C, {MinTemp}°C. Days of air frost: {DaysAirFrost}. Rain in MM: {MmRain}. Hours of sunlight: {HrsSun}");
-
-            return messageOut;
         }
+
+        // (int theMonthId, double theMaxTemp, double theMinTemp, int theDaysAirFrost, double theMmRain, double theHrsSun)
+        //Outputting
+        //public string OutputMonth()
+        //{
+        //    string messageOut = "";
+
+        //    messageOut = string.Format($"{MonthName}: Max. and min. temp this month was {MaxTemp}°C, {MinTemp}°C. Days of air frost: {DaysAirFrost}. Rain in MM: {MmRain}. Hours of sunlight: {HrsSun}");
+
+        //    return messageOut;
+        //}
     }
 }
