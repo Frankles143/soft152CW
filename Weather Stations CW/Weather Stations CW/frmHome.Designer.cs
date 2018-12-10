@@ -218,7 +218,6 @@
             // 
             // btnNewLocation
             // 
-            this.btnNewLocation.Enabled = false;
             this.btnNewLocation.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnNewLocation.Location = new System.Drawing.Point(650, 31);
             this.btnNewLocation.Name = "btnNewLocation";
@@ -238,7 +237,7 @@
             this.btnNewYear.TabIndex = 14;
             this.btnNewYear.Text = "New Year";
             this.btnNewYear.UseVisualStyleBackColor = true;
-            this.btnNewYear.Click += new System.EventHandler(this.btnNewYear_Click_1);
+            this.btnNewYear.Click += new System.EventHandler(this.btnNewYear_Click);
             // 
             // frmHome
             // 

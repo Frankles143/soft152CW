@@ -172,6 +172,7 @@
             this.btnSave.TabIndex = 2;
             this.btnSave.Text = "Save";
             this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // btnExit
             // 
@@ -181,6 +182,7 @@
             this.btnExit.TabIndex = 3;
             this.btnExit.Text = "Exit";
             this.btnExit.UseVisualStyleBackColor = true;
+            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
             // frmEditAdd
             // 
@@ -200,19 +202,19 @@
 
         #endregion
         private System.Windows.Forms.GroupBox grpLocation;
-        private System.Windows.Forms.TextBox txtNameInput;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox txtStreetNumberAndNameInput;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox txtPostcodeInput;
-        private System.Windows.Forms.TextBox txtCountyInput;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox txtLatitudeInput;
-        private System.Windows.Forms.TextBox txtLongtitudeInput;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnExit;
+        public System.Windows.Forms.TextBox txtNameInput;
+        public System.Windows.Forms.TextBox txtStreetNumberAndNameInput;
+        public System.Windows.Forms.TextBox txtPostcodeInput;
+        public System.Windows.Forms.TextBox txtCountyInput;
+        public System.Windows.Forms.TextBox txtLatitudeInput;
+        public System.Windows.Forms.TextBox txtLongtitudeInput;
     }
 }

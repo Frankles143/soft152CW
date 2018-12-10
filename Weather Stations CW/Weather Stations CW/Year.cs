@@ -20,10 +20,9 @@ namespace Weather_Stations_CW
             MonthlyObservationsArray = theMonthlyObservationsArray;
         }
 
-        public Year(string theYearDescription, int theYearDate)
+        public Year()
         {
-            YearDate = theYearDate;
-            YearDescription = theYearDescription;
+            
         }
 
         //Properties

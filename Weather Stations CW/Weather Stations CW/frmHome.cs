@@ -70,51 +70,25 @@ namespace Weather_Stations_CW
         private void btnNewLocation_Click(object sender, EventArgs e)
         {
             //Brings up form for adding/editing
+            Location newLocation = NewLocationDialog();
+
+            if (newLocation != null)
+            {
+                SaveNewLocation(newLocation);
+            }
+            
         }
 
-        private void btnNewYear_Click_1(object sender, EventArgs e)
+        private void btnNewYear_Click(object sender, EventArgs e)
         {
             //Bring up custom dialog box for year description and then save the new year into the array
-            string newYearDescription = NewYearDialog();
-            SaveNewYear(newYearDescription);
+            Year newYear = NewYearDialog();
+            if (newYear != null)
+            {
+                SaveNewYear(newYear);
+            }
 
             OutputYearData();
-        }
-
-        private string NewYearDialog()
-        {
-            frmNewYear newYearDialog = new frmNewYear();
-
-            // Show testDialog as a modal dialog and determine if DialogResult = OK.
-            if (newYearDialog.ShowDialog(this) == DialogResult.OK)
-            {
-                // Read the contents of newYearDialog's textbox and returns it
-                return newYearDialog.txtDescriptionInput.Text;
-            }
-            else
-            {
-                newYearDialog.Dispose();
-                return null;
-            }
-        }
-
-        private void SaveNewYear(string newYearText)
-        {
-            //Grab the the year description and the location index
-            string locationString = lstLocations.SelectedItem.ToString();
-            int locationIndex = getLocationIndexFromString(locationString), newYearDate, arraySize;
-            Year[] arrayToChange = Data.locationArray[locationIndex].YearsOfObservationsArray;
-
-            //get array size, increase the array and then increase the variable to make it easier to work with down below
-            arraySize = Data.locationArray[locationIndex].YearsOfObservationsArray.Length;
-            //This doesn't work - create method in location class so I can access it directly?
-            Array.Resize(ref arrayToChange, arraySize + 1);
-            arraySize++;
-
-            //Calculate the new year number by adding 1 to the previous year, then store all the new year data in the array
-            newYearDate = Convert.ToInt32(Data.locationArray[locationIndex].YearsOfObservationsArray[arraySize - 1].YearDate) + 1;
-            Data.locationArray[locationIndex].YearsOfObservationsArray[arraySize].YearDescription = newYearText;
-            Data.locationArray[locationIndex].YearsOfObservationsArray[arraySize].YearDate = newYearDate;
         }
 
         private void btnEdit_Click(object sender, EventArgs e)
@@ -130,6 +104,91 @@ namespace Weather_Stations_CW
         private void btnExit_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        //Method to get location data from user
+        private Location NewLocationDialog()
+        {
+            frmEditAdd newLocationDialog = new frmEditAdd();
+            string locationName, streetNumberAndName, county, postCode, latitude, longtitude;
+            Location newLocation;
+
+            if (newLocationDialog.ShowDialog(this) == DialogResult.OK)
+            {
+                //put everything into an object and return it
+                locationName = newLocationDialog.txtNameInput.Text;
+                streetNumberAndName = newLocationDialog.txtStreetNumberAndNameInput.Text;
+                county = newLocationDialog.txtCountyInput.Text;
+                postCode = newLocationDialog.txtPostcodeInput.Text;
+                latitude = newLocationDialog.txtLatitudeInput.Text;
+                longtitude = newLocationDialog.txtLongtitudeInput.Text;
+                Year[] newYear = new Year[0];
+
+                newLocation = new Location(locationName, streetNumberAndName, county, postCode, latitude, longtitude, newYear);
+
+                return newLocation;
+            }
+            else
+            {
+                newLocationDialog.Dispose();
+                return null;
+            }
+        }
+
+        //Saves new location array
+        private void SaveNewLocation(Location newLocation)
+        {
+            //Increase the location arraty by one and then add in the new location object
+            GrowArray(ref Data.locationArray);
+            Data.locationArray[Data.locationArray.Length - 1] = newLocation;
+
+            OutputLocationData();
+        }
+
+        //Gets new year data from user
+        private Year NewYearDialog()
+        {
+            frmNewYear newYearDialog = new frmNewYear();
+            Year tempYear;
+            int yearDate;
+            string yearDescription;
+            MonthlyObservations[] newMonthlyObservations = new MonthlyObservations[12];
+
+
+            // Show testDialog as a modal dialog and determine if DialogResult = OK.
+            if (newYearDialog.ShowDialog(this) == DialogResult.OK)
+            {
+                // Read from textboxes to create a new object to return
+                yearDate = Convert.ToInt32(newYearDialog.txtYearDateInput.Text);
+                yearDescription = newYearDialog.txtDescriptionInput.Text;
+
+                tempYear = new Year(yearDescription, yearDate, newMonthlyObservations);
+
+                return tempYear;
+            }
+            else
+            {
+                newYearDialog.Dispose();
+                return null;
+            }
+        }
+
+        //Saves new year array for a specific location
+        private void SaveNewYear(Year newYear)
+        {
+            //Declare variables and objects
+            string locationString = lstLocations.SelectedItem.ToString();
+            int locationIndex = getLocationIndexFromString(locationString), arraySize;
+            Location tempLocation = new Location();
+
+            //Call method to increase year array for that location
+            tempLocation.IncreaseYearArray(locationIndex);
+
+            //get array size
+            arraySize = Data.locationArray[locationIndex].YearsOfObservationsArray.Length;
+
+            //Put new data into an object and then put that into new index
+            Data.locationArray[locationIndex].YearsOfObservationsArray[arraySize - 1] = newYear;
         }
 
         //Method to search through the locations
@@ -244,14 +303,23 @@ namespace Weather_Stations_CW
 
             string locationString = lstLocations.SelectedItem.ToString();
             Location currentLocation = getLocationFromString(locationString);
-
-            //Loops through every month
-            for (int i = 0; i < 12; i++)
+            try
             {
-                //Outputs the month data for location and year selected
-                dgdMonths.Rows.Add(currentLocation.YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].MonthName, currentLocation.YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].MaxTemp, currentLocation.YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].MinTemp, currentLocation.YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].DaysAirFrost, currentLocation.YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].MmRain, currentLocation.YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].HrsSun);
+                //Loops through every month
+                for (int i = 0; i < 12; i++)
+                {
+                    //Outputs the month data for location and year selected
+                    dgdMonths.Rows.Add(currentLocation.YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].MonthName, currentLocation.YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].MaxTemp, currentLocation.YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].MinTemp, currentLocation.YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].DaysAirFrost, currentLocation.YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].MmRain, currentLocation.YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].HrsSun);
+                }
+                dgdMonths.Refresh();
             }
-            dgdMonths.Refresh();
+            catch (NullReferenceException)
+            {
+                for (int i = 0; i < 12; i++)
+                {
+                    dgdMonths.Rows.Add(Data.yearArray[0].MonthlyObservationsArray[i].MonthName,"","","","","");
+                }
+            }
         }
 
         //Method to pull in data from text file

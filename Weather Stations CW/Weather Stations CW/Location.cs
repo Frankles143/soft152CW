@@ -24,6 +24,11 @@ namespace Weather_Stations_CW
             YearsOfObservationsArray = theYearsOfObservationsArray;
         }
 
+        public Location()
+        {
+
+        }
+
         //Properties
         public string LocationName
         {
@@ -107,6 +112,21 @@ namespace Weather_Stations_CW
             {
                 return yearsOfObservationsArray;
             }
+        }
+
+        public void IncreaseYearArray(int locationIndex)
+        {
+            int newArraySize;
+
+            if (Data.locationArray[locationIndex].yearsOfObservationsArray.Length == 0)
+            {
+                newArraySize = 0; ;
+            }
+            else
+            {
+                newArraySize = Data.locationArray[locationIndex].yearsOfObservationsArray.Length;
+            }
+            Array.Resize(ref Data.locationArray[locationIndex].yearsOfObservationsArray, newArraySize + 1);
         }
 
         //string locationName, streetNumberAndName, county, postCode, latitude, longtitude;
