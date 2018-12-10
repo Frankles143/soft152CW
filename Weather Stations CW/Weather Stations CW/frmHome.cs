@@ -13,14 +13,14 @@ namespace Weather_Stations_CW
 {
     //TO DO LIST
     //GUI - WIP
-        //Graphics on same screen on the other side
-        //Drop down or listbox for graphing options? - rainfall, sunshine etc. 
+    //Graphics on same screen on the other side
+    //Drop down or listbox for graphing options? - rainfall, sunshine etc. 
     //Get adding done - new form?
-        //Adding a new year, bring up blank datagrid for data? - Check that all rows are full before save
+    //Adding a new year, bring up blank datagrid for data? - Check that all rows are full before save
     //Get editing data working - Read in selected index and edit that specific index (depending on what you click on)
-        //Have an edit button that lets users change the data grid entries and then a save button that makes it readonly again
-        //I will need a SAVE DATA method to put the entire locationArray back into the text file -- Use another dialog to save the file? Saves overwriting it everytime
-        //dataGridView.Rows[4].Cells["Name"].Value.ToString(); - This will help for outputting from datagrid to array
+    //Have an edit button that lets users change the data grid entries and then a save button that makes it readonly again
+    //I will need a SAVE DATA method to put the entire locationArray back into the text file -- Use another dialog to save the file? Saves overwriting it everytime
+    //dataGridView.Rows[4].Cells["Name"].Value.ToString(); - This will help for outputting from datagrid to array
     //Need some exception handling for pulling in data - check problems
 
     //ASK LIZ
@@ -42,10 +42,22 @@ namespace Weather_Stations_CW
         //Reads in data, spits out location data for user to choose from and then brings the form into focus
         private void frmHome_Load(object sender, EventArgs e)
         {
-            ReadInData();
-            OutputLocationData();
-            GetMonthName();
-            this.Activate();
+            //exception handling
+            try
+            {
+                ReadInData();
+                OutputLocationData();
+                GetMonthName();
+                this.Activate();
+            }
+            catch (FileNotFoundException ex)
+            {
+                MessageBox.Show("Please choose a valid file " + ex.Message);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message);
+            }
         }
 
         private void txtLocationSearch_TextChanged(object sender, EventArgs e)
@@ -53,18 +65,24 @@ namespace Weather_Stations_CW
             dgdMonths.Rows.Clear();
             lstYears.Items.Clear();
             SearchLocations();
+            btnEditLocation.Enabled = false;
+            btnNewYear.Enabled = false;
+            btnEditYear.Enabled = false;
         }
 
         private void lstLocations_SelectedIndexChanged(object sender, EventArgs e)
         {
             OutputYearData();
             btnNewYear.Enabled = true;
+            btnEditLocation.Enabled = true;
+            btnEditYear.Enabled = false;
         }
 
         private void lstYears_SelectedIndexChanged(object sender, EventArgs e)
         {
             int yearIndex = lstYears.SelectedIndex;
             OutputMonthData(yearIndex);
+            btnEditYear.Enabled = true;
         }
 
         private void btnNewLocation_Click(object sender, EventArgs e)
@@ -76,7 +94,6 @@ namespace Weather_Stations_CW
             {
                 SaveNewLocation(newLocation);
             }
-            
         }
 
         private void btnNewYear_Click(object sender, EventArgs e)
@@ -87,13 +104,7 @@ namespace Weather_Stations_CW
             {
                 SaveNewYear(newYear);
             }
-
             OutputYearData();
-        }
-
-        private void btnEdit_Click(object sender, EventArgs e)
-        {
-            //Again, custom box to get location, year or month
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -115,18 +126,27 @@ namespace Weather_Stations_CW
 
             if (newLocationDialog.ShowDialog(this) == DialogResult.OK)
             {
-                //put everything into an object and return it
-                locationName = newLocationDialog.txtNameInput.Text;
-                streetNumberAndName = newLocationDialog.txtStreetNumberAndNameInput.Text;
-                county = newLocationDialog.txtCountyInput.Text;
-                postCode = newLocationDialog.txtPostcodeInput.Text;
-                latitude = newLocationDialog.txtLatitudeInput.Text;
-                longtitude = newLocationDialog.txtLongtitudeInput.Text;
-                Year[] newYear = new Year[0];
+                if (newLocationDialog.txtNameInput.Text != "" && newLocationDialog.txtStreetNumberAndNameInput.Text != "" && newLocationDialog.txtCountyInput.Text != "" && newLocationDialog.txtPostcodeInput.Text != "" && newLocationDialog.txtLatitudeInput.Text != "" && newLocationDialog.txtLongtitudeInput.Text != "")
+                {
+                    //put everything into an object and return it
+                    locationName = newLocationDialog.txtNameInput.Text;
+                    streetNumberAndName = newLocationDialog.txtStreetNumberAndNameInput.Text;
+                    county = newLocationDialog.txtCountyInput.Text;
+                    postCode = newLocationDialog.txtPostcodeInput.Text;
+                    latitude = newLocationDialog.txtLatitudeInput.Text;
+                    longtitude = newLocationDialog.txtLongtitudeInput.Text;
+                    Year[] newYear = new Year[0];
 
-                newLocation = new Location(locationName, streetNumberAndName, county, postCode, latitude, longtitude, newYear);
+                    newLocation = new Location(locationName, streetNumberAndName, county, postCode, latitude, longtitude, newYear);
 
-                return newLocation;
+                    return newLocation;
+                }
+                else
+                {
+                    MessageBox.Show("Please fill in all fields");
+                    return null;
+                }
+
             }
             else
             {
@@ -154,17 +174,33 @@ namespace Weather_Stations_CW
             string yearDescription;
             MonthlyObservations[] newMonthlyObservations = new MonthlyObservations[12];
 
-
             // Show testDialog as a modal dialog and determine if DialogResult = OK.
             if (newYearDialog.ShowDialog(this) == DialogResult.OK)
             {
-                // Read from textboxes to create a new object to return
-                yearDate = Convert.ToInt32(newYearDialog.txtYearDateInput.Text);
-                yearDescription = newYearDialog.txtDescriptionInput.Text;
+                if (newYearDialog.txtYearDateInput.Text != "" && newYearDialog.txtDescriptionInput.Text != "")
+                {
+                    try
+                    {
+                        // Read from textboxes to create a new object to return
+                        yearDate = Convert.ToInt32(newYearDialog.txtYearDateInput.Text);
+                        yearDescription = newYearDialog.txtDescriptionInput.Text;
 
-                tempYear = new Year(yearDescription, yearDate, newMonthlyObservations);
+                        tempYear = new Year(yearDescription, yearDate, newMonthlyObservations);
 
-                return tempYear;
+                        return tempYear;
+                    }
+                    catch (FormatException)
+                    {
+                        MessageBox.Show("Please enter the year as a number");
+                        return null;
+                    }
+                    
+                }
+                else
+                {
+                    MessageBox.Show("Please fill in all fields");
+                    return null;
+                }
             }
             else
             {
@@ -200,7 +236,7 @@ namespace Weather_Stations_CW
 
             //Get user input
             searchTerm = txtLocationSearch.Text;
-            
+
             //Clear first
             lstLocations.Items.Clear();
             //locationName, streetNumberAndName, county, postCode, latitude, longtitude;
@@ -221,6 +257,7 @@ namespace Weather_Stations_CW
             }
         }
 
+        //Should I get rid of the return object method? Less helpful and not needed now?
         private Location getLocationFromString(string locationInput)
         {
             Location matchedLocation = null;
@@ -258,7 +295,7 @@ namespace Weather_Stations_CW
             }
             return matchedIndex;
         }
-        
+
         //Output locations
         private void OutputLocationData()
         {
@@ -317,7 +354,7 @@ namespace Weather_Stations_CW
             {
                 for (int i = 0; i < 12; i++)
                 {
-                    dgdMonths.Rows.Add(Data.yearArray[0].MonthlyObservationsArray[i].MonthName,"","","","","");
+                    dgdMonths.Rows.Add(Data.yearArray[0].MonthlyObservationsArray[i].MonthName, "", "", "", "", "");
                 }
             }
         }
@@ -329,50 +366,40 @@ namespace Weather_Stations_CW
             string filename = "";
             int numberOfLocations, locationIndex = 0;
 
-            //exception handling
-            try
-            {
-                //Choosing file
-                dlgOpenData.ShowDialog();
-                filename = dlgOpenData.FileName;
 
-                //Reading in file
-                //Opens streamreader
-                using (StreamReader fileInput = new StreamReader(filename))
+            //Choosing file
+            dlgOpenData.ShowDialog();
+            filename = dlgOpenData.FileName;
+
+            //Reading in file
+            //Opens streamreader
+            using (StreamReader fileInput = new StreamReader(filename))
+            {
+                //Number of locations - 1st line
+                numberOfLocations = Convert.ToInt32(fileInput.ReadLine());
+
+                //Create arrays
+                Data.locationArray = new Location[numberOfLocations];
+                Data.yearArray = new Year[0];
+                Data.monthlyArray = new MonthlyObservations[12];
+
+                //While loop to continue until no more data
+                while (!fileInput.EndOfStream)
                 {
-                    //Number of locations - 1st line
-                    numberOfLocations = Convert.ToInt32(fileInput.ReadLine());
+                    //Gather location data and store - 6 lines
+                    //Number of years from that location - 1 line
+                    //Year data - 2 lines
+                    //Month data - 6 lines (12 times)
+                    //Back up to year data until done
+                    //Back up to location to start again until done
 
-                    //Create arrays
-                    Data.locationArray = new Location[numberOfLocations];
-                    Data.yearArray = new Year[0];
-                    Data.monthlyArray = new MonthlyObservations[12];
+                    //Call methods (which calls the next method)
+                    ReadLocation(ref Data.locationArray, ref Data.yearArray, ref Data.monthlyArray, fileInput, ref locationIndex);
 
-                    //While loop to continue until no more data
-                    while (!fileInput.EndOfStream)
-                    {
-                        //Gather location data and store - 6 lines
-                        //Number of years from that location - 1 line
-                        //Year data - 2 lines
-                        //Month data - 6 lines (12 times)
-                        //Back up to year data until done
-                        //Back up to location to start again until done
-
-                        //Call methods (which calls the next method)
-                        ReadLocation(ref Data.locationArray, ref Data.yearArray, ref Data.monthlyArray, fileInput, ref locationIndex);
-
-                    }
-                    //Close streamreader
                 }
+                //Close streamreader
             }
-            catch (FileNotFoundException ex)
-            {
-                MessageBox.Show("Please choose a valid file " + ex.Message);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error: " + ex.Message);
-            }
+
         }
 
         //Method to read in location data
@@ -432,13 +459,13 @@ namespace Weather_Stations_CW
         private void ReadMonth(ref MonthlyObservations[] monthlyArray, StreamReader inputData)
         {
             //Delcare variables
-            int monthID,  daysAirFrost, year;
+            int monthID, daysAirFrost, year;
             double maxTemp, minTemp, mmRain, hrsSun;
             monthlyArray = new MonthlyObservations[12];
             //One for loop for years, second for loop for 12 months of that year
             for (int months = 0; months < 12; months++)
             {
-                
+
                 //Read in data
                 if (months != 0)
                 {
