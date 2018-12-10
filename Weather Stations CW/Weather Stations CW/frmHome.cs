@@ -15,12 +15,12 @@ namespace Weather_Stations_CW
     //GUI - WIP
     //Graphics on same screen on the other side
     //Drop down or listbox for graphing options? - rainfall, sunshine etc. 
-    //Get adding done - new form?
-    //Adding a new year, bring up blank datagrid for data? - Check that all rows are full before save
+
     //Get editing data working - Read in selected index and edit that specific index (depending on what you click on)
     //Have an edit button that lets users change the data grid entries and then a save button that makes it readonly again
     //I will need a SAVE DATA method to put the entire locationArray back into the text file -- Use another dialog to save the file? Saves overwriting it everytime
     //dataGridView.Rows[4].Cells["Name"].Value.ToString(); - This will help for outputting from datagrid to array
+
     //Need some exception handling for pulling in data - check problems
 
     //ASK LIZ
@@ -105,6 +105,17 @@ namespace Weather_Stations_CW
                 SaveNewYear(newYear);
             }
             OutputYearData();
+        }
+
+        //These things are stupid and I hate them
+        private void dgdMonths_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            //btnEditMonth.Enabled = true;
+        }
+
+        private void dgdMonths_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            btnEditMonth.Enabled = true;
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -227,6 +238,7 @@ namespace Weather_Stations_CW
             Data.locationArray[locationIndex].YearsOfObservationsArray[arraySize - 1] = newYear;
         }
 
+
         //Method to search through the locations
         private void SearchLocations()
         {
@@ -296,6 +308,7 @@ namespace Weather_Stations_CW
             return matchedIndex;
         }
 
+
         //Output locations
         private void OutputLocationData()
         {
@@ -359,6 +372,7 @@ namespace Weather_Stations_CW
             }
         }
 
+
         //Method to pull in data from text file
         private void ReadInData()
         {
@@ -399,7 +413,6 @@ namespace Weather_Stations_CW
                 }
                 //Close streamreader
             }
-
         }
 
         //Method to read in location data
@@ -572,5 +585,6 @@ namespace Weather_Stations_CW
                 }
             }
         }
+
     }
 }
