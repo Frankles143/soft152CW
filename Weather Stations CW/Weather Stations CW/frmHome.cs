@@ -19,7 +19,7 @@ namespace Weather_Stations_CW
         //Adding a new year, bring up blank datagrid for data? - Check that all rows are full before save
     //Get editing data working - Read in selected index and edit that specific index (depending on what you click on)
         //Have an edit button that lets users change the data grid entries and then a save button that makes it readonly again
-        //I will need a SAVE DATA method to put the entire locationArray back into the text file
+        //I will need a SAVE DATA method to put the entire locationArray back into the text file -- Use another dialog to save the file? Saves overwriting it everytime
         //dataGridView.Rows[4].Cells["Name"].Value.ToString(); - This will help for outputting from datagrid to array
     //Need some exception handling for pulling in data - check problems
 
@@ -58,12 +58,73 @@ namespace Weather_Stations_CW
         private void lstLocations_SelectedIndexChanged(object sender, EventArgs e)
         {
             OutputYearData();
+            btnNewYear.Enabled = true;
         }
 
         private void lstYears_SelectedIndexChanged(object sender, EventArgs e)
         {
             int yearIndex = lstYears.SelectedIndex;
             OutputMonthData(yearIndex);
+        }
+
+        private void btnNewLocation_Click(object sender, EventArgs e)
+        {
+            //Brings up form for adding/editing
+        }
+
+        private void btnNewYear_Click_1(object sender, EventArgs e)
+        {
+            //Bring up custom dialog box for year description and then save the new year into the array
+            string newYearDescription = NewYearDialog();
+            SaveNewYear(newYearDescription);
+
+            OutputYearData();
+        }
+
+        private string NewYearDialog()
+        {
+            frmNewYear newYearDialog = new frmNewYear();
+
+            // Show testDialog as a modal dialog and determine if DialogResult = OK.
+            if (newYearDialog.ShowDialog(this) == DialogResult.OK)
+            {
+                // Read the contents of newYearDialog's textbox and returns it
+                return newYearDialog.txtDescriptionInput.Text;
+            }
+            else
+            {
+                newYearDialog.Dispose();
+                return null;
+            }
+        }
+
+        private void SaveNewYear(string newYearText)
+        {
+            //Grab the the year description and the location index
+            string locationString = lstLocations.SelectedItem.ToString();
+            int locationIndex = getLocationIndexFromString(locationString), newYearDate, arraySize;
+            Year[] arrayToChange = Data.locationArray[locationIndex].YearsOfObservationsArray;
+
+            //get array size, increase the array and then increase the variable to make it easier to work with down below
+            arraySize = Data.locationArray[locationIndex].YearsOfObservationsArray.Length;
+            //This doesn't work - create method in location class so I can access it directly?
+            Array.Resize(ref arrayToChange, arraySize + 1);
+            arraySize++;
+
+            //Calculate the new year number by adding 1 to the previous year, then store all the new year data in the array
+            newYearDate = Convert.ToInt32(Data.locationArray[locationIndex].YearsOfObservationsArray[arraySize - 1].YearDate) + 1;
+            Data.locationArray[locationIndex].YearsOfObservationsArray[arraySize].YearDescription = newYearText;
+            Data.locationArray[locationIndex].YearsOfObservationsArray[arraySize].YearDate = newYearDate;
+        }
+
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            //Again, custom box to get location, year or month
+        }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            //Saves all changes to a file? -- How to stop editing a month?
         }
 
         private void btnExit_Click(object sender, EventArgs e)
@@ -118,6 +179,25 @@ namespace Weather_Stations_CW
                 }
             }
             return matchedLocation;
+        }
+
+        private int getLocationIndexFromString(string locationInput)
+        {
+            int matchedIndex = 0;
+            string locationToCheck;
+            //loop through locations, find a match and return that object
+            for (int i = 0; i < Data.locationArray.Length; i++)
+            {
+                //Output every location into a string, with the exact same formatting as the input
+                locationToCheck = Data.locationArray[i].OutputLocation();
+
+                if (locationToCheck == locationInput)
+                {
+                    matchedIndex = i;
+                    break;
+                }
+            }
+            return matchedIndex;
         }
         
         //Output locations
@@ -397,6 +477,5 @@ namespace Weather_Stations_CW
                 }
             }
         }
-
     }
 }

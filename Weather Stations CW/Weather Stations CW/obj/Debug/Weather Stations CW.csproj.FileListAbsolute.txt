@@ -18,3 +18,5 @@ D:\git\soft152CW\Weather Stations CW\Weather Stations CW\bin\Debug\Weather Stati
 D:\git\soft152CW\Weather Stations CW\Weather Stations CW\bin\Debug\Weather Stations CW.pdb
 D:\git\soft152CW\Weather Stations CW\Weather Stations CW\obj\Debug\Weather Stations CW.exe
 D:\git\soft152CW\Weather Stations CW\Weather Stations CW\obj\Debug\Weather Stations CW.pdb
+C:\git\soft152CW\Weather Stations CW\Weather Stations CW\obj\Debug\Weather_Stations_CW.frmEditAdd.resources
+C:\git\soft152CW\Weather Stations CW\Weather Stations CW\obj\Debug\Weather_Stations_CW.frmNewYear.resources
