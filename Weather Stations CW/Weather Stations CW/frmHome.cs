@@ -85,7 +85,11 @@ namespace Weather_Stations_CW
             btnNewYear.Enabled = true;
             btnEditLocation.Enabled = true;
             btnEditYear.Enabled = false;
-            lstYears.SelectedIndex = 0;
+            if (lstYears.SelectedIndex > -1)
+            {
+                lstYears.SelectedIndex = 0;
+            }
+            
         }
 
         private void lstYears_SelectedIndexChanged(object sender, EventArgs e)
@@ -319,7 +323,12 @@ namespace Weather_Stations_CW
             return matchedIndex;
         }
 
-        
+        private void ClearYearForm()
+        {
+            //Make this clear the year form - do another for location
+            
+            //You need this one for when you create a new location, if the array size of the new location is 0 then clear the boxes
+        }
 
         //Output locations
         private void OutputLocationList()
@@ -445,7 +454,6 @@ namespace Weather_Stations_CW
 
                     //Call methods (which calls the next method)
                     ReadLocation(ref Data.locationArray, ref Data.yearArray, ref Data.monthlyArray, fileInput, ref locationIndex);
-
                 }
                 //Close streamreader
             }
