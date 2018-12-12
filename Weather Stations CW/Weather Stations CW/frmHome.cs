@@ -19,6 +19,9 @@ namespace Weather_Stations_CW
     //Graphics on same screen on the other side
     //Drop down or listbox for graphing options? - rainfall, sunshine etc. 
 
+    //Get add year working - same as add location
+    //Get on top of adding monthly data
+
     //Get editing data working - Read in selected index and edit that specific index (depending on what you click on)
     //Have an edit button that lets users change the data grid entries and then a save button that makes it readonly again
     //I will need a SAVE DATA method to put the entire locationArray back into the text file -- Use another dialog to save the file? Saves overwriting it everytime
@@ -73,6 +76,8 @@ namespace Weather_Stations_CW
             dgdMonths.Rows.Clear();
             lstYears.Items.Clear();
             SearchLocations();
+            ClearYearForm();
+            ClearLocationForm();
             btnEditLocation.Enabled = false;
             btnNewYear.Enabled = false;
             btnEditYear.Enabled = false;
@@ -85,11 +90,15 @@ namespace Weather_Stations_CW
             btnNewYear.Enabled = true;
             btnEditLocation.Enabled = true;
             btnEditYear.Enabled = false;
-            if (lstYears.SelectedIndex > -1)
+            if (lstYears.SelectedIndex >= -1 && lstYears.Items.Count > 0)
             {
                 lstYears.SelectedIndex = 0;
             }
-            
+            else if (lstYears.Items.Count == 0)
+            {
+                ClearYearForm();
+            }
+
         }
 
         private void lstYears_SelectedIndexChanged(object sender, EventArgs e)
@@ -102,15 +111,31 @@ namespace Weather_Stations_CW
 
         private void btnNewLocation_Click(object sender, EventArgs e)
         {
-            //Takes what's currently in the boxes and then outputs it as a new location
-            //Currently doesn't work, need to empty boxes first, get input and THEN save the new location - Do this next
-            Location newLocation = NewLocation();
-            lstLocations.Items.Clear();
+            //Dettach the event handler, change the selected index and then reattach the event handler
+            lstLocations.SelectedIndexChanged -= lstLocations_SelectedIndexChanged;
+            lstLocations.SelectedIndex = -1;
+            lstLocations.SelectedIndexChanged += lstLocations_SelectedIndexChanged;
 
-            if (newLocation != null)
-            {
-                SaveNewLocation(newLocation);
-            }
+            ClearLocationForm();
+            ClearYearForm();
+
+            //Set focus for the location name
+            txtName.Focus();
+            //Disable/enable listboxes, buttons etc.
+            lstLocations.Enabled = false;
+            txtLocationSearch.Enabled = false;
+            btnSaveLocation.Enabled = true;
+
+
+            
+        }
+
+        private void btnSaveLocation_Click(object sender, EventArgs e)
+        {
+            lstLocations.Items.Clear();
+            NewLocation();
+            lstLocations.Enabled = true;
+            txtLocationSearch.Enabled = true;
         }
 
         private void btnNewYear_Click(object sender, EventArgs e)
@@ -145,45 +170,7 @@ namespace Weather_Stations_CW
             this.Close();
         }
 
-        //Method to get location data from user
-        //private Location NewLocationDialog()
-        //{
-        //    frmEditAdd newLocationDialog = new frmEditAdd();
-        //    string locationName, streetNumberAndName, county, postCode, latitude, longtitude;
-        //    Location newLocation;
-
-        //    if (newLocationDialog.ShowDialog(this) == DialogResult.OK)
-        //    {
-        //        if (newLocationDialog.txtNameInput.Text != "" && newLocationDialog.txtStreetNumberAndNameInput.Text != "" && newLocationDialog.txtCountyInput.Text != "" && newLocationDialog.txtPostcodeInput.Text != "" && newLocationDialog.txtLatitudeInput.Text != "" && newLocationDialog.txtLongtitudeInput.Text != "")
-        //        {
-        //            //put everything into an object and return it
-        //            locationName = newLocationDialog.txtNameInput.Text;
-        //            streetNumberAndName = newLocationDialog.txtStreetNumberAndNameInput.Text;
-        //            county = newLocationDialog.txtCountyInput.Text;
-        //            postCode = newLocationDialog.txtPostcodeInput.Text;
-        //            latitude = newLocationDialog.txtLatitudeInput.Text;
-        //            longtitude = newLocationDialog.txtLongtitudeInput.Text;
-        //            Year[] newYear = new Year[0];
-
-        //            newLocation = new Location(locationName, streetNumberAndName, county, postCode, latitude, longtitude, newYear);
-
-        //            return newLocation;
-        //        }
-        //        else
-        //        {
-        //            MessageBox.Show("Please fill in all fields");
-        //            return null;
-        //        }
-
-        //    }
-        //    else
-        //    {
-        //        newLocationDialog.Dispose();
-        //        return null;
-        //    }
-        //}
-
-        private Location NewLocation()
+        private void NewLocation()
         {
             string locationName, streetNumberAndName, county, postCode, latitude, longtitude;
             Location newLocation;
@@ -201,23 +188,24 @@ namespace Weather_Stations_CW
 
                 newLocation = new Location(locationName, streetNumberAndName, county, postCode, latitude, longtitude, newYear);
 
-                return newLocation;
+                //Increase the location array by one and then add in the new location object
+                GrowArray(ref Data.locationArray);
+                Data.locationArray[Data.locationArray.Length - 1] = newLocation;
+
+                OutputLocationList();
+                //lstLocations.SelectedIndex = lstLocations.Items.Count;
+                btnSaveLocation.Enabled = false;
             }
             else
             {
                 MessageBox.Show("Please fill in all fields");
-                return null;
             }
         }
 
         //Saves new location array
         private void SaveNewLocation(Location newLocation)
         {
-            //Increase the location arraty by one and then add in the new location object
-            GrowArray(ref Data.locationArray);
-            Data.locationArray[Data.locationArray.Length - 1] = newLocation;
-
-            OutputLocationList();
+            
         }
 
         //Gets new year data from user
@@ -669,6 +657,7 @@ namespace Weather_Stations_CW
                 }
             }
         }
+
 
     }
 }
