@@ -102,8 +102,10 @@ namespace Weather_Stations_CW
 
         private void btnNewLocation_Click(object sender, EventArgs e)
         {
-            //Brings up form for adding/editing
-            Location newLocation = NewLocationDialog();
+            //Takes what's currently in the boxes and then outputs it as a new location
+            //Currently doesn't work, need to empty boxes first, get input and THEN save the new location - Do this next
+            Location newLocation = NewLocation();
+            lstLocations.Items.Clear();
 
             if (newLocation != null)
             {
@@ -144,39 +146,66 @@ namespace Weather_Stations_CW
         }
 
         //Method to get location data from user
-        private Location NewLocationDialog()
+        //private Location NewLocationDialog()
+        //{
+        //    frmEditAdd newLocationDialog = new frmEditAdd();
+        //    string locationName, streetNumberAndName, county, postCode, latitude, longtitude;
+        //    Location newLocation;
+
+        //    if (newLocationDialog.ShowDialog(this) == DialogResult.OK)
+        //    {
+        //        if (newLocationDialog.txtNameInput.Text != "" && newLocationDialog.txtStreetNumberAndNameInput.Text != "" && newLocationDialog.txtCountyInput.Text != "" && newLocationDialog.txtPostcodeInput.Text != "" && newLocationDialog.txtLatitudeInput.Text != "" && newLocationDialog.txtLongtitudeInput.Text != "")
+        //        {
+        //            //put everything into an object and return it
+        //            locationName = newLocationDialog.txtNameInput.Text;
+        //            streetNumberAndName = newLocationDialog.txtStreetNumberAndNameInput.Text;
+        //            county = newLocationDialog.txtCountyInput.Text;
+        //            postCode = newLocationDialog.txtPostcodeInput.Text;
+        //            latitude = newLocationDialog.txtLatitudeInput.Text;
+        //            longtitude = newLocationDialog.txtLongtitudeInput.Text;
+        //            Year[] newYear = new Year[0];
+
+        //            newLocation = new Location(locationName, streetNumberAndName, county, postCode, latitude, longtitude, newYear);
+
+        //            return newLocation;
+        //        }
+        //        else
+        //        {
+        //            MessageBox.Show("Please fill in all fields");
+        //            return null;
+        //        }
+
+        //    }
+        //    else
+        //    {
+        //        newLocationDialog.Dispose();
+        //        return null;
+        //    }
+        //}
+
+        private Location NewLocation()
         {
-            frmEditAdd newLocationDialog = new frmEditAdd();
             string locationName, streetNumberAndName, county, postCode, latitude, longtitude;
             Location newLocation;
 
-            if (newLocationDialog.ShowDialog(this) == DialogResult.OK)
+            if (txtName.Text != "" && txtStreetNumberAndName.Text != "" && txtCounty.Text != "" && txtPostcode.Text != "" && txtLatitude.Text != "" && txtLongtitude.Text != "")
             {
-                if (newLocationDialog.txtNameInput.Text != "" && newLocationDialog.txtStreetNumberAndNameInput.Text != "" && newLocationDialog.txtCountyInput.Text != "" && newLocationDialog.txtPostcodeInput.Text != "" && newLocationDialog.txtLatitudeInput.Text != "" && newLocationDialog.txtLongtitudeInput.Text != "")
-                {
-                    //put everything into an object and return it
-                    locationName = newLocationDialog.txtNameInput.Text;
-                    streetNumberAndName = newLocationDialog.txtStreetNumberAndNameInput.Text;
-                    county = newLocationDialog.txtCountyInput.Text;
-                    postCode = newLocationDialog.txtPostcodeInput.Text;
-                    latitude = newLocationDialog.txtLatitudeInput.Text;
-                    longtitude = newLocationDialog.txtLongtitudeInput.Text;
-                    Year[] newYear = new Year[0];
+                //put everything into an object and return it
+                locationName = txtName.Text;
+                streetNumberAndName = txtStreetNumberAndName.Text;
+                county = txtCounty.Text;
+                postCode = txtPostcode.Text;
+                latitude = txtLatitude.Text;
+                longtitude = txtLongtitude.Text;
+                Year[] newYear = new Year[0];
 
-                    newLocation = new Location(locationName, streetNumberAndName, county, postCode, latitude, longtitude, newYear);
+                newLocation = new Location(locationName, streetNumberAndName, county, postCode, latitude, longtitude, newYear);
 
-                    return newLocation;
-                }
-                else
-                {
-                    MessageBox.Show("Please fill in all fields");
-                    return null;
-                }
-
+                return newLocation;
             }
             else
             {
-                newLocationDialog.Dispose();
+                MessageBox.Show("Please fill in all fields");
                 return null;
             }
         }
@@ -323,9 +352,20 @@ namespace Weather_Stations_CW
             return matchedIndex;
         }
 
+        private void ClearLocationForm()
+        {
+            txtName.Clear();
+            txtStreetNumberAndName.Clear();
+            txtCounty.Clear();
+            txtPostcode.Clear();
+            txtLatitude.Clear();
+            txtLongtitude.Clear();
+        }
+
         private void ClearYearForm()
         {
-            //Make this clear the year form - do another for location
+            txtDescriptionInput.Clear();
+            txtYearDateInput.Clear();
             
             //You need this one for when you create a new location, if the array size of the new location is 0 then clear the boxes
         }
