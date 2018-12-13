@@ -30,7 +30,7 @@
         {
             this.dlgOpenData = new System.Windows.Forms.OpenFileDialog();
             this.txtLocationSearch = new System.Windows.Forms.RichTextBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.grpLocation = new System.Windows.Forms.GroupBox();
             this.txtLatitude = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
             this.txtLongtitude = new System.Windows.Forms.TextBox();
@@ -61,17 +61,17 @@
             this.btnEditYear = new System.Windows.Forms.Button();
             this.btnSaveMonth = new System.Windows.Forms.Button();
             this.btnEditMonth = new System.Windows.Forms.Button();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.grpYear = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
             this.txtYearDateInput = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.txtDescriptionInput = new System.Windows.Forms.TextBox();
             this.btnSaveLocation = new System.Windows.Forms.Button();
             this.btnSaveYear = new System.Windows.Forms.Button();
-            this.groupBox1.SuspendLayout();
+            this.grpLocation.SuspendLayout();
             this.grpMonths.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgdMonths)).BeginInit();
-            this.groupBox2.SuspendLayout();
+            this.grpYear.SuspendLayout();
             this.SuspendLayout();
             // 
             // dlgOpenData
@@ -81,7 +81,7 @@
             // txtLocationSearch
             // 
             this.txtLocationSearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtLocationSearch.Location = new System.Drawing.Point(11, 18);
+            this.txtLocationSearch.Location = new System.Drawing.Point(6, 18);
             this.txtLocationSearch.Multiline = false;
             this.txtLocationSearch.Name = "txtLocationSearch";
             this.txtLocationSearch.Size = new System.Drawing.Size(199, 26);
@@ -89,30 +89,32 @@
             this.txtLocationSearch.Text = "";
             this.txtLocationSearch.TextChanged += new System.EventHandler(this.txtLocationSearch_TextChanged);
             // 
-            // groupBox1
+            // grpLocation
             // 
-            this.groupBox1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.groupBox1.Controls.Add(this.txtLatitude);
-            this.groupBox1.Controls.Add(this.label12);
-            this.groupBox1.Controls.Add(this.txtLongtitude);
-            this.groupBox1.Controls.Add(this.label11);
-            this.groupBox1.Controls.Add(this.txtPostcode);
-            this.groupBox1.Controls.Add(this.txtCounty);
-            this.groupBox1.Controls.Add(this.label10);
-            this.groupBox1.Controls.Add(this.txtStreetNumberAndName);
-            this.groupBox1.Controls.Add(this.label9);
-            this.groupBox1.Controls.Add(this.label8);
-            this.groupBox1.Controls.Add(this.label7);
-            this.groupBox1.Controls.Add(this.txtName);
-            this.groupBox1.Controls.Add(this.lstLocations);
-            this.groupBox1.Controls.Add(this.txtLocationSearch);
-            this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox1.Location = new System.Drawing.Point(9, 23);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(694, 201);
-            this.groupBox1.TabIndex = 3;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Location";
+            this.grpLocation.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.grpLocation.Controls.Add(this.txtLatitude);
+            this.grpLocation.Controls.Add(this.btnNewLocation);
+            this.grpLocation.Controls.Add(this.label12);
+            this.grpLocation.Controls.Add(this.txtLongtitude);
+            this.grpLocation.Controls.Add(this.btnEditLocation);
+            this.grpLocation.Controls.Add(this.label11);
+            this.grpLocation.Controls.Add(this.txtPostcode);
+            this.grpLocation.Controls.Add(this.txtCounty);
+            this.grpLocation.Controls.Add(this.label10);
+            this.grpLocation.Controls.Add(this.txtStreetNumberAndName);
+            this.grpLocation.Controls.Add(this.label9);
+            this.grpLocation.Controls.Add(this.label8);
+            this.grpLocation.Controls.Add(this.label7);
+            this.grpLocation.Controls.Add(this.txtName);
+            this.grpLocation.Controls.Add(this.lstLocations);
+            this.grpLocation.Controls.Add(this.txtLocationSearch);
+            this.grpLocation.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grpLocation.Location = new System.Drawing.Point(9, 23);
+            this.grpLocation.Name = "grpLocation";
+            this.grpLocation.Size = new System.Drawing.Size(841, 201);
+            this.grpLocation.TabIndex = 3;
+            this.grpLocation.TabStop = false;
+            this.grpLocation.Text = "Location";
             // 
             // txtLatitude
             // 
@@ -215,7 +217,7 @@
             this.lstLocations.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lstLocations.FormattingEnabled = true;
             this.lstLocations.ItemHeight = 16;
-            this.lstLocations.Location = new System.Drawing.Point(11, 48);
+            this.lstLocations.Location = new System.Drawing.Point(6, 48);
             this.lstLocations.Name = "lstLocations";
             this.lstLocations.Size = new System.Drawing.Size(283, 132);
             this.lstLocations.TabIndex = 2;
@@ -238,7 +240,7 @@
             this.lstYears.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lstYears.FormattingEnabled = true;
             this.lstYears.ItemHeight = 16;
-            this.lstYears.Location = new System.Drawing.Point(8, 18);
+            this.lstYears.Location = new System.Drawing.Point(6, 21);
             this.lstYears.Name = "lstYears";
             this.lstYears.Size = new System.Drawing.Size(283, 132);
             this.lstYears.TabIndex = 0;
@@ -248,10 +250,12 @@
             // 
             this.grpMonths.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.grpMonths.Controls.Add(this.dgdMonths);
+            this.grpMonths.Controls.Add(this.btnSaveMonth);
+            this.grpMonths.Controls.Add(this.btnEditMonth);
             this.grpMonths.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.grpMonths.Location = new System.Drawing.Point(12, 392);
             this.grpMonths.Name = "grpMonths";
-            this.grpMonths.Size = new System.Drawing.Size(532, 313);
+            this.grpMonths.Size = new System.Drawing.Size(679, 313);
             this.grpMonths.TabIndex = 10;
             this.grpMonths.TabStop = false;
             this.grpMonths.Text = "Months";
@@ -274,7 +278,7 @@
             this.dgdMonths.Location = new System.Drawing.Point(3, 18);
             this.dgdMonths.Name = "dgdMonths";
             this.dgdMonths.ReadOnly = true;
-            this.dgdMonths.Size = new System.Drawing.Size(526, 292);
+            this.dgdMonths.Size = new System.Drawing.Size(528, 292);
             this.dgdMonths.TabIndex = 0;
             this.dgdMonths.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgdMonths_CellClick);
             this.dgdMonths.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgdMonths_CellContentClick);
@@ -323,10 +327,10 @@
             // 
             // btnEditLocation
             // 
-            this.btnEditLocation.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.btnEditLocation.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.btnEditLocation.Enabled = false;
             this.btnEditLocation.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnEditLocation.Location = new System.Drawing.Point(709, 107);
+            this.btnEditLocation.Location = new System.Drawing.Point(700, 84);
             this.btnEditLocation.Name = "btnEditLocation";
             this.btnEditLocation.Size = new System.Drawing.Size(109, 36);
             this.btnEditLocation.TabIndex = 7;
@@ -348,9 +352,9 @@
             // 
             // btnNewLocation
             // 
-            this.btnNewLocation.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.btnNewLocation.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.btnNewLocation.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnNewLocation.Location = new System.Drawing.Point(709, 65);
+            this.btnNewLocation.Location = new System.Drawing.Point(700, 42);
             this.btnNewLocation.Name = "btnNewLocation";
             this.btnNewLocation.Size = new System.Drawing.Size(109, 36);
             this.btnNewLocation.TabIndex = 6;
@@ -360,10 +364,10 @@
             // 
             // btnNewYear
             // 
-            this.btnNewYear.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.btnNewYear.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.btnNewYear.Enabled = false;
             this.btnNewYear.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnNewYear.Location = new System.Drawing.Point(709, 250);
+            this.btnNewYear.Location = new System.Drawing.Point(697, 20);
             this.btnNewYear.Name = "btnNewYear";
             this.btnNewYear.Size = new System.Drawing.Size(109, 36);
             this.btnNewYear.TabIndex = 11;
@@ -373,10 +377,10 @@
             // 
             // btnEditYear
             // 
-            this.btnEditYear.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.btnEditYear.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.btnEditYear.Enabled = false;
             this.btnEditYear.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnEditYear.Location = new System.Drawing.Point(709, 292);
+            this.btnEditYear.Location = new System.Drawing.Point(697, 62);
             this.btnEditYear.Name = "btnEditYear";
             this.btnEditYear.Size = new System.Drawing.Size(109, 36);
             this.btnEditYear.TabIndex = 12;
@@ -388,7 +392,7 @@
             this.btnSaveMonth.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.btnSaveMonth.Enabled = false;
             this.btnSaveMonth.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSaveMonth.Location = new System.Drawing.Point(567, 642);
+            this.btnSaveMonth.Location = new System.Drawing.Point(550, 80);
             this.btnSaveMonth.Name = "btnSaveMonth";
             this.btnSaveMonth.Size = new System.Drawing.Size(112, 44);
             this.btnSaveMonth.TabIndex = 16;
@@ -400,29 +404,32 @@
             this.btnEditMonth.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.btnEditMonth.Enabled = false;
             this.btnEditMonth.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnEditMonth.Location = new System.Drawing.Point(567, 592);
+            this.btnEditMonth.Location = new System.Drawing.Point(550, 21);
             this.btnEditMonth.Name = "btnEditMonth";
             this.btnEditMonth.Size = new System.Drawing.Size(112, 44);
             this.btnEditMonth.TabIndex = 17;
             this.btnEditMonth.Text = "Edit Month Data";
             this.btnEditMonth.UseVisualStyleBackColor = true;
             // 
-            // groupBox2
+            // grpYear
             // 
-            this.groupBox2.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.groupBox2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.groupBox2.Controls.Add(this.label2);
-            this.groupBox2.Controls.Add(this.txtYearDateInput);
-            this.groupBox2.Controls.Add(this.lstYears);
-            this.groupBox2.Controls.Add(this.label1);
-            this.groupBox2.Controls.Add(this.txtDescriptionInput);
-            this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox2.Location = new System.Drawing.Point(12, 230);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(691, 156);
-            this.groupBox2.TabIndex = 4;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Year";
+            this.grpYear.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.grpYear.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.grpYear.Controls.Add(this.btnSaveYear);
+            this.grpYear.Controls.Add(this.label2);
+            this.grpYear.Controls.Add(this.txtYearDateInput);
+            this.grpYear.Controls.Add(this.lstYears);
+            this.grpYear.Controls.Add(this.label1);
+            this.grpYear.Controls.Add(this.btnEditYear);
+            this.grpYear.Controls.Add(this.btnNewYear);
+            this.grpYear.Controls.Add(this.txtDescriptionInput);
+            this.grpYear.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grpYear.Location = new System.Drawing.Point(12, 230);
+            this.grpYear.Name = "grpYear";
+            this.grpYear.Size = new System.Drawing.Size(838, 156);
+            this.grpYear.TabIndex = 4;
+            this.grpYear.TabStop = false;
+            this.grpYear.Text = "Year";
             // 
             // label2
             // 
@@ -460,7 +467,7 @@
             // 
             // btnSaveLocation
             // 
-            this.btnSaveLocation.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.btnSaveLocation.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.btnSaveLocation.Enabled = false;
             this.btnSaveLocation.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnSaveLocation.Location = new System.Drawing.Point(709, 149);
@@ -473,45 +480,39 @@
             // 
             // btnSaveYear
             // 
-            this.btnSaveYear.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.btnSaveYear.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.btnSaveYear.Enabled = false;
             this.btnSaveYear.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSaveYear.Location = new System.Drawing.Point(709, 334);
+            this.btnSaveYear.Location = new System.Drawing.Point(697, 104);
             this.btnSaveYear.Name = "btnSaveYear";
             this.btnSaveYear.Size = new System.Drawing.Size(109, 36);
             this.btnSaveYear.TabIndex = 18;
             this.btnSaveYear.Text = "Save Year";
             this.btnSaveYear.UseVisualStyleBackColor = true;
+            this.btnSaveYear.Click += new System.EventHandler(this.btnSaveYear_Click);
             // 
             // frmHome
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1268, 708);
-            this.Controls.Add(this.btnSaveYear);
             this.Controls.Add(this.btnSaveLocation);
-            this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.btnEditMonth);
-            this.Controls.Add(this.btnSaveMonth);
-            this.Controls.Add(this.btnEditYear);
-            this.Controls.Add(this.btnNewYear);
-            this.Controls.Add(this.btnNewLocation);
             this.Controls.Add(this.btnSave);
-            this.Controls.Add(this.btnEditLocation);
             this.Controls.Add(this.grpMonths);
             this.Controls.Add(this.btnExit);
-            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.grpLocation);
+            this.Controls.Add(this.grpYear);
             this.MinimumSize = new System.Drawing.Size(1284, 553);
             this.Name = "frmHome";
             this.Text = "Weather Information";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.frmHome_Load);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.grpLocation.ResumeLayout(false);
+            this.grpLocation.PerformLayout();
             this.grpMonths.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgdMonths)).EndInit();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
+            this.grpYear.ResumeLayout(false);
+            this.grpYear.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -520,7 +521,7 @@
 
         private System.Windows.Forms.OpenFileDialog dlgOpenData;
         private System.Windows.Forms.RichTextBox txtLocationSearch;
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox grpLocation;
         private System.Windows.Forms.Button btnExit;
         private System.Windows.Forms.ListBox lstLocations;
         private System.Windows.Forms.ListBox lstYears;
@@ -533,7 +534,7 @@
         private System.Windows.Forms.Button btnEditYear;
         private System.Windows.Forms.Button btnSaveMonth;
         private System.Windows.Forms.Button btnEditMonth;
-        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox grpYear;
         public System.Windows.Forms.TextBox txtPostcode;
         public System.Windows.Forms.TextBox txtCounty;
         private System.Windows.Forms.Label label10;

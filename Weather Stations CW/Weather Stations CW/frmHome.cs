@@ -124,35 +124,52 @@ namespace Weather_Stations_CW
             //Disable/enable listboxes, buttons etc.
             lstLocations.Enabled = false;
             txtLocationSearch.Enabled = false;
+            btnNewLocation.Enabled = false;
+            btnEditLocation.Enabled = false;
+
             btnSaveLocation.Enabled = true;
 
-
-            
+            grpYear.Enabled = false;
+            grpMonths.Enabled = false;
         }
 
         private void btnSaveLocation_Click(object sender, EventArgs e)
         {
-            lstLocations.Items.Clear();
+
             NewLocation();
-            lstLocations.Enabled = true;
-            txtLocationSearch.Enabled = true;
+
         }
 
         private void btnNewYear_Click(object sender, EventArgs e)
         {
-            //Bring up custom dialog box for year description and then save the new year into the array
-            Year newYear = NewYearDialog();
-            if (newYear != null)
-            {
-                SaveNewYear(newYear);
-            }
-            OutputYearList();
+            //Remove the event handler, then change the selected index, then add the event handler back on
+            lstYears.SelectedIndexChanged -= lstYears_SelectedIndexChanged;
+            lstYears.SelectedIndex = -1;
+            lstYears.SelectedIndexChanged += lstYears_SelectedIndexChanged;
+
+            ClearYearForm();
+
+            //Set focus for the year date
+            txtYearDateInput.Focus();
+            //Disable/enable listboxes, buttons etc.
+            lstYears.Enabled = false;
+            btnNewYear.Enabled = false;
+            btnEditYear.Enabled = false;
+            btnSaveYear.Enabled = true;
+
+            grpLocation.Enabled = false;
+            grpMonths.Enabled = false;
         }
 
-        
+        private void btnSaveYear_Click(object sender, EventArgs e)
+        {
+            NewYear();
+        }
+
+
         private void dgdMonths_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            
+
         }
 
         private void dgdMonths_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -177,6 +194,8 @@ namespace Weather_Stations_CW
 
             if (txtName.Text != "" && txtStreetNumberAndName.Text != "" && txtCounty.Text != "" && txtPostcode.Text != "" && txtLatitude.Text != "" && txtLongtitude.Text != "")
             {
+
+
                 //put everything into an object and return it
                 locationName = txtName.Text;
                 streetNumberAndName = txtStreetNumberAndName.Text;
@@ -192,9 +211,19 @@ namespace Weather_Stations_CW
                 GrowArray(ref Data.locationArray);
                 Data.locationArray[Data.locationArray.Length - 1] = newLocation;
 
+                //Clears old list to output new one with updated array
+                lstLocations.Items.Clear();
                 OutputLocationList();
-                //lstLocations.SelectedIndex = lstLocations.Items.Count;
+
+                //Enable listboxes and buttons that were disabled during the new location process
+                grpLocation.Enabled = true;
+                lstLocations.Enabled = true;
+                grpYear.Enabled = true;
+                grpMonths.Enabled = true;
+
                 btnSaveLocation.Enabled = false;
+                btnSaveYear.Enabled = false;
+                btnSaveMonth.Enabled = false;
             }
             else
             {
@@ -202,53 +231,47 @@ namespace Weather_Stations_CW
             }
         }
 
-        //Saves new location array
-        private void SaveNewLocation(Location newLocation)
-        {
-            
-        }
-
         //Gets new year data from user
-        private Year NewYearDialog()
+        private void NewYear()
         {
-            frmNewYear newYearDialog = new frmNewYear();
-            Year tempYear;
+            Year newYear;
             int yearDate;
             string yearDescription;
             MonthlyObservations[] newMonthlyObservations = new MonthlyObservations[12];
 
             // Show testDialog as a modal dialog and determine if DialogResult = OK.
-            if (newYearDialog.ShowDialog(this) == DialogResult.OK)
+            if (txtYearDateInput.Text != "" && txtDescriptionInput.Text != "")
             {
-                if (newYearDialog.txtYearDateInput.Text != "" && newYearDialog.txtDescriptionInput.Text != "")
+                try
                 {
-                    try
-                    {
-                        // Read from textboxes to create a new object to return
-                        yearDate = Convert.ToInt32(newYearDialog.txtYearDateInput.Text);
-                        yearDescription = newYearDialog.txtDescriptionInput.Text;
+                    // Read from textboxes to create a new object to return
+                    yearDate = Convert.ToInt32(txtYearDateInput.Text);
+                    yearDescription = txtDescriptionInput.Text;
 
-                        tempYear = new Year(yearDescription, yearDate, newMonthlyObservations);
+                    newYear = new Year(yearDescription, yearDate, newMonthlyObservations);
 
-                        return tempYear;
-                    }
-                    catch (FormatException)
-                    {
-                        MessageBox.Show("Please enter the year as a number");
-                        return null;
-                    }
-                    
+                    SaveNewYear(newYear);
+
+                    lstYears.Items.Clear();
+                    OutputYearList();
+
+                    //Disable/enable listboxes, buttons etc.
+                    grpLocation.Enabled = true;
+                    grpYear.Enabled = true;
+                    grpMonths.Enabled = true;
+
+                    btnSaveLocation.Enabled = false;
+                    btnSaveYear.Enabled = false;
+                    btnSaveMonth.Enabled = false;
                 }
-                else
+                catch (FormatException)
                 {
-                    MessageBox.Show("Please fill in all fields");
-                    return null;
+                    MessageBox.Show("Please enter the year as a number");
                 }
             }
             else
             {
-                newYearDialog.Dispose();
-                return null;
+                MessageBox.Show("Please fill in all fields");
             }
         }
 
@@ -354,7 +377,7 @@ namespace Weather_Stations_CW
         {
             txtDescriptionInput.Clear();
             txtYearDateInput.Clear();
-            
+
             //You need this one for when you create a new location, if the array size of the new location is 0 then clear the boxes
         }
 
