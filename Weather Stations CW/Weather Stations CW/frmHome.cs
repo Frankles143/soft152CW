@@ -36,6 +36,7 @@ namespace Weather_Stations_CW
 
     public partial class frmHome : Form
     {
+        private int saveOrEdit;
         public frmHome()
         {
             InitializeComponent();
@@ -104,6 +105,7 @@ namespace Weather_Stations_CW
 
         private void btnNewLocation_Click(object sender, EventArgs e)
         {
+            saveOrEdit = 0;
             //Dettach the event handler, change the selected index and then reattach the event handler
             lstLocations.SelectedIndexChanged -= lstLocations_SelectedIndexChanged;
             lstLocations.SelectedIndex = -1;
@@ -120,6 +122,8 @@ namespace Weather_Stations_CW
 
         private void btnEditLocation_Click(object sender, EventArgs e)
         {
+            saveOrEdit = 1;
+            DisableButtonsNewLocation();
 
         }
 
@@ -135,13 +139,20 @@ namespace Weather_Stations_CW
 
         private void btnSaveLocation_Click(object sender, EventArgs e)
         {
-
-            NewLocation();
-
+            //Decide between edit or save
+            if (saveOrEdit == 0)
+            {
+                NewLocation();
+            }
+            else if (saveOrEdit == 1)
+            {
+                EditLocation();
+            }
         }
 
         private void btnNewYear_Click(object sender, EventArgs e)
         {
+            saveOrEdit = 0;
             //Remove the event handler, then change the selected index, then add the event handler back on
             lstYears.SelectedIndexChanged -= lstYears_SelectedIndexChanged;
             lstYears.SelectedIndex = -1;
@@ -157,7 +168,8 @@ namespace Weather_Stations_CW
 
         private void btnEditYear_Click(object sender, EventArgs e)
         {
-
+            saveOrEdit = 1;
+            DisableButtonsNewYear();
         }
 
         private void btnCancelNewYear_Click(object sender, EventArgs e)
@@ -173,7 +185,13 @@ namespace Weather_Stations_CW
 
         private void btnSaveYear_Click(object sender, EventArgs e)
         {
-            NewYear();
+            if (saveOrEdit == 0)
+            {
+                NewYear();
+            } else if (saveOrEdit == 1)
+            {
+                EditYear();
+            }
         }
 
         private void btnEditMonth_Click(object sender, EventArgs e)
@@ -249,6 +267,41 @@ namespace Weather_Stations_CW
             }
         }
 
+        private void EditLocation()
+        {
+            string locationName, streetNumberAndName, county, postCode, latitude, longtitude;
+            Location newLocation;
+            int selectedLocation = GetLocationIndexFromString();
+
+            if (txtName.Text != "" && txtStreetNumberAndName.Text != "" && txtCounty.Text != "" && txtPostcode.Text != "" && txtLatitude.Text != "" && txtLongtitude.Text != "")
+            {
+                //put everything into an object and return it
+                locationName = txtName.Text;
+                streetNumberAndName = txtStreetNumberAndName.Text;
+                county = txtCounty.Text;
+                postCode = txtPostcode.Text;
+                latitude = txtLatitude.Text;
+                longtitude = txtLongtitude.Text;
+                Year[] newYear = Data.locationArray[selectedLocation].YearsOfObservationsArray;
+
+                newLocation = new Location(locationName, streetNumberAndName, county, postCode, latitude, longtitude, newYear);
+
+                Data.locationArray[selectedLocation] = newLocation;
+
+                //Clears old list to output new one with updated array
+                lstLocations.Items.Clear();
+                OutputLocationList();
+
+                EnableButtonsNewLocation();
+
+                lstLocations.SelectedIndex = 0;
+            }
+            else
+            {
+                MessageBox.Show("Please fill in all fields");
+            }
+        }
+
         //Gets new year data from user
         private void NewYear()
         {
@@ -301,6 +354,44 @@ namespace Weather_Stations_CW
 
             //Put new data into an object and then put that into new index
             Data.locationArray[locationIndex].YearsOfObservationsArray[arraySize - 1] = newYear;
+        }
+
+        private void EditYear()
+        {
+            Year tempYear;
+            int yearDate;
+            string yearDescription;
+            int locationIndex = GetLocationIndexFromString();
+            int yearIndex = lstYears.SelectedIndex;
+            MonthlyObservations[] monthlyObservations = Data.locationArray[locationIndex].YearsOfObservationsArray[yearIndex].MonthlyObservationsArray;
+
+            // Show testDialog as a modal dialog and determine if DialogResult = OK.
+            if (txtYearDateInput.Text != "" && txtDescriptionInput.Text != "")
+            {
+                try
+                {
+                    // Read from textboxes to create a new object to return
+                    yearDate = Convert.ToInt32(txtYearDateInput.Text);
+                    yearDescription = txtDescriptionInput.Text;
+
+                    tempYear = new Year(yearDescription, yearDate, monthlyObservations);
+
+                    Data.locationArray[locationIndex].YearsOfObservationsArray[yearIndex] = tempYear;
+
+                    lstYears.Items.Clear();
+                    OutputYearList();
+
+                    EnableButtonsNewYear();
+                }
+                catch (FormatException)
+                {
+                    MessageBox.Show("Please enter the year as a number");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please fill in all fields");
+            }
         }
 
         private void SaveMonthData()
@@ -369,6 +460,13 @@ namespace Weather_Stations_CW
             btnEditLocation.Enabled = false;
             btnCancelNewLocation.Enabled = true;
 
+            txtName.ReadOnly = false;
+            txtStreetNumberAndName.ReadOnly = false;
+            txtCounty.ReadOnly = false;
+            txtPostcode.ReadOnly = false;
+            txtLongtitude.ReadOnly = false;
+            txtLatitude.ReadOnly = false;
+
             btnSaveLocation.Enabled = true;
 
             grpYear.Enabled = false;
@@ -383,6 +481,13 @@ namespace Weather_Stations_CW
             txtLocationSearch.Enabled = true;
             btnNewLocation.Enabled = true;
             btnEditLocation.Enabled = true;
+
+            txtName.ReadOnly = true;
+            txtStreetNumberAndName.ReadOnly = true;
+            txtCounty.ReadOnly = true;
+            txtPostcode.ReadOnly = true;
+            txtLongtitude.ReadOnly = true;
+            txtLatitude.ReadOnly = true;
 
             grpYear.Enabled = true;
             grpMonths.Enabled = true;
@@ -402,6 +507,9 @@ namespace Weather_Stations_CW
             btnSaveYear.Enabled = true;
             btnCancelNewYear.Enabled = true;
 
+            txtYearDateInput.ReadOnly = false;
+            txtDescriptionInput.ReadOnly = false;
+
             grpLocation.Enabled = false;
             grpMonths.Enabled = false;
         }
@@ -415,6 +523,9 @@ namespace Weather_Stations_CW
             btnNewYear.Enabled = true;
             btnEditYear.Enabled = true;
             btnCancelNewYear.Enabled = false;
+
+            txtYearDateInput.ReadOnly = true;
+            txtDescriptionInput.ReadOnly = true;
 
             grpMonths.Enabled = true;
 
@@ -431,6 +542,8 @@ namespace Weather_Stations_CW
             btnEditMonth.Enabled = false;
             btnSaveMonth.Enabled = true;
             btnCancelEditMonth.Enabled = true;
+
+            dgdMonths.Columns["monthId"].ReadOnly = true;
         }
 
         private void EnableButtonsEditMonth()
@@ -442,6 +555,7 @@ namespace Weather_Stations_CW
             btnEditMonth.Enabled = true;
             btnSaveMonth.Enabled = false;
             btnCancelEditMonth.Enabled = false;
+            dgdMonths.ReadOnly = true;
         }
 
         //Method to search through the locations

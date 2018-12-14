@@ -150,6 +150,7 @@
             // 
             this.txtLatitude.Location = new System.Drawing.Point(409, 162);
             this.txtLatitude.Name = "txtLatitude";
+            this.txtLatitude.ReadOnly = true;
             this.txtLatitude.Size = new System.Drawing.Size(273, 22);
             this.txtLatitude.TabIndex = 5;
             // 
@@ -178,6 +179,7 @@
             // 
             this.txtLongtitude.Location = new System.Drawing.Point(409, 134);
             this.txtLongtitude.Name = "txtLongtitude";
+            this.txtLongtitude.ReadOnly = true;
             this.txtLongtitude.Size = new System.Drawing.Size(273, 22);
             this.txtLongtitude.TabIndex = 4;
             // 
@@ -207,6 +209,7 @@
             // 
             this.txtPostcode.Location = new System.Drawing.Point(409, 106);
             this.txtPostcode.Name = "txtPostcode";
+            this.txtPostcode.ReadOnly = true;
             this.txtPostcode.Size = new System.Drawing.Size(273, 22);
             this.txtPostcode.TabIndex = 3;
             // 
@@ -214,6 +217,7 @@
             // 
             this.txtCounty.Location = new System.Drawing.Point(409, 78);
             this.txtCounty.Name = "txtCounty";
+            this.txtCounty.ReadOnly = true;
             this.txtCounty.Size = new System.Drawing.Size(273, 22);
             this.txtCounty.TabIndex = 2;
             // 
@@ -230,6 +234,7 @@
             // 
             this.txtStreetNumberAndName.Location = new System.Drawing.Point(409, 50);
             this.txtStreetNumberAndName.Name = "txtStreetNumberAndName";
+            this.txtStreetNumberAndName.ReadOnly = true;
             this.txtStreetNumberAndName.Size = new System.Drawing.Size(273, 22);
             this.txtStreetNumberAndName.TabIndex = 1;
             // 
@@ -264,6 +269,7 @@
             // 
             this.txtName.Location = new System.Drawing.Point(409, 18);
             this.txtName.Name = "txtName";
+            this.txtName.ReadOnly = true;
             this.txtName.Size = new System.Drawing.Size(273, 22);
             this.txtName.TabIndex = 0;
             // 
@@ -520,6 +526,7 @@
             // 
             this.txtYearDateInput.Location = new System.Drawing.Point(403, 37);
             this.txtYearDateInput.Name = "txtYearDateInput";
+            this.txtYearDateInput.ReadOnly = true;
             this.txtYearDateInput.Size = new System.Drawing.Size(276, 22);
             this.txtYearDateInput.TabIndex = 9;
             // 
@@ -537,6 +544,7 @@
             // 
             this.txtDescriptionInput.Location = new System.Drawing.Point(403, 79);
             this.txtDescriptionInput.Name = "txtDescriptionInput";
+            this.txtDescriptionInput.ReadOnly = true;
             this.txtDescriptionInput.Size = new System.Drawing.Size(276, 22);
             this.txtDescriptionInput.TabIndex = 10;
             // 
