@@ -14,26 +14,19 @@ namespace Weather_Stations_CW
     //TO DO LIST
 
     //GUI - WIP
-    //Change your output for the location listbox to be brief (KEEP ROBUST SEARCH), and then output data next to it, to be able to easily edit
-    //Same with year?
+    //Change your output for the location listbox to be brief (KEEP ROBUST SEARCH), and then output data next to it, to be able to easily edit -- Not sure if I can do with current search methods
+
     //Graphics on same screen on the other side
-    //Drop down or listbox for graphing options? - rainfall, sunshine etc. 
+        //Drop down or listbox for graphing options? - rainfall, sunshine etc. 
 
-    //Get add year working - same as add location
-    //Get on top of adding monthly data
+    //Get editing location and year working - Read in selected index and edit that specific index (depending on what you click on)
 
-    //Get editing data working - Read in selected index and edit that specific index (depending on what you click on)
-    //Have an edit button that lets users change the data grid entries and then a save button that makes it readonly again
     //I will need a SAVE DATA method to put the entire locationArray back into the text file -- Use another dialog to save the file? Saves overwriting it everytime
-    //dataGridView.Rows[4].Cells["Name"].Value.ToString(); - This will help for outputting from datagrid to array
 
     //Need some exception handling for pulling in data - check problems
 
     //ASK LIZ
-    //Do I need to edit the text file when adding or editing? - Yes, cry. --Just rewrite the whole damn thing?
-    //GUI feedback: She's not sure on the 1-2-3-4 approach, maybe have everything on the left and data read out on the right? 
-    //Have a search function and only display some of the data, once you click on that location it pushes out all the data elsewhere ^ on the right, with graphing etc
-    //Scrunch up the month grid!
+    //Nothing currently
 
     //Problems
     //Postcodes don't output in a regular way
@@ -104,7 +97,7 @@ namespace Weather_Stations_CW
         private void lstYears_SelectedIndexChanged(object sender, EventArgs e)
         {
             int yearIndex = lstYears.SelectedIndex;
-            OutputMonthList(yearIndex);
+            OutputMonthList();
             OutputYearData();
             btnEditYear.Enabled = true;
         }
@@ -121,16 +114,23 @@ namespace Weather_Stations_CW
 
             //Set focus for the location name
             txtName.Focus();
-            //Disable/enable listboxes, buttons etc.
-            lstLocations.Enabled = false;
-            txtLocationSearch.Enabled = false;
-            btnNewLocation.Enabled = false;
-            btnEditLocation.Enabled = false;
 
-            btnSaveLocation.Enabled = true;
+            DisableButtonsNewLocation();
+        }
 
-            grpYear.Enabled = false;
-            grpMonths.Enabled = false;
+        private void btnEditLocation_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnCancelNewLocation_Click(object sender, EventArgs e)
+        {
+            //Re enable everything to cancel the new location process
+            OutputLocationList();
+
+            EnableButtonsNewLocation();
+
+            lstLocations.SelectedIndex = 0;
         }
 
         private void btnSaveLocation_Click(object sender, EventArgs e)
@@ -151,14 +151,24 @@ namespace Weather_Stations_CW
 
             //Set focus for the year date
             txtYearDateInput.Focus();
-            //Disable/enable listboxes, buttons etc.
-            lstYears.Enabled = false;
-            btnNewYear.Enabled = false;
-            btnEditYear.Enabled = false;
-            btnSaveYear.Enabled = true;
 
-            grpLocation.Enabled = false;
-            grpMonths.Enabled = false;
+            DisableButtonsNewYear();
+        }
+
+        private void btnEditYear_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnCancelNewYear_Click(object sender, EventArgs e)
+        {
+            //Re enable everything to cancel the new year process
+            OutputLocationList();
+            OutputYearList();
+
+            EnableButtonsNewYear();
+
+            lstLocations.SelectedIndex = 0;
         }
 
         private void btnSaveYear_Click(object sender, EventArgs e)
@@ -166,6 +176,22 @@ namespace Weather_Stations_CW
             NewYear();
         }
 
+        private void btnEditMonth_Click(object sender, EventArgs e)
+        {
+            dgdMonths.ReadOnly = false;
+            DisableButtonsEditMonth();
+        }
+
+        private void btnSaveMonth_Click(object sender, EventArgs e)
+        {
+            SaveMonthData();
+        }
+
+        private void btnCancelEditMonth_Click(object sender, EventArgs e)
+        {
+            EnableButtonsEditMonth();
+            OutputMonthList();
+        }
 
         private void dgdMonths_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -194,8 +220,6 @@ namespace Weather_Stations_CW
 
             if (txtName.Text != "" && txtStreetNumberAndName.Text != "" && txtCounty.Text != "" && txtPostcode.Text != "" && txtLatitude.Text != "" && txtLongtitude.Text != "")
             {
-
-
                 //put everything into an object and return it
                 locationName = txtName.Text;
                 streetNumberAndName = txtStreetNumberAndName.Text;
@@ -215,15 +239,9 @@ namespace Weather_Stations_CW
                 lstLocations.Items.Clear();
                 OutputLocationList();
 
-                //Enable listboxes and buttons that were disabled during the new location process
-                grpLocation.Enabled = true;
-                lstLocations.Enabled = true;
-                grpYear.Enabled = true;
-                grpMonths.Enabled = true;
+                EnableButtonsNewLocation();
 
-                btnSaveLocation.Enabled = false;
-                btnSaveYear.Enabled = false;
-                btnSaveMonth.Enabled = false;
+                lstLocations.SelectedIndex = 0;
             }
             else
             {
@@ -255,14 +273,7 @@ namespace Weather_Stations_CW
                     lstYears.Items.Clear();
                     OutputYearList();
 
-                    //Disable/enable listboxes, buttons etc.
-                    grpLocation.Enabled = true;
-                    grpYear.Enabled = true;
-                    grpMonths.Enabled = true;
-
-                    btnSaveLocation.Enabled = false;
-                    btnSaveYear.Enabled = false;
-                    btnSaveMonth.Enabled = false;
+                    EnableButtonsNewYear();
                 }
                 catch (FormatException)
                 {
@@ -292,6 +303,146 @@ namespace Weather_Stations_CW
             Data.locationArray[locationIndex].YearsOfObservationsArray[arraySize - 1] = newYear;
         }
 
+        private void SaveMonthData()
+        {
+            //dataGridView.Rows[4].Cells["Name"].Value.ToString(); - This will help for outputting from datagrid to array
+            if (DatagridChecker() == true)
+            {
+                //declare vars
+                int monthId, daysAirFrost;
+                double maxTemp, minTemp, mmRain, hrsSun;
+                int locationIndex = GetLocationIndexFromString();
+                int yearIndex = lstYears.SelectedIndex;
+                MonthlyObservations tempMonthlyObservations;
+
+                //Cycle through each row to grab all the data for one month, put that month into it's own index and do that for the whole year
+                for (int i = 0; i < 12; i++)
+                {
+                    try
+                    {
+                        monthId = i + 1;
+                        maxTemp = Convert.ToDouble(dgdMonths.Rows[i].Cells["maxTemp"].Value);
+                        minTemp = Convert.ToDouble(dgdMonths.Rows[i].Cells["minTemp"].Value);
+                        daysAirFrost = Convert.ToInt32(dgdMonths.Rows[i].Cells["daysAirFrost"].Value);
+                        mmRain = Convert.ToDouble(dgdMonths.Rows[i].Cells["mmRain"].Value);
+                        hrsSun = Convert.ToDouble(dgdMonths.Rows[i].Cells["hrsSun"].Value);
+
+                        tempMonthlyObservations = new MonthlyObservations(monthId, maxTemp, minTemp, daysAirFrost, mmRain, hrsSun);
+
+                        Data.locationArray[locationIndex].YearsOfObservationsArray[yearIndex].MonthlyObservationsArray[i] = tempMonthlyObservations;
+                    }
+                    catch (FormatException)
+                    {
+                        MessageBox.Show("Please enter month data in numbers!");
+                    }
+                }
+                //Output the new array
+                GetMonthName();
+                OutputMonthList();
+                EnableButtonsEditMonth();
+            }
+        }
+
+        private bool DatagridChecker()
+        {
+            //Checks every cell to make sure it has data inside it
+            for (int i = 0; i < dgdMonths.Rows.Count; i++)
+            {
+                for (int j = 0; j < dgdMonths.ColumnCount; j++)
+                {
+                    if (dgdMonths.Rows[i].Cells[j].Value == null)
+                    {
+                        MessageBox.Show("Please fill in all fields!");
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        private void DisableButtonsNewLocation()
+        {
+            //Disable/enable listboxes, buttons etc.
+            lstLocations.Enabled = false;
+            txtLocationSearch.Enabled = false;
+            btnNewLocation.Enabled = false;
+            btnEditLocation.Enabled = false;
+            btnCancelNewLocation.Enabled = true;
+
+            btnSaveLocation.Enabled = true;
+
+            grpYear.Enabled = false;
+            grpMonths.Enabled = false;
+        }
+
+        private void EnableButtonsNewLocation()
+        {
+            //Enable listboxes and buttons that were disabled during the new location process
+            grpLocation.Enabled = true;
+            lstLocations.Enabled = true;
+            txtLocationSearch.Enabled = true;
+            btnNewLocation.Enabled = true;
+            btnEditLocation.Enabled = true;
+
+            grpYear.Enabled = true;
+            grpMonths.Enabled = true;
+
+            btnSaveLocation.Enabled = false;
+            btnSaveYear.Enabled = false;
+            btnSaveMonth.Enabled = false;
+            btnCancelNewLocation.Enabled = false;
+        }
+
+        private void DisableButtonsNewYear()
+        {
+            //Disable/enable listboxes, buttons etc.
+            lstYears.Enabled = false;
+            btnNewYear.Enabled = false;
+            btnEditYear.Enabled = false;
+            btnSaveYear.Enabled = true;
+            btnCancelNewYear.Enabled = true;
+
+            grpLocation.Enabled = false;
+            grpMonths.Enabled = false;
+        }
+
+        private void EnableButtonsNewYear()
+        {
+            //Disable/enable listboxes, buttons etc.
+            grpLocation.Enabled = true;
+            grpYear.Enabled = true;
+            lstYears.Enabled = true;
+            btnNewYear.Enabled = true;
+            btnEditYear.Enabled = true;
+            btnCancelNewYear.Enabled = false;
+
+            grpMonths.Enabled = true;
+
+            btnSaveLocation.Enabled = false;
+            btnSaveYear.Enabled = false;
+            btnSaveMonth.Enabled = false;
+        }
+
+        private void DisableButtonsEditMonth()
+        {
+            grpLocation.Enabled = false;
+            grpYear.Enabled = false;
+
+            btnEditMonth.Enabled = false;
+            btnSaveMonth.Enabled = true;
+            btnCancelEditMonth.Enabled = true;
+        }
+
+        private void EnableButtonsEditMonth()
+        {
+            grpLocation.Enabled = true;
+            grpYear.Enabled = true;
+            grpMonths.Enabled = true;
+
+            btnEditMonth.Enabled = true;
+            btnSaveMonth.Enabled = false;
+            btnCancelEditMonth.Enabled = false;
+        }
 
         //Method to search through the locations
         private void SearchLocations()
@@ -443,19 +594,20 @@ namespace Weather_Stations_CW
         }
 
         //Output all months in a year for a specific location
-        private void OutputMonthList(int selectedYear)
+        private void OutputMonthList()
         {
-            dgdMonths.Rows.Clear();
-
-            string locationString = lstLocations.SelectedItem.ToString();
-            Location currentLocation = GetLocationFromString(locationString);
             try
             {
+                dgdMonths.Rows.Clear();
+
+                int currentLocation = GetLocationIndexFromString();
+                int selectedYear = lstYears.SelectedIndex;
+
                 //Loops through every month
                 for (int i = 0; i < 12; i++)
                 {
                     //Outputs the month data for location and year selected
-                    dgdMonths.Rows.Add(currentLocation.YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].MonthName, currentLocation.YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].MaxTemp, currentLocation.YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].MinTemp, currentLocation.YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].DaysAirFrost, currentLocation.YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].MmRain, currentLocation.YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].HrsSun);
+                    dgdMonths.Rows.Add(Data.locationArray[currentLocation].YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].MonthName, Data.locationArray[currentLocation].YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].MaxTemp, Data.locationArray[currentLocation].YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].MinTemp, Data.locationArray[currentLocation].YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].DaysAirFrost, Data.locationArray[currentLocation].YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].MmRain, Data.locationArray[currentLocation].YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].HrsSun);
                 }
                 dgdMonths.Refresh();
             }
@@ -680,7 +832,5 @@ namespace Weather_Stations_CW
                 }
             }
         }
-
-
     }
 }
