@@ -13,13 +13,15 @@ namespace Weather_Stations_CW
 {
     //TO DO LIST
 
+
+    //Output everything back into a text file to save things permanantly - this needs to be done EVERYTIME something in the array is changed -- save month, year, location
+
+
     //GUI - WIP
     //Change your output for the location listbox to be brief (KEEP ROBUST SEARCH), and then output data next to it, to be able to easily edit -- Not sure if I can do with current search methods
 
     //Graphics on same screen on the other side
         //Drop down or listbox for graphing options? - rainfall, sunshine etc. 
-
-    //Get editing location and year working - Read in selected index and edit that specific index (depending on what you click on)
 
     //I will need a SAVE DATA method to put the entire locationArray back into the text file -- Use another dialog to save the file? Saves overwriting it everytime
 
