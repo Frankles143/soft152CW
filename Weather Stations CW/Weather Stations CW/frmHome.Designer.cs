@@ -71,6 +71,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.txtDescriptionInput = new System.Windows.Forms.TextBox();
             this.dlgSaveData = new System.Windows.Forms.SaveFileDialog();
+            this.pnlGraphics = new System.Windows.Forms.Panel();
             this.grpLocation.SuspendLayout();
             this.grpMonths.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgdMonths)).BeginInit();
@@ -535,11 +536,22 @@
             this.txtDescriptionInput.Size = new System.Drawing.Size(276, 22);
             this.txtDescriptionInput.TabIndex = 10;
             // 
+            // pnlGraphics
+            // 
+            this.pnlGraphics.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlGraphics.BackColor = System.Drawing.SystemColors.Window;
+            this.pnlGraphics.Location = new System.Drawing.Point(709, 402);
+            this.pnlGraphics.Name = "pnlGraphics";
+            this.pnlGraphics.Size = new System.Drawing.Size(450, 300);
+            this.pnlGraphics.TabIndex = 11;
+            this.pnlGraphics.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlGraphics_Paint);
+            // 
             // frmHome
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1268, 708);
+            this.Controls.Add(this.pnlGraphics);
             this.Controls.Add(this.grpMonths);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.grpLocation);
@@ -604,6 +616,7 @@
         private System.Windows.Forms.Button btnCancelNewYear;
         private System.Windows.Forms.Button btnCancelEditMonth;
         private System.Windows.Forms.SaveFileDialog dlgSaveData;
+        public System.Windows.Forms.Panel pnlGraphics;
     }
 }
 

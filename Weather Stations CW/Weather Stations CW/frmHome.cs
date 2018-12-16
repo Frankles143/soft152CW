@@ -8,11 +8,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using System.Drawing.Drawing2D;
 
 namespace Weather_Stations_CW
 {
     //TO DO LIST
-
+    //Sort out edit month button - it's a bit all over the place for when it comes on
+    //graphics - check notebook
+    //averages and stuff - check assignment brief
 
     //GUI - WIP
     //Change your output for the location listbox to be brief (KEEP ROBUST SEARCH), and then output data next to it, to be able to easily edit -- Not sure if I can do with current search methods
@@ -20,12 +23,7 @@ namespace Weather_Stations_CW
     //Graphics on same screen on the other side
     //Drop down or listbox for graphing options? - rainfall, sunshine etc. 
 
-    //I will need a SAVE DATA method to put the entire locationArray back into the text file -- Use another dialog to save the file? Saves overwriting it everytime
-
     //Need some exception handling for pulling in data - check problems
-
-    //ASK LIZ
-    //Nothing currently
 
     //Problems
     //Postcodes don't output in a regular way
@@ -229,6 +227,28 @@ namespace Weather_Stations_CW
         private void dgdMonths_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             btnEditMonth.Enabled = true;
+        }
+
+        private void pnlGraphics_Paint(object sender, PaintEventArgs e)
+        {
+            Pen redPen;
+            Pen blackPen;
+            int penSize = 2, gapBetweenBars = 10;
+            Color myColour = Color.Red;
+            Color black = Color.Black;
+
+            redPen = new Pen(myColour, penSize);
+            blackPen = new Pen(black, penSize);
+
+            using (Graphics panelGraphics = pnlGraphics.CreateGraphics())
+            {
+                
+                panelGraphics.DrawLine(blackPen, 10, 10, 10, 290);
+                panelGraphics.DrawLine(blackPen, 10, 290, 440, 290);
+
+                panelGraphics.DrawRectangle(redPen, gapBetweenBars * 2, 20, 20, pnlGraphics.Height - 30);
+            }
+            redPen.Dispose();
         }
 
         private void btnExit_Click(object sender, EventArgs e)
