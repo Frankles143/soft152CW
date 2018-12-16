@@ -14,14 +14,11 @@ namespace Weather_Stations_CW
     //TO DO LIST
 
 
-    //Output everything back into a text file to save things permanantly - this needs to be done EVERYTIME something in the array is changed -- save month, year, location
-
-
     //GUI - WIP
     //Change your output for the location listbox to be brief (KEEP ROBUST SEARCH), and then output data next to it, to be able to easily edit -- Not sure if I can do with current search methods
 
     //Graphics on same screen on the other side
-        //Drop down or listbox for graphing options? - rainfall, sunshine etc. 
+    //Drop down or listbox for graphing options? - rainfall, sunshine etc. 
 
     //I will need a SAVE DATA method to put the entire locationArray back into the text file -- Use another dialog to save the file? Saves overwriting it everytime
 
@@ -39,6 +36,7 @@ namespace Weather_Stations_CW
     public partial class frmHome : Form
     {
         private int saveOrEdit;
+
         public frmHome()
         {
             InitializeComponent();
@@ -47,24 +45,32 @@ namespace Weather_Stations_CW
         //Reads in data, spits out location data for user to choose from and then brings the form into focus
         private void frmHome_Load(object sender, EventArgs e)
         {
-            //exception handling
-            try
+            bool exceptionHandled = false;
+
+            //While loop to make sure users select a file
+            while (exceptionHandled == false)
             {
-                ReadInData();
-                OutputLocationList();
-                GetMonthName();
-                this.Activate();
-                lstLocations.SelectedIndex = 0;
-                lstYears.SelectedIndex = 0;
+                //exception handling
+                try
+                {
+                    ReadInData();
+                    OutputLocationList();
+                    GetMonthName();
+                    this.Activate();
+                    lstLocations.SelectedIndex = 0;
+                    lstYears.SelectedIndex = 0;
+                    exceptionHandled = true;
+                }
+                catch (FileNotFoundException ex)
+                {
+                    MessageBox.Show("Please choose a valid file " + ex.Message);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: " + ex.Message);
+                }
             }
-            catch (FileNotFoundException ex)
-            {
-                MessageBox.Show("Please choose a valid file " + ex.Message);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error: " + ex.Message);
-            }
+
         }
 
         private void txtLocationSearch_TextChanged(object sender, EventArgs e)
@@ -86,9 +92,11 @@ namespace Weather_Stations_CW
             btnNewYear.Enabled = true;
             btnEditLocation.Enabled = true;
             btnEditYear.Enabled = false;
+            //If lstYears has items in it then change the selected index to 0, otherwise, clear year form ready for a new year
             if (lstYears.SelectedIndex >= -1 && lstYears.Items.Count > 0)
             {
                 lstYears.SelectedIndex = 0;
+                OutputMonthList();
             }
             else if (lstYears.Items.Count == 0)
             {
@@ -99,7 +107,6 @@ namespace Weather_Stations_CW
 
         private void lstYears_SelectedIndexChanged(object sender, EventArgs e)
         {
-            int yearIndex = lstYears.SelectedIndex;
             OutputMonthList();
             OutputYearData();
             btnEditYear.Enabled = true;
@@ -190,7 +197,8 @@ namespace Weather_Stations_CW
             if (saveOrEdit == 0)
             {
                 NewYear();
-            } else if (saveOrEdit == 1)
+            }
+            else if (saveOrEdit == 1)
             {
                 EditYear();
             }
@@ -221,11 +229,6 @@ namespace Weather_Stations_CW
         private void dgdMonths_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             btnEditMonth.Enabled = true;
-        }
-
-        private void btnSave_Click(object sender, EventArgs e)
-        {
-            //Saves all changes to a file? -- How to stop editing a month?
         }
 
         private void btnExit_Click(object sender, EventArgs e)
@@ -262,6 +265,8 @@ namespace Weather_Stations_CW
                 EnableButtonsNewLocation();
 
                 lstLocations.SelectedIndex = 0;
+
+                WriteOutData();
             }
             else
             {
@@ -329,6 +334,16 @@ namespace Weather_Stations_CW
                     OutputYearList();
 
                     EnableButtonsNewYear();
+
+                    lstYears.SelectedIndexChanged -= lstYears_SelectedIndexChanged;
+                    lstYears.SelectedIndex = (lstYears.Items.Count - 1);
+                    lstYears.SelectedIndexChanged += lstYears_SelectedIndexChanged;
+
+                    dgdMonths.ReadOnly = false;
+                    DisableButtonsEditMonth();
+                    btnCancelEditMonth.Enabled = false;
+                    btnEditMonth.Enabled = false;
+                    OutputMonthList();
                 }
                 catch (FormatException)
                 {
@@ -398,7 +413,7 @@ namespace Weather_Stations_CW
 
         private void SaveMonthData()
         {
-            //dataGridView.Rows[4].Cells["Name"].Value.ToString(); - This will help for outputting from datagrid to array
+            //Checks to see if every cell is full first
             if (DatagridChecker() == true)
             {
                 //declare vars
@@ -407,12 +422,12 @@ namespace Weather_Stations_CW
                 int locationIndex = GetLocationIndexFromString();
                 int yearIndex = lstYears.SelectedIndex;
                 MonthlyObservations tempMonthlyObservations;
-
-                //Cycle through each row to grab all the data for one month, put that month into it's own index and do that for the whole year
-                for (int i = 0; i < 12; i++)
+                try
                 {
-                    try
+                    //Cycle through each row to grab all the data for one month, put that month into it's own index and do that for the whole year - as long as no exception is thrown!
+                    for (int i = 0; i < 12; i++)
                     {
+
                         monthId = i + 1;
                         maxTemp = Convert.ToDouble(dgdMonths.Rows[i].Cells["maxTemp"].Value);
                         minTemp = Convert.ToDouble(dgdMonths.Rows[i].Cells["minTemp"].Value);
@@ -423,16 +438,18 @@ namespace Weather_Stations_CW
                         tempMonthlyObservations = new MonthlyObservations(monthId, maxTemp, minTemp, daysAirFrost, mmRain, hrsSun);
 
                         Data.locationArray[locationIndex].YearsOfObservationsArray[yearIndex].MonthlyObservationsArray[i] = tempMonthlyObservations;
+
                     }
-                    catch (FormatException)
-                    {
-                        MessageBox.Show("Please enter month data in numbers!");
-                    }
+                    //Output the new array
+                    GetMonthName();
+                    OutputMonthList();
+                    EnableButtonsEditMonth();
+                    WriteOutData();
                 }
-                //Output the new array
-                GetMonthName();
-                OutputMonthList();
-                EnableButtonsEditMonth();
+                catch (FormatException)
+                {
+                    MessageBox.Show("Please enter month data in numbers!");
+                }
             }
         }
 
@@ -712,28 +729,36 @@ namespace Weather_Stations_CW
         //Output all months in a year for a specific location
         private void OutputMonthList()
         {
-            try
+            if (dgdMonths.Rows.Count > 0)
             {
-                dgdMonths.Rows.Clear();
+                try
+                {
+                    dgdMonths.Rows.Clear();
 
-                int currentLocation = GetLocationIndexFromString();
-                int selectedYear = lstYears.SelectedIndex;
+                    int currentLocation = GetLocationIndexFromString();
+                    int selectedYear = lstYears.SelectedIndex;
 
-                //Loops through every month
+                    //Loops through every month
+                    for (int i = 0; i < 12; i++)
+                    {
+                        //Outputs the month data for location and year selected
+                        dgdMonths.Rows.Add(Data.locationArray[currentLocation].YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].MonthName, Data.locationArray[currentLocation].YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].MaxTemp, Data.locationArray[currentLocation].YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].MinTemp, Data.locationArray[currentLocation].YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].DaysAirFrost, Data.locationArray[currentLocation].YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].MmRain, Data.locationArray[currentLocation].YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].HrsSun);
+                    }
+                    dgdMonths.Refresh();
+                }
+                catch (NullReferenceException e)
+                {
+                    MessageBox.Show("Null reference exception!" + e.Message);
+                }
+            }
+            else
+            {
                 for (int i = 0; i < 12; i++)
                 {
-                    //Outputs the month data for location and year selected
-                    dgdMonths.Rows.Add(Data.locationArray[currentLocation].YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].MonthName, Data.locationArray[currentLocation].YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].MaxTemp, Data.locationArray[currentLocation].YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].MinTemp, Data.locationArray[currentLocation].YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].DaysAirFrost, Data.locationArray[currentLocation].YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].MmRain, Data.locationArray[currentLocation].YearsOfObservationsArray[selectedYear].MonthlyObservationsArray[i].HrsSun);
-                }
-                dgdMonths.Refresh();
-            }
-            catch (NullReferenceException)
-            {
-                for (int i = 0; i < 12; i++)
-                {
-                    dgdMonths.Rows.Add(Data.yearArray[0].MonthlyObservationsArray[i].MonthName, "", "", "", "", "");
+                    dgdMonths.Rows.Add(Data.locationArray[0].YearsOfObservationsArray[0].MonthlyObservationsArray[i].MonthName, "", "", "", "", "");
                 }
             }
+
         }
 
 
@@ -860,6 +885,79 @@ namespace Weather_Stations_CW
             }
         }
 
+        private string outputFilename = "";
+
+        //Saves all the locations, years and months to a file
+        private void WriteOutData()
+        {
+            //Choosing where to save - only have to do this once
+            if (outputFilename == "")
+            {
+                dlgSaveData.ShowDialog();
+                outputFilename = dlgSaveData.FileName;
+            }
+
+            //Grab number of locations
+            int numberOfLocations = Data.locationArray.Length;
+
+            //Opens streamwriter
+            using (StreamWriter fileOutput = new StreamWriter(outputFilename))
+            {
+                fileOutput.WriteLine(numberOfLocations);
+
+                //Loop for how many locations there are before closing the streamwriter
+                for (int location = 0; location < numberOfLocations; location++)
+                {
+                    WriteLocation(fileOutput, location);
+                }
+            }
+        }
+
+        private void WriteLocation(StreamWriter fileOutput, int location)
+        {
+            //Grab number of years for this location
+            int numberOfYears = Data.locationArray[location].YearsOfObservationsArray.Length;
+
+            //Write in location data
+            fileOutput.WriteLine(Data.locationArray[location].LocationName);
+            fileOutput.WriteLine(Data.locationArray[location].StreetNumberAndName);
+            fileOutput.WriteLine(Data.locationArray[location].County);
+            fileOutput.WriteLine(Data.locationArray[location].PostCode);
+            fileOutput.WriteLine(Data.locationArray[location].Latitude);
+            fileOutput.WriteLine(Data.locationArray[location].Longtitude);
+
+            fileOutput.WriteLine(numberOfYears);
+
+            //Loop for number of years in that location
+            for (int year = 0; year < numberOfYears; year++)
+            {
+                WriteYear(fileOutput, location, year);
+            }
+        }
+
+        private void WriteYear(StreamWriter fileOutput, int location, int year)
+        {
+            //Write out year data
+            fileOutput.WriteLine(Data.locationArray[location].YearsOfObservationsArray[year].YearDescription);
+
+            //Loop for 12 months
+            for (int month = 0; month < 12; month++)
+            {
+                fileOutput.WriteLine(Data.locationArray[location].YearsOfObservationsArray[year].YearDate);
+                WriteMonth(fileOutput, location, year, month);
+            }
+        }
+
+        private void WriteMonth(StreamWriter fileOutput, int location, int year, int month)
+        {
+            //Write out all the month data
+            fileOutput.WriteLine(Data.locationArray[location].YearsOfObservationsArray[year].MonthlyObservationsArray[month].MonthId);
+            fileOutput.WriteLine(Data.locationArray[location].YearsOfObservationsArray[year].MonthlyObservationsArray[month].MaxTemp);
+            fileOutput.WriteLine(Data.locationArray[location].YearsOfObservationsArray[year].MonthlyObservationsArray[month].MinTemp);
+            fileOutput.WriteLine(Data.locationArray[location].YearsOfObservationsArray[year].MonthlyObservationsArray[month].DaysAirFrost);
+            fileOutput.WriteLine(Data.locationArray[location].YearsOfObservationsArray[year].MonthlyObservationsArray[month].MmRain);
+            fileOutput.WriteLine(Data.locationArray[location].YearsOfObservationsArray[year].MonthlyObservationsArray[month].HrsSun);
+        }
 
         //Growing arrays with polymorphism
         private void GrowArray(ref Location[] arrayToChange)

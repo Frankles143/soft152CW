@@ -61,7 +61,6 @@
             this.hrsSun = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnSaveMonth = new System.Windows.Forms.Button();
             this.btnEditMonth = new System.Windows.Forms.Button();
-            this.btnSave = new System.Windows.Forms.Button();
             this.btnNewYear = new System.Windows.Forms.Button();
             this.btnEditYear = new System.Windows.Forms.Button();
             this.grpYear = new System.Windows.Forms.GroupBox();
@@ -71,6 +70,7 @@
             this.txtYearDateInput = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.txtDescriptionInput = new System.Windows.Forms.TextBox();
+            this.dlgSaveData = new System.Windows.Forms.SaveFileDialog();
             this.grpLocation.SuspendLayout();
             this.grpMonths.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgdMonths)).BeginInit();
@@ -426,19 +426,6 @@
             this.btnEditMonth.UseVisualStyleBackColor = true;
             this.btnEditMonth.Click += new System.EventHandler(this.btnEditMonth_Click);
             // 
-            // btnSave
-            // 
-            this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSave.Enabled = false;
-            this.btnSave.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSave.Location = new System.Drawing.Point(1076, 642);
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(80, 54);
-            this.btnSave.TabIndex = 12;
-            this.btnSave.Text = "Save";
-            this.btnSave.UseVisualStyleBackColor = true;
-            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
-            // 
             // btnNewYear
             // 
             this.btnNewYear.Anchor = System.Windows.Forms.AnchorStyles.Left;
@@ -553,7 +540,6 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1268, 708);
-            this.Controls.Add(this.btnSave);
             this.Controls.Add(this.grpMonths);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.grpLocation);
@@ -584,7 +570,6 @@
         private System.Windows.Forms.GroupBox grpMonths;
         private System.Windows.Forms.DataGridView dgdMonths;
         private System.Windows.Forms.Button btnEditLocation;
-        private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnNewLocation;
         private System.Windows.Forms.Button btnNewYear;
         private System.Windows.Forms.Button btnEditYear;
@@ -618,6 +603,7 @@
         private System.Windows.Forms.Button btnCancelNewLocation;
         private System.Windows.Forms.Button btnCancelNewYear;
         private System.Windows.Forms.Button btnCancelEditMonth;
+        private System.Windows.Forms.SaveFileDialog dlgSaveData;
     }
 }
 
