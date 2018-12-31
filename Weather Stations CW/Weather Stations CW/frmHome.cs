@@ -33,6 +33,7 @@ namespace Weather_Stations_CW
 
     public partial class frmHome : Form
     {
+        private bool fileLoaded = false;
         private int saveOrEdit;
 
         public frmHome()
@@ -43,10 +44,9 @@ namespace Weather_Stations_CW
         //Reads in data, spits out location data for user to choose from and then brings the form into focus
         private void frmHome_Load(object sender, EventArgs e)
         {
-            bool exceptionHandled = false;
 
             //While loop to make sure users select a file
-            while (exceptionHandled == false)
+            while (fileLoaded == false)
             {
                 //exception handling
                 try
@@ -57,7 +57,7 @@ namespace Weather_Stations_CW
                     this.Activate();
                     lstLocations.SelectedIndex = 0;
                     lstYears.SelectedIndex = 0;
-                    exceptionHandled = true;
+                    fileLoaded = true;
                 }
                 catch (FileNotFoundException ex)
                 {
@@ -233,22 +233,98 @@ namespace Weather_Stations_CW
         {
             Pen redPen;
             Pen blackPen;
-            int penSize = 2, gapBetweenBars = 10;
+            int penSize = 2, gapBetweenPoints = 35;
             Color myColour = Color.Red;
             Color black = Color.Black;
 
             redPen = new Pen(myColour, penSize);
             blackPen = new Pen(black, penSize);
 
-            using (Graphics panelGraphics = pnlGraphics.CreateGraphics())
+            if (fileLoaded == true)
             {
-                
-                panelGraphics.DrawLine(blackPen, 10, 10, 10, 290);
-                panelGraphics.DrawLine(blackPen, 10, 290, 440, 290);
+                using (Graphics panelGraphics = pnlGraphics.CreateGraphics())
+                {
+                    //Declare points and vars
+                    Point p1 = new Point();
+                    Point p2 = new Point();
+                    //300 pixels between the chart lines X
+                    //3 pixels is 1%
+                    //430 pixels between lines Y
+                    //430/12 = ~35
+                    int topOfGraph = 10, onePercent = 3;
+                    double value, difference;
 
-                panelGraphics.DrawRectangle(redPen, gapBetweenBars * 2, 20, 20, pnlGraphics.Height - 30);
+                    //Create pens
+                    panelGraphics.DrawLine(blackPen, 10, 10, 10, 310);
+                    panelGraphics.DrawLine(blackPen, 10, 310, 440, 310);
+
+                    //panelGraphics.DrawRectangle(redPen, gapBetweenBars * 2, 20, 20, pnlGraphics.Height - 30);
+
+                    p1.X = 10;
+                    p1.Y = 310;
+                    p2.X = 10;
+                    p2.Y = 310;
+
+                    for (int i = 0; i < 12; i++)
+                    {
+                        double newY = 0;
+
+                        value = Data.locationArray[GetLocationIndexFromString()].YearsOfObservationsArray[lstYears.SelectedIndex].MonthlyObservationsArray[i].HrsSun;
+                        difference = 180;
+
+                       
+
+                        //Make sure that the next point comes from the last point
+                        p1 = p2;
+
+                        //p2.X will be increased by a set amount so points are equal distance apart 
+                        p2.X = p2.X + gapBetweenPoints;
+
+                        //New p2.Y co-ord is made using method and some maths
+                        newY = (PercentageCalcAndInvert(value, difference) * onePercent) + topOfGraph;
+                        p2.Y = Convert.ToInt32(newY);
+
+                        //Dynamically create labels and attach the value to them
+                        Label val = new Label();
+                        //this.pnlGraphics.Controls.Add(val);
+                        
+                        val.Location = p2;
+                        val.Text = value.ToString();
+                        val.Size = new Size(40, 20);
+                        val.Parent = pnlGraphics;
+                        val.BackColor = Color.Transparent;
+                        
+
+
+                        if (p1.X != 0 && p2.X != 0)
+                        {
+                            panelGraphics.DrawLine(blackPen, p1, p2);
+                        }
+
+                        //Draws dot at p2
+                        panelGraphics.DrawPie(blackPen, p2.X - 2.5f, p2.Y - 2.5f, 5, 5, 0, 360);
+                        panelGraphics.FillPie(new SolidBrush(Color.Black), p2.X - 2.5f, p2.Y - 2.5f, 5, 5, 0, 360);
+                    }
+
+                }
             }
+
             redPen.Dispose();
+            blackPen.Dispose();
+        }
+
+        private double PercentageCalcAndInvert(double value, double difference)
+        {
+            double percent, returnPercent;
+
+            //Finds percent given two values
+            percent = (value / difference) * 100;
+
+            //inverts the percentage because of how the graph works
+            returnPercent = 100 - percent;
+
+            //Returns a percent I can use for the graph
+            return returnPercent;
         }
 
         private void btnExit_Click(object sender, EventArgs e)

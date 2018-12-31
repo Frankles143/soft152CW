@@ -289,7 +289,7 @@
             // 
             this.btnExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnExit.Location = new System.Drawing.Point(1173, 642);
+            this.btnExit.Location = new System.Drawing.Point(1176, 654);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(80, 54);
             this.btnExit.TabIndex = 8;
@@ -316,7 +316,7 @@
             this.grpMonths.Controls.Add(this.btnSaveMonth);
             this.grpMonths.Controls.Add(this.btnEditMonth);
             this.grpMonths.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grpMonths.Location = new System.Drawing.Point(12, 392);
+            this.grpMonths.Location = new System.Drawing.Point(12, 404);
             this.grpMonths.Name = "grpMonths";
             this.grpMonths.Size = new System.Drawing.Size(679, 313);
             this.grpMonths.TabIndex = 10;
@@ -467,7 +467,7 @@
             this.grpYear.Controls.Add(this.btnNewYear);
             this.grpYear.Controls.Add(this.txtDescriptionInput);
             this.grpYear.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grpYear.Location = new System.Drawing.Point(12, 230);
+            this.grpYear.Location = new System.Drawing.Point(12, 236);
             this.grpYear.Name = "grpYear";
             this.grpYear.Size = new System.Drawing.Size(838, 156);
             this.grpYear.TabIndex = 4;
@@ -540,9 +540,9 @@
             // 
             this.pnlGraphics.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlGraphics.BackColor = System.Drawing.SystemColors.Window;
-            this.pnlGraphics.Location = new System.Drawing.Point(709, 402);
+            this.pnlGraphics.Location = new System.Drawing.Point(709, 394);
             this.pnlGraphics.Name = "pnlGraphics";
-            this.pnlGraphics.Size = new System.Drawing.Size(450, 300);
+            this.pnlGraphics.Size = new System.Drawing.Size(450, 320);
             this.pnlGraphics.TabIndex = 11;
             this.pnlGraphics.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlGraphics_Paint);
             // 
@@ -550,7 +550,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1268, 708);
+            this.ClientSize = new System.Drawing.Size(1271, 720);
             this.Controls.Add(this.pnlGraphics);
             this.Controls.Add(this.grpMonths);
             this.Controls.Add(this.btnExit);
