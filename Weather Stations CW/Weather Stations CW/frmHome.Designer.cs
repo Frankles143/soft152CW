@@ -72,6 +72,21 @@
             this.txtDescriptionInput = new System.Windows.Forms.TextBox();
             this.dlgSaveData = new System.Windows.Forms.SaveFileDialog();
             this.pnlGraphics = new System.Windows.Forms.Panel();
+            this.cmbGraphicOptions = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
+            this.label19 = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
+            this.lblMaxValue = new System.Windows.Forms.Label();
+            this.lblMinValue = new System.Windows.Forms.Label();
             this.grpLocation.SuspendLayout();
             this.grpMonths.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgdMonths)).BeginInit();
@@ -289,7 +304,7 @@
             // 
             this.btnExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnExit.Location = new System.Drawing.Point(1176, 654);
+            this.btnExit.Location = new System.Drawing.Point(1356, 654);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(80, 54);
             this.btnExit.TabIndex = 8;
@@ -357,7 +372,6 @@
             this.dgdMonths.Size = new System.Drawing.Size(541, 292);
             this.dgdMonths.TabIndex = 0;
             this.dgdMonths.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgdMonths_CellClick);
-            this.dgdMonths.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgdMonths_CellContentClick);
             // 
             // monthId
             // 
@@ -540,23 +554,194 @@
             // 
             this.pnlGraphics.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlGraphics.BackColor = System.Drawing.SystemColors.Window;
-            this.pnlGraphics.Location = new System.Drawing.Point(709, 394);
+            this.pnlGraphics.Location = new System.Drawing.Point(889, 328);
             this.pnlGraphics.Name = "pnlGraphics";
             this.pnlGraphics.Size = new System.Drawing.Size(450, 320);
             this.pnlGraphics.TabIndex = 11;
             this.pnlGraphics.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlGraphics_Paint);
             // 
+            // cmbGraphicOptions
+            // 
+            this.cmbGraphicOptions.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cmbGraphicOptions.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbGraphicOptions.FormattingEnabled = true;
+            this.cmbGraphicOptions.Items.AddRange(new object[] {
+            "Maximum Temperature",
+            "Minimum Temperature",
+            "Days of Air Frost",
+            "Rain (mm)",
+            "Hours of sunlight"});
+            this.cmbGraphicOptions.Location = new System.Drawing.Point(889, 687);
+            this.cmbGraphicOptions.Name = "cmbGraphicOptions";
+            this.cmbGraphicOptions.Size = new System.Drawing.Size(269, 21);
+            this.cmbGraphicOptions.TabIndex = 12;
+            this.cmbGraphicOptions.SelectedIndexChanged += new System.EventHandler(this.cmbGraphicOptions_SelectedIndexChanged);
+            // 
+            // label3
+            // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(911, 654);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(24, 13);
+            this.label3.TabIndex = 13;
+            this.label3.Text = "Jan";
+            // 
+            // label4
+            // 
+            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(946, 654);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(25, 13);
+            this.label4.TabIndex = 14;
+            this.label4.Text = "Feb";
+            // 
+            // label5
+            // 
+            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(981, 654);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(25, 13);
+            this.label5.TabIndex = 15;
+            this.label5.Text = "Mar";
+            // 
+            // label6
+            // 
+            this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(1016, 654);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(23, 13);
+            this.label6.TabIndex = 16;
+            this.label6.Text = "Apr";
+            // 
+            // label13
+            // 
+            this.label13.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(1051, 654);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(27, 13);
+            this.label13.TabIndex = 17;
+            this.label13.Text = "May";
+            // 
+            // label14
+            // 
+            this.label14.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(1086, 654);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(24, 13);
+            this.label14.TabIndex = 18;
+            this.label14.Text = "Jun";
+            // 
+            // label15
+            // 
+            this.label15.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(1121, 654);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(20, 13);
+            this.label15.TabIndex = 19;
+            this.label15.Text = "Jul";
+            // 
+            // label16
+            // 
+            this.label16.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(1156, 654);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(26, 13);
+            this.label16.TabIndex = 20;
+            this.label16.Text = "Aug";
+            // 
+            // label17
+            // 
+            this.label17.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(1296, 654);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(27, 13);
+            this.label17.TabIndex = 21;
+            this.label17.Text = "Dec";
+            // 
+            // label18
+            // 
+            this.label18.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(1261, 654);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(27, 13);
+            this.label18.TabIndex = 22;
+            this.label18.Text = "Nov";
+            // 
+            // label19
+            // 
+            this.label19.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(1226, 654);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(24, 13);
+            this.label19.TabIndex = 23;
+            this.label19.Text = "Oct";
+            // 
+            // label20
+            // 
+            this.label20.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(1191, 654);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(26, 13);
+            this.label20.TabIndex = 24;
+            this.label20.Text = "Sep";
+            // 
+            // lblMaxValue
+            // 
+            this.lblMaxValue.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblMaxValue.AutoSize = true;
+            this.lblMaxValue.Location = new System.Drawing.Point(854, 338);
+            this.lblMaxValue.Name = "lblMaxValue";
+            this.lblMaxValue.Size = new System.Drawing.Size(0, 13);
+            this.lblMaxValue.TabIndex = 25;
+            // 
+            // lblMinValue
+            // 
+            this.lblMinValue.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblMinValue.AutoSize = true;
+            this.lblMinValue.Location = new System.Drawing.Point(868, 631);
+            this.lblMinValue.Name = "lblMinValue";
+            this.lblMinValue.Size = new System.Drawing.Size(13, 13);
+            this.lblMinValue.TabIndex = 26;
+            this.lblMinValue.Text = "0";
+            // 
             // frmHome
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1271, 720);
+            this.ClientSize = new System.Drawing.Size(1451, 720);
+            this.Controls.Add(this.lblMinValue);
+            this.Controls.Add(this.lblMaxValue);
+            this.Controls.Add(this.label20);
+            this.Controls.Add(this.label19);
+            this.Controls.Add(this.label18);
+            this.Controls.Add(this.label17);
+            this.Controls.Add(this.label16);
+            this.Controls.Add(this.label15);
+            this.Controls.Add(this.label14);
+            this.Controls.Add(this.label13);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.cmbGraphicOptions);
             this.Controls.Add(this.pnlGraphics);
             this.Controls.Add(this.grpMonths);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.grpLocation);
             this.Controls.Add(this.grpYear);
-            this.MinimumSize = new System.Drawing.Size(1284, 553);
+            this.MinimumSize = new System.Drawing.Size(1467, 759);
             this.Name = "frmHome";
             this.Text = "Weather Information";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
@@ -568,6 +753,7 @@
             this.grpYear.ResumeLayout(false);
             this.grpYear.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -617,6 +803,21 @@
         private System.Windows.Forms.Button btnCancelEditMonth;
         private System.Windows.Forms.SaveFileDialog dlgSaveData;
         public System.Windows.Forms.Panel pnlGraphics;
+        private System.Windows.Forms.ComboBox cmbGraphicOptions;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.Label lblMaxValue;
+        private System.Windows.Forms.Label lblMinValue;
     }
 }
 

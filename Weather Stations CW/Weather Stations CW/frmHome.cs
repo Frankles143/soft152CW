@@ -14,14 +14,10 @@ namespace Weather_Stations_CW
 {
     //TO DO LIST
     //Sort out edit month button - it's a bit all over the place for when it comes on
-    //graphics - check notebook
     //averages and stuff - check assignment brief
 
     //GUI - WIP
     //Change your output for the location listbox to be brief (KEEP ROBUST SEARCH), and then output data next to it, to be able to easily edit -- Not sure if I can do with current search methods
-
-    //Graphics on same screen on the other side
-    //Drop down or listbox for graphing options? - rainfall, sunshine etc. 
 
     //Need some exception handling for pulling in data - check problems
 
@@ -33,7 +29,7 @@ namespace Weather_Stations_CW
 
     public partial class frmHome : Form
     {
-        private bool fileLoaded = false;
+        private bool fileLoaded = false, stillEditing = false;
         private int saveOrEdit;
 
         public frmHome()
@@ -87,6 +83,7 @@ namespace Weather_Stations_CW
         {
             OutputYearList();
             OutputLocationData();
+            OutputLocationData();
             btnNewYear.Enabled = true;
             btnEditLocation.Enabled = true;
             btnEditYear.Enabled = false;
@@ -95,6 +92,8 @@ namespace Weather_Stations_CW
             {
                 lstYears.SelectedIndex = 0;
                 OutputMonthList();
+                pnlGraphics.Refresh();
+                PanelUpdates();
             }
             else if (lstYears.Items.Count == 0)
             {
@@ -107,11 +106,14 @@ namespace Weather_Stations_CW
         {
             OutputMonthList();
             OutputYearData();
+            pnlGraphics.Refresh();
+            PanelUpdates();
             btnEditYear.Enabled = true;
         }
 
         private void btnNewLocation_Click(object sender, EventArgs e)
         {
+            stillEditing = true;
             saveOrEdit = 0;
             //Dettach the event handler, change the selected index and then reattach the event handler
             lstLocations.SelectedIndexChanged -= lstLocations_SelectedIndexChanged;
@@ -129,6 +131,7 @@ namespace Weather_Stations_CW
 
         private void btnEditLocation_Click(object sender, EventArgs e)
         {
+            stillEditing = true;
             saveOrEdit = 1;
             DisableButtonsNewLocation();
 
@@ -137,10 +140,9 @@ namespace Weather_Stations_CW
         private void btnCancelNewLocation_Click(object sender, EventArgs e)
         {
             //Re enable everything to cancel the new location process
+            stillEditing = false;
             OutputLocationList();
-
             EnableButtonsNewLocation();
-
             lstLocations.SelectedIndex = 0;
         }
 
@@ -159,6 +161,7 @@ namespace Weather_Stations_CW
 
         private void btnNewYear_Click(object sender, EventArgs e)
         {
+            stillEditing = true;
             saveOrEdit = 0;
             //Remove the event handler, then change the selected index, then add the event handler back on
             lstYears.SelectedIndexChanged -= lstYears_SelectedIndexChanged;
@@ -175,6 +178,7 @@ namespace Weather_Stations_CW
 
         private void btnEditYear_Click(object sender, EventArgs e)
         {
+            stillEditing = true;
             saveOrEdit = 1;
             DisableButtonsNewYear();
         }
@@ -182,11 +186,10 @@ namespace Weather_Stations_CW
         private void btnCancelNewYear_Click(object sender, EventArgs e)
         {
             //Re enable everything to cancel the new year process
+            stillEditing = false;
             OutputLocationList();
             OutputYearList();
-
             EnableButtonsNewYear();
-
             lstLocations.SelectedIndex = 0;
         }
 
@@ -204,6 +207,7 @@ namespace Weather_Stations_CW
 
         private void btnEditMonth_Click(object sender, EventArgs e)
         {
+            stillEditing = true;
             dgdMonths.ReadOnly = false;
             DisableButtonsEditMonth();
         }
@@ -215,13 +219,9 @@ namespace Weather_Stations_CW
 
         private void btnCancelEditMonth_Click(object sender, EventArgs e)
         {
+            stillEditing = false;
             EnableButtonsEditMonth();
             OutputMonthList();
-        }
-
-        private void dgdMonths_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
         }
 
         private void dgdMonths_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -229,7 +229,18 @@ namespace Weather_Stations_CW
             btnEditMonth.Enabled = true;
         }
 
+        private void cmbGraphicOptions_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            pnlGraphics.Refresh();
+            PanelUpdates();
+        }
+
         private void pnlGraphics_Paint(object sender, PaintEventArgs e)
+        {
+            PanelUpdates();
+        }
+
+        private void PanelUpdates()
         {
             Pen redPen;
             Pen blackPen;
@@ -240,85 +251,200 @@ namespace Weather_Stations_CW
             redPen = new Pen(myColour, penSize);
             blackPen = new Pen(black, penSize);
 
-            if (fileLoaded == true)
-            {
+
+            if (fileLoaded == true && stillEditing == false)
+            { 
                 using (Graphics panelGraphics = pnlGraphics.CreateGraphics())
                 {
                     //Declare points and vars
                     Point p1 = new Point();
                     Point p2 = new Point();
+
                     //300 pixels between the chart lines X
                     //3 pixels is 1%
                     //430 pixels between lines Y
                     //430/12 = ~35
                     int topOfGraph = 10, onePercent = 3;
-                    double value, difference;
+                    //the ? allows these two doubles to be nulled, this is for error checking
+                    double? value = 0, difference = 0;
 
                     //Create pens
                     panelGraphics.DrawLine(blackPen, 10, 10, 10, 310);
                     panelGraphics.DrawLine(blackPen, 10, 310, 440, 310);
 
-                    //panelGraphics.DrawRectangle(redPen, gapBetweenBars * 2, 20, 20, pnlGraphics.Height - 30);
-
-                    p1.X = 10;
-                    p1.Y = 310;
-                    p2.X = 10;
-                    p2.Y = 310;
-
                     for (int i = 0; i < 12; i++)
                     {
                         double newY = 0;
 
-                        value = Data.locationArray[GetLocationIndexFromString()].YearsOfObservationsArray[lstYears.SelectedIndex].MonthlyObservationsArray[i].HrsSun;
-                        difference = 180;
+                        //Grabs the value and difference depending on drop down option
+                        MonthDataSwitch(ref value, ref difference, i);
 
-                       
-
-                        //Make sure that the next point comes from the last point
-                        p1 = p2;
-
-                        //p2.X will be increased by a set amount so points are equal distance apart 
-                        p2.X = p2.X + gapBetweenPoints;
-
-                        //New p2.Y co-ord is made using method and some maths
-                        newY = (PercentageCalcAndInvert(value, difference) * onePercent) + topOfGraph;
-                        p2.Y = Convert.ToInt32(newY);
-
-                        //Dynamically create labels and attach the value to them
-                        Label val = new Label();
-                        //this.pnlGraphics.Controls.Add(val);
-                        
-                        val.Location = p2;
-                        val.Text = value.ToString();
-                        val.Size = new Size(40, 20);
-                        val.Parent = pnlGraphics;
-                        val.BackColor = Color.Transparent;
-                        
-
-
-                        if (p1.X != 0 && p2.X != 0)
+                        if (value != null && difference != null)
                         {
-                            panelGraphics.DrawLine(blackPen, p1, p2);
+                            //Make sure that the next point starts from the last point
+                            p1 = p2;
+
+                            //p2.X will be increased by a set amount so points are equal distance apart 
+                            p2.X = p2.X + gapBetweenPoints;
+
+                            //New p2.Y co-ord is made using method and some maths
+                            newY = (PercentageCalcAndInvert(value, difference) * onePercent) + topOfGraph;
+                            p2.Y = Convert.ToInt32(newY);
+
+                            //Dynamically create labels and attach the correct value to them
+                            //Label val = new Label();
+                            //val.Name = "lblValue";
+                            //pVal.X = p2.X;
+                            //pVal.Y = p2.Y + 10;
+                            //val.Location = pVal;
+                            //val.AutoSize = true;
+                            //val.Text = value.ToString();
+                            //val.Parent = pnlGraphics;
+                            //val.BorderStyle = BorderStyle.None;
+                            //val.BackColor = Color.Transparent;
+                            //this.pnlGraphics.Controls.Add(val);
+
+
+                            if (p1.X != 0 && p2.X != 0)
+                            {
+                                panelGraphics.DrawLine(blackPen, p1, p2);
+                            }
+
+                            //Draws dot at p2
+                            panelGraphics.DrawPie(blackPen, p2.X - 2.5f, p2.Y - 2.5f, 5, 5, 0, 360);
+                            panelGraphics.FillPie(new SolidBrush(Color.Black), p2.X - 2.5f, p2.Y - 2.5f, 5, 5, 0, 360);
                         }
-
-                        //Draws dot at p2
-                        panelGraphics.DrawPie(blackPen, p2.X - 2.5f, p2.Y - 2.5f, 5, 5, 0, 360);
-                        panelGraphics.FillPie(new SolidBrush(Color.Black), p2.X - 2.5f, p2.Y - 2.5f, 5, 5, 0, 360);
                     }
-
                 }
             }
-
             redPen.Dispose();
             blackPen.Dispose();
         }
 
-        private double PercentageCalcAndInvert(double value, double difference)
+        private void MonthDataSwitch(ref double? value, ref double? difference, int currentIndex)
+        {
+            double highestCurrentValue = 0, lowestCurrentValue = 0, tempCurrentValue = 0;
+            //Returns value depending on drop down option
+            switch (cmbGraphicOptions.SelectedIndex)
+            {
+                case -1:
+                    value = null;
+                    difference = null;
+                    break;
+                case 0:
+                    value = Data.locationArray[GetLocationIndexFromString()].YearsOfObservationsArray[lstYears.SelectedIndex].MonthlyObservationsArray[currentIndex].MaxTemp;
+
+                    //Cycles through each month and will eventually end up with highest and lowest values
+                    for (int i = 0; i < 12; i++)
+                    {
+                        tempCurrentValue = Data.locationArray[GetLocationIndexFromString()].YearsOfObservationsArray[lstYears.SelectedIndex].MonthlyObservationsArray[i].MaxTemp;
+                        if (tempCurrentValue > highestCurrentValue)
+                        {
+                            highestCurrentValue = tempCurrentValue;
+                        }
+                        if (tempCurrentValue < lowestCurrentValue)
+                        {
+                            lowestCurrentValue = tempCurrentValue;
+                        }
+                    }
+
+                    lblMaxValue.Text = highestCurrentValue.ToString();
+
+                    //The difference is calculated and then 10% is added to make sure there is enough room on the graph
+                    difference = (highestCurrentValue - lowestCurrentValue) * 1.1;
+                    break;
+                case 1:
+                    value = Data.locationArray[GetLocationIndexFromString()].YearsOfObservationsArray[lstYears.SelectedIndex].MonthlyObservationsArray[currentIndex].MinTemp;
+
+                    //Cycles through each month and will eventually end up with highest and lowest values
+                    for (int i = 0; i < 12; i++)
+                    {
+                        tempCurrentValue = Data.locationArray[GetLocationIndexFromString()].YearsOfObservationsArray[lstYears.SelectedIndex].MonthlyObservationsArray[i].MinTemp;
+                        if (tempCurrentValue > highestCurrentValue)
+                        {
+                            highestCurrentValue = tempCurrentValue;
+                        }
+                        if (tempCurrentValue < lowestCurrentValue)
+                        {
+                            lowestCurrentValue = tempCurrentValue;
+                        }
+                    }
+                    lblMaxValue.Text = highestCurrentValue.ToString();
+                    //The difference is calculated and then 10% is added to make sure there is enough room on the graph
+                    difference = (highestCurrentValue - lowestCurrentValue) * 1.1;
+                    break;
+                case 2:
+                    value = Data.locationArray[GetLocationIndexFromString()].YearsOfObservationsArray[lstYears.SelectedIndex].MonthlyObservationsArray[currentIndex].DaysAirFrost;
+
+                    //Cycles through each month and will eventually end up with highest and lowest values
+                    for (int i = 0; i < 12; i++)
+                    {
+                        tempCurrentValue = Data.locationArray[GetLocationIndexFromString()].YearsOfObservationsArray[lstYears.SelectedIndex].MonthlyObservationsArray[i].DaysAirFrost;
+                        if (tempCurrentValue > highestCurrentValue)
+                        {
+                            highestCurrentValue = tempCurrentValue;
+                        }
+                        if (tempCurrentValue < lowestCurrentValue)
+                        {
+                            lowestCurrentValue = tempCurrentValue;
+                        }
+                    }
+                    lblMaxValue.Text = highestCurrentValue.ToString();
+                    //The difference is calculated and then 10% is added to make sure there is enough room on the graph
+                    difference = (highestCurrentValue - lowestCurrentValue) * 1.1;
+                    break;
+                case 3:
+                    value = Data.locationArray[GetLocationIndexFromString()].YearsOfObservationsArray[lstYears.SelectedIndex].MonthlyObservationsArray[currentIndex].MmRain;
+
+                    //Cycles through each month and will eventually end up with highest and lowest values
+                    for (int i = 0; i < 12; i++)
+                    {
+                        tempCurrentValue = Data.locationArray[GetLocationIndexFromString()].YearsOfObservationsArray[lstYears.SelectedIndex].MonthlyObservationsArray[i].MmRain;
+                        if (tempCurrentValue > highestCurrentValue)
+                        {
+                            highestCurrentValue = tempCurrentValue;
+                        }
+                        if (tempCurrentValue < lowestCurrentValue)
+                        {
+                            lowestCurrentValue = tempCurrentValue;
+                        }
+                    }
+                    lblMaxValue.Text = highestCurrentValue.ToString();
+                    //The difference is calculated and then 10% is added to make sure there is enough room on the graph
+                    difference = (highestCurrentValue - lowestCurrentValue) * 1.1;
+                    break;
+                case 4:
+                    value = Data.locationArray[GetLocationIndexFromString()].YearsOfObservationsArray[lstYears.SelectedIndex].MonthlyObservationsArray[currentIndex].HrsSun;
+
+                    //Cycles through each month and will eventually end up with highest and lowest values
+                    for (int i = 0; i < 12; i++)
+                    {
+                        tempCurrentValue = Data.locationArray[GetLocationIndexFromString()].YearsOfObservationsArray[lstYears.SelectedIndex].MonthlyObservationsArray[i].HrsSun;
+                        if (tempCurrentValue > highestCurrentValue)
+                        {
+                            highestCurrentValue = tempCurrentValue;
+                        }
+                        if (tempCurrentValue < lowestCurrentValue)
+                        {
+                            lowestCurrentValue = tempCurrentValue;
+                        }
+                    }
+                    lblMaxValue.Text = highestCurrentValue.ToString();
+                    //The difference is calculated and then 10% is added to make sure there is enough room on the graph
+                    difference = (highestCurrentValue - lowestCurrentValue) * 1.1;
+                    break;
+                default:
+                    value = null;
+                    break;
+            }
+        }
+
+        private double PercentageCalcAndInvert(double? value, double? difference)
         {
             double percent, returnPercent;
 
             //Finds percent given two values
-            percent = (value / difference) * 100;
+            percent = Convert.ToDouble((value / difference) * 100);
 
             //inverts the percentage because of how the graph works
             returnPercent = 100 - percent;
@@ -363,6 +489,7 @@ namespace Weather_Stations_CW
                 lstLocations.SelectedIndex = 0;
 
                 WriteOutData();
+                stillEditing = false;
             }
             else
             {
@@ -398,6 +525,7 @@ namespace Weather_Stations_CW
                 EnableButtonsNewLocation();
 
                 lstLocations.SelectedIndex = 0;
+                stillEditing = false;
             }
             else
             {
@@ -431,6 +559,7 @@ namespace Weather_Stations_CW
 
                     EnableButtonsNewYear();
 
+                    //Remove event handler, change the index and then reattach the handler
                     lstYears.SelectedIndexChanged -= lstYears_SelectedIndexChanged;
                     lstYears.SelectedIndex = (lstYears.Items.Count - 1);
                     lstYears.SelectedIndexChanged += lstYears_SelectedIndexChanged;
@@ -440,6 +569,7 @@ namespace Weather_Stations_CW
                     btnCancelEditMonth.Enabled = false;
                     btnEditMonth.Enabled = false;
                     OutputMonthList();
+                    stillEditing = false;
                 }
                 catch (FormatException)
                 {
@@ -478,7 +608,6 @@ namespace Weather_Stations_CW
             int yearIndex = lstYears.SelectedIndex;
             MonthlyObservations[] monthlyObservations = Data.locationArray[locationIndex].YearsOfObservationsArray[yearIndex].MonthlyObservationsArray;
 
-            // Show testDialog as a modal dialog and determine if DialogResult = OK.
             if (txtYearDateInput.Text != "" && txtDescriptionInput.Text != "")
             {
                 try
@@ -495,6 +624,7 @@ namespace Weather_Stations_CW
                     OutputYearList();
 
                     EnableButtonsNewYear();
+                    stillEditing = false;
                 }
                 catch (FormatException)
                 {
@@ -541,6 +671,8 @@ namespace Weather_Stations_CW
                     OutputMonthList();
                     EnableButtonsEditMonth();
                     WriteOutData();
+                    stillEditing = false;
+
                 }
                 catch (FormatException)
                 {
@@ -830,6 +962,11 @@ namespace Weather_Stations_CW
                 try
                 {
                     dgdMonths.Rows.Clear();
+                    //Changes the selected index only if nothing was selected before
+                    if (cmbGraphicOptions.SelectedIndex == -1)
+                    {
+                        cmbGraphicOptions.SelectedIndex = 0;
+                    }
 
                     int currentLocation = GetLocationIndexFromString();
                     int selectedYear = lstYears.SelectedIndex;
@@ -1142,5 +1279,6 @@ namespace Weather_Stations_CW
                 }
             }
         }
+
     }
 }
