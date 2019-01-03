@@ -13,12 +13,8 @@ using System.Drawing.Drawing2D;
 namespace Weather_Stations_CW
 {
     //TO DO LIST
-    //Sort out edit month button - it's a bit all over the place for when it comes on
-    //averages and stuff - check assignment brief
-
-    //GUI - WIP
-    //Change your output for the location listbox to be brief (KEEP ROBUST SEARCH), and then output data next to it, to be able to easily edit -- Not sure if I can do with current search methods
-
+    //Fix graph
+    //Get rid of object search, and fix normal search somehow - see notes
     //Need some exception handling for pulling in data - check problems
 
     //Problems
@@ -32,6 +28,8 @@ namespace Weather_Stations_CW
         private bool fileLoaded = false, stillEditing = false;
         private int saveOrEdit;
 
+        //Form events and buttons
+
         public frmHome()
         {
             InitializeComponent();
@@ -40,7 +38,6 @@ namespace Weather_Stations_CW
         //Reads in data, spits out location data for user to choose from and then brings the form into focus
         private void frmHome_Load(object sender, EventArgs e)
         {
-
             //While loop to make sure users select a file
             while (fileLoaded == false)
             {
@@ -109,6 +106,7 @@ namespace Weather_Stations_CW
             pnlGraphics.Refresh();
             PanelUpdates();
             btnEditYear.Enabled = true;
+            btnEditMonth.Enabled = true;
         }
 
         private void btnNewLocation_Click(object sender, EventArgs e)
@@ -141,6 +139,7 @@ namespace Weather_Stations_CW
         {
             //Re enable everything to cancel the new location process
             stillEditing = false;
+            pnlGraphics.Refresh();
             OutputLocationList();
             EnableButtonsNewLocation();
             lstLocations.SelectedIndex = 0;
@@ -187,6 +186,7 @@ namespace Weather_Stations_CW
         {
             //Re enable everything to cancel the new year process
             stillEditing = false;
+            pnlGraphics.Refresh();
             OutputLocationList();
             OutputYearList();
             EnableButtonsNewYear();
@@ -220,13 +220,17 @@ namespace Weather_Stations_CW
         private void btnCancelEditMonth_Click(object sender, EventArgs e)
         {
             stillEditing = false;
+            pnlGraphics.Refresh();
             EnableButtonsEditMonth();
             OutputMonthList();
         }
 
         private void dgdMonths_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            btnEditMonth.Enabled = true;
+            if (stillEditing == false)
+            {
+                btnEditMonth.Enabled = true;
+            }
         }
 
         private void cmbGraphicOptions_SelectedIndexChanged(object sender, EventArgs e)
@@ -240,6 +244,13 @@ namespace Weather_Stations_CW
             PanelUpdates();
         }
 
+        private void btnExit_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        //Methods
+
         private void PanelUpdates()
         {
             Pen redPen;
@@ -251,9 +262,9 @@ namespace Weather_Stations_CW
             redPen = new Pen(myColour, penSize);
             blackPen = new Pen(black, penSize);
 
-
-            if (fileLoaded == true && stillEditing == false)
-            { 
+            //error checking, seeing if the file has been pulled in, whether the user is editing or adding a location and to make sure there is a year of data to output
+            if (fileLoaded == true && stillEditing == false && lstYears.Items.Count > 0)
+            {
                 using (Graphics panelGraphics = pnlGraphics.CreateGraphics())
                 {
                     //Declare points and vars
@@ -291,20 +302,6 @@ namespace Weather_Stations_CW
                             newY = (PercentageCalcAndInvert(value, difference) * onePercent) + topOfGraph;
                             p2.Y = Convert.ToInt32(newY);
 
-                            //Dynamically create labels and attach the correct value to them
-                            //Label val = new Label();
-                            //val.Name = "lblValue";
-                            //pVal.X = p2.X;
-                            //pVal.Y = p2.Y + 10;
-                            //val.Location = pVal;
-                            //val.AutoSize = true;
-                            //val.Text = value.ToString();
-                            //val.Parent = pnlGraphics;
-                            //val.BorderStyle = BorderStyle.None;
-                            //val.BackColor = Color.Transparent;
-                            //this.pnlGraphics.Controls.Add(val);
-
-
                             if (p1.X != 0 && p2.X != 0)
                             {
                                 panelGraphics.DrawLine(blackPen, p1, p2);
@@ -323,10 +320,11 @@ namespace Weather_Stations_CW
 
         private void MonthDataSwitch(ref double? value, ref double? difference, int currentIndex)
         {
-            double highestCurrentValue = 0, lowestCurrentValue = 0, tempCurrentValue = 0;
+            double highestCurrentValue = 0, lowestCurrentValue = 500000, tempCurrentValue = 0, average = 0, runningTotal = 0;
             //Returns value depending on drop down option
             switch (cmbGraphicOptions.SelectedIndex)
             {
+                
                 case -1:
                     value = null;
                     difference = null;
@@ -334,7 +332,7 @@ namespace Weather_Stations_CW
                 case 0:
                     value = Data.locationArray[GetLocationIndexFromString()].YearsOfObservationsArray[lstYears.SelectedIndex].MonthlyObservationsArray[currentIndex].MaxTemp;
 
-                    //Cycles through each month and will eventually end up with highest and lowest values
+                    //Cycles through each month and will eventually end up with highest, lowest and average values
                     for (int i = 0; i < 12; i++)
                     {
                         tempCurrentValue = Data.locationArray[GetLocationIndexFromString()].YearsOfObservationsArray[lstYears.SelectedIndex].MonthlyObservationsArray[i].MaxTemp;
@@ -346,12 +344,16 @@ namespace Weather_Stations_CW
                         {
                             lowestCurrentValue = tempCurrentValue;
                         }
+                        runningTotal = runningTotal + tempCurrentValue;
                     }
 
-                    lblMaxValue.Text = highestCurrentValue.ToString();
+                    average = runningTotal / 12;
 
-                    //The difference is calculated and then 10% is added to make sure there is enough room on the graph
-                    difference = (highestCurrentValue - lowestCurrentValue) * 1.1;
+                    
+                    
+
+                    //The difference for the graph is calculated and then 10% is added to make sure there is enough room
+                    difference = (highestCurrentValue - 0) * 1.1;
                     break;
                 case 1:
                     value = Data.locationArray[GetLocationIndexFromString()].YearsOfObservationsArray[lstYears.SelectedIndex].MonthlyObservationsArray[currentIndex].MinTemp;
@@ -368,10 +370,13 @@ namespace Weather_Stations_CW
                         {
                             lowestCurrentValue = tempCurrentValue;
                         }
+                        runningTotal = runningTotal + tempCurrentValue;
                     }
-                    lblMaxValue.Text = highestCurrentValue.ToString();
+
+                    average = runningTotal / 12;
+
                     //The difference is calculated and then 10% is added to make sure there is enough room on the graph
-                    difference = (highestCurrentValue - lowestCurrentValue) * 1.1;
+                    difference = (highestCurrentValue - 0) * 1.1;
                     break;
                 case 2:
                     value = Data.locationArray[GetLocationIndexFromString()].YearsOfObservationsArray[lstYears.SelectedIndex].MonthlyObservationsArray[currentIndex].DaysAirFrost;
@@ -388,10 +393,13 @@ namespace Weather_Stations_CW
                         {
                             lowestCurrentValue = tempCurrentValue;
                         }
+                        runningTotal = runningTotal + tempCurrentValue;
                     }
-                    lblMaxValue.Text = highestCurrentValue.ToString();
+
+                    average = runningTotal / 12;
+
                     //The difference is calculated and then 10% is added to make sure there is enough room on the graph
-                    difference = (highestCurrentValue - lowestCurrentValue) * 1.1;
+                    difference = (highestCurrentValue - 0) * 1.1;
                     break;
                 case 3:
                     value = Data.locationArray[GetLocationIndexFromString()].YearsOfObservationsArray[lstYears.SelectedIndex].MonthlyObservationsArray[currentIndex].MmRain;
@@ -408,10 +416,13 @@ namespace Weather_Stations_CW
                         {
                             lowestCurrentValue = tempCurrentValue;
                         }
+                        runningTotal = runningTotal + tempCurrentValue;
                     }
-                    lblMaxValue.Text = highestCurrentValue.ToString();
+
+                    average = runningTotal / 12;
+
                     //The difference is calculated and then 10% is added to make sure there is enough room on the graph
-                    difference = (highestCurrentValue - lowestCurrentValue) * 1.1;
+                    difference = (highestCurrentValue - 0) * 1.1;
                     break;
                 case 4:
                     value = Data.locationArray[GetLocationIndexFromString()].YearsOfObservationsArray[lstYears.SelectedIndex].MonthlyObservationsArray[currentIndex].HrsSun;
@@ -428,15 +439,23 @@ namespace Weather_Stations_CW
                         {
                             lowestCurrentValue = tempCurrentValue;
                         }
+                        runningTotal = runningTotal + tempCurrentValue;
                     }
-                    lblMaxValue.Text = highestCurrentValue.ToString();
+
+                    average = runningTotal / 12;
+
                     //The difference is calculated and then 10% is added to make sure there is enough room on the graph
-                    difference = (highestCurrentValue - lowestCurrentValue) * 1.1;
+                    difference = (highestCurrentValue - 0) * 1.1;
                     break;
                 default:
                     value = null;
                     break;
             }
+            //Print out numbers after calculations are complete
+            lblAverage.Text = string.Format($"{average:0.00}");
+            lblHighestValue.Text = highestCurrentValue.ToString();
+            lblLowestValue.Text = lowestCurrentValue.ToString();
+            lblMaxValue.Text = highestCurrentValue.ToString();
         }
 
         private double PercentageCalcAndInvert(double? value, double? difference)
@@ -451,11 +470,6 @@ namespace Weather_Stations_CW
 
             //Returns a percent I can use for the graph
             return returnPercent;
-        }
-
-        private void btnExit_Click(object sender, EventArgs e)
-        {
-            this.Close();
         }
 
         private void NewLocation()
@@ -490,6 +504,7 @@ namespace Weather_Stations_CW
 
                 WriteOutData();
                 stillEditing = false;
+                pnlGraphics.Refresh();
             }
             else
             {
@@ -526,6 +541,7 @@ namespace Weather_Stations_CW
 
                 lstLocations.SelectedIndex = 0;
                 stillEditing = false;
+                pnlGraphics.Refresh();
             }
             else
             {
@@ -570,6 +586,7 @@ namespace Weather_Stations_CW
                     btnEditMonth.Enabled = false;
                     OutputMonthList();
                     stillEditing = false;
+                    pnlGraphics.Refresh();
                 }
                 catch (FormatException)
                 {
@@ -625,6 +642,7 @@ namespace Weather_Stations_CW
 
                     EnableButtonsNewYear();
                     stillEditing = false;
+                    pnlGraphics.Refresh();
                 }
                 catch (FormatException)
                 {
@@ -672,7 +690,7 @@ namespace Weather_Stations_CW
                     EnableButtonsEditMonth();
                     WriteOutData();
                     stillEditing = false;
-
+                    pnlGraphics.Refresh();
                 }
                 catch (FormatException)
                 {
