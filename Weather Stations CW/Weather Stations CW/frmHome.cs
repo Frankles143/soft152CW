@@ -12,21 +12,11 @@ using System.Drawing.Drawing2D;
 
 namespace Weather_Stations_CW
 {
-    //TO DO LIST
-    //Fix graph
-    //Get rid of object search, and fix normal search somehow - see notes
-    //Need some exception handling for pulling in data - check problems
-
-    //Problems
-    //Postcodes don't output in a regular way
-    //Waddington prints out streetnum weirdly - add exception that if left default like that it just "" that field?
-    //Location info goes out of box
-    //One of the location's has an ' that is printed out weirdly
-
     public partial class frmHome : Form
     {
-        private bool fileLoaded = false, stillEditing = false;
-        private int saveOrEdit;
+        private bool fileLoaded = false, stillEditing = true;
+        private int saveOrEdit, colourCounter = 0;
+        private string outputFilename = "";
 
         //Form events and buttons
 
@@ -35,8 +25,7 @@ namespace Weather_Stations_CW
             InitializeComponent();
         }
 
-        //Reads in data, spits out location data for user to choose from and then brings the form into focus
-        private void frmHome_Load(object sender, EventArgs e)
+        private void btnOpenFile_Click(object sender, EventArgs e)
         {
             //While loop to make sure users select a file
             while (fileLoaded == false)
@@ -44,13 +33,19 @@ namespace Weather_Stations_CW
                 //exception handling
                 try
                 {
+                    //Read in the data, output everything, select default index's and update the graph
                     ReadInData();
-                    OutputLocationList();
                     GetMonthName();
-                    this.Activate();
+                    OutputLocationList();
                     lstLocations.SelectedIndex = 0;
                     lstYears.SelectedIndex = 0;
                     fileLoaded = true;
+                    stillEditing = false;
+                    PanelUpdates();
+
+                    txtLocationSearch.Enabled = true;
+                    btnNewLocation.Enabled = true;
+                    btnOpenFile.Visible = false;
                 }
                 catch (FileNotFoundException ex)
                 {
@@ -61,11 +56,12 @@ namespace Weather_Stations_CW
                     MessageBox.Show("Error: " + ex.Message);
                 }
             }
-
         }
+
 
         private void txtLocationSearch_TextChanged(object sender, EventArgs e)
         {
+            //Clear the month and year data when searching for a location
             dgdMonths.Rows.Clear();
             lstYears.Items.Clear();
             SearchLocations();
@@ -74,16 +70,18 @@ namespace Weather_Stations_CW
             btnEditLocation.Enabled = false;
             btnNewYear.Enabled = false;
             btnEditYear.Enabled = false;
+            btnEditMonth.Enabled = false;
         }
 
         private void lstLocations_SelectedIndexChanged(object sender, EventArgs e)
         {
+            //Change the year list when clicking on a different location
             OutputYearList();
-            OutputLocationData();
             OutputLocationData();
             btnNewYear.Enabled = true;
             btnEditLocation.Enabled = true;
             btnEditYear.Enabled = false;
+
             //If lstYears has items in it then change the selected index to 0, otherwise, clear year form ready for a new year
             if (lstYears.SelectedIndex >= -1 && lstYears.Items.Count > 0)
             {
@@ -101,12 +99,14 @@ namespace Weather_Stations_CW
 
         private void lstYears_SelectedIndexChanged(object sender, EventArgs e)
         {
+            //Change the month list and year data when a different year is selected
             OutputMonthList();
             OutputYearData();
             pnlGraphics.Refresh();
             PanelUpdates();
             btnEditYear.Enabled = true;
             btnEditMonth.Enabled = true;
+            lblGraphYear.Text = txtYearDateInput.Text;
         }
 
         private void btnNewLocation_Click(object sender, EventArgs e)
@@ -132,7 +132,6 @@ namespace Weather_Stations_CW
             stillEditing = true;
             saveOrEdit = 1;
             DisableButtonsNewLocation();
-
         }
 
         private void btnCancelNewLocation_Click(object sender, EventArgs e)
@@ -235,6 +234,7 @@ namespace Weather_Stations_CW
 
         private void cmbGraphicOptions_SelectedIndexChanged(object sender, EventArgs e)
         {
+            lblStatsTitle.Text = cmbGraphicOptions.Text;
             pnlGraphics.Refresh();
             PanelUpdates();
         }
@@ -242,6 +242,36 @@ namespace Weather_Stations_CW
         private void pnlGraphics_Paint(object sender, PaintEventArgs e)
         {
             PanelUpdates();
+        }
+
+        private void btnBackgroundColour_Click(object sender, EventArgs e)
+        {
+            if (colourCounter > 4)
+            {
+                colourCounter = 0;
+            }
+
+            switch (colourCounter)
+            {
+                case 0:
+                    BackColor = Color.LightBlue;
+                    break;
+                case 1:
+                    BackColor = Color.MediumSeaGreen;
+                    break;
+                case 2:
+                    BackColor = Color.Beige;
+                    break;
+                case 3:
+                    BackColor = Color.DarkSlateGray;
+                    break;
+                case 4:
+                    BackColor = SystemColors.Control;
+                        break;
+                default:
+                    break;
+            }
+            colourCounter++;
         }
 
         private void btnExit_Click(object sender, EventArgs e)
@@ -259,27 +289,23 @@ namespace Weather_Stations_CW
             Color myColour = Color.Red;
             Color black = Color.Black;
 
+            //Create pens
             redPen = new Pen(myColour, penSize);
             blackPen = new Pen(black, penSize);
 
             //error checking, seeing if the file has been pulled in, whether the user is editing or adding a location and to make sure there is a year of data to output
-            if (fileLoaded == true && stillEditing == false && lstYears.Items.Count > 0)
+            if (fileLoaded == true && stillEditing == false && lstYears.SelectedIndex > -1)
             {
                 using (Graphics panelGraphics = pnlGraphics.CreateGraphics())
                 {
                     //Declare points and vars
                     Point p1 = new Point();
                     Point p2 = new Point();
-
-                    //300 pixels between the chart lines X
-                    //3 pixels is 1%
-                    //430 pixels between lines Y
-                    //430/12 = ~35
                     int topOfGraph = 10, onePercent = 3;
                     //the ? allows these two doubles to be nulled, this is for error checking
                     double? value = 0, difference = 0;
 
-                    //Create pens
+                    //Create graph axis
                     panelGraphics.DrawLine(blackPen, 10, 10, 10, 310);
                     panelGraphics.DrawLine(blackPen, 10, 310, 440, 310);
 
@@ -304,12 +330,12 @@ namespace Weather_Stations_CW
 
                             if (p1.X != 0 && p2.X != 0)
                             {
-                                panelGraphics.DrawLine(blackPen, p1, p2);
+                                panelGraphics.DrawLine(redPen, p1, p2);
                             }
 
                             //Draws dot at p2
-                            panelGraphics.DrawPie(blackPen, p2.X - 2.5f, p2.Y - 2.5f, 5, 5, 0, 360);
-                            panelGraphics.FillPie(new SolidBrush(Color.Black), p2.X - 2.5f, p2.Y - 2.5f, 5, 5, 0, 360);
+                            panelGraphics.DrawPie(redPen, p2.X - 2.5f, p2.Y - 2.5f, 5, 5, 0, 360);
+                            panelGraphics.FillPie(new SolidBrush(Color.Red), p2.X - 2.5f, p2.Y - 2.5f, 5, 5, 0, 360);
                         }
                     }
                 }
@@ -542,6 +568,7 @@ namespace Weather_Stations_CW
                 lstLocations.SelectedIndex = 0;
                 stillEditing = false;
                 pnlGraphics.Refresh();
+                WriteOutData();
             }
             else
             {
@@ -585,8 +612,7 @@ namespace Weather_Stations_CW
                     btnCancelEditMonth.Enabled = false;
                     btnEditMonth.Enabled = false;
                     OutputMonthList();
-                    stillEditing = false;
-                    pnlGraphics.Refresh();
+                    lblGraphYear.Text = txtYearDateInput.Text;
                 }
                 catch (FormatException)
                 {
@@ -643,6 +669,7 @@ namespace Weather_Stations_CW
                     EnableButtonsNewYear();
                     stillEditing = false;
                     pnlGraphics.Refresh();
+                    WriteOutData();
                 }
                 catch (FormatException)
                 {
@@ -853,26 +880,6 @@ namespace Weather_Stations_CW
             }
         }
 
-        //Should I get rid of the return object method? Less helpful and not needed now?
-        private Location GetLocationFromString(string locationInput)
-        {
-            Location matchedLocation = null;
-            string locationToCheck;
-            //loop through locations, find a match and return that object
-            for (int i = 0; i < Data.locationArray.Length; i++)
-            {
-                //Output every location into a string, with the exact same formatting as the input
-                locationToCheck = Data.locationArray[i].OutputLocation();
-
-                if (locationToCheck == locationInput)
-                {
-                    matchedLocation = Data.locationArray[i];
-                    break;
-                }
-            }
-            return matchedLocation;
-        }
-
         private int GetLocationIndexFromString()
         {
             int matchedIndex = 0;
@@ -914,11 +921,13 @@ namespace Weather_Stations_CW
         //Output locations
         private void OutputLocationList()
         {
+            lstLocations.Items.Clear();
             for (int location = 0; location < Data.locationArray.Length; location++)
             {
                 //Calls output location for every location
                 lstLocations.Items.Add(Data.locationArray[location].OutputLocation());
             }
+            lstLocations.SelectedIndex = 0;
         }
 
         private void OutputLocationData()
@@ -936,30 +945,19 @@ namespace Weather_Stations_CW
         //Output all years for one location
         private void OutputYearList()
         {
-            int selectedIndex;
-            string locationString;
+            int locationIndex = GetLocationIndexFromString();
 
             if (lstLocations.SelectedItem != null)
             {
                 dgdMonths.Rows.Clear();
-                selectedIndex = lstLocations.SelectedIndex;
-                locationString = lstLocations.SelectedItem.ToString();
-
-                //This will return the object with the year and month data for that location inside it
-                Location locationMatch = GetLocationFromString(locationString);
 
                 lstYears.Items.Clear();
                 //Output all years
-                for (int year = 0; year < locationMatch.YearsOfObservationsArray.Length; year++)
+                for (int year = 0; year < Data.locationArray[locationIndex].YearsOfObservationsArray.Length; year++)
                 {
                     //call Output Year
-                    lstYears.Items.Add(locationMatch.YearsOfObservationsArray[year].OutputYear());
+                    lstYears.Items.Add(Data.locationArray[locationIndex].YearsOfObservationsArray[year].OutputYear());
                 }
-
-                //Dettach the event handler, clear the box and then reattach handler
-                //txtLocationSearch.TextChanged -= txtLocationSearch_TextChanged;
-                //txtLocationSearch.Clear();
-                //txtLocationSearch.TextChanged += txtLocationSearch_TextChanged;
             }
         }
 
@@ -1012,8 +1010,7 @@ namespace Weather_Stations_CW
 
         }
 
-
-        //Method to pull in data from text file
+        //Pulls in data from text file
         private void ReadInData()
         {
             //Declare variables
@@ -1054,7 +1051,7 @@ namespace Weather_Stations_CW
             }
         }
 
-        //Method to read in location data
+        //Reads in location data
         private void ReadLocation(ref Location[] locationArray, ref Year[] yearArray, ref MonthlyObservations[] monthlyArray, StreamReader inputData, ref int locationIndex)
         {
             //Delcare vars
@@ -1078,7 +1075,7 @@ namespace Weather_Stations_CW
             locationIndex++;
         }
 
-        //Method to read in year data
+        //Reads in year data
         private void ReadYear(ref Year[] yearArray, ref MonthlyObservations[] monthlyArray, StreamReader inputData)
         {
             //Delcare vars
@@ -1107,7 +1104,7 @@ namespace Weather_Stations_CW
             }
         }
 
-        //Method to read in month data
+        //Reads in month data
         private void ReadMonth(ref MonthlyObservations[] monthlyArray, StreamReader inputData)
         {
             //Delcare variables
@@ -1136,8 +1133,6 @@ namespace Weather_Stations_CW
             }
         }
 
-        private string outputFilename = "";
-
         //Saves all the locations, years and months to a file
         private void WriteOutData()
         {
@@ -1161,6 +1156,7 @@ namespace Weather_Stations_CW
                 {
                     WriteLocation(fileOutput, location);
                 }
+                MessageBox.Show("Saved successfully");
             }
         }
 

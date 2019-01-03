@@ -129,7 +129,7 @@ namespace Weather_Stations_CW
             Array.Resize(ref Data.locationArray[locationIndex].yearsOfObservationsArray, newArraySize + 1);
         }
 
-        //string locationName, streetNumberAndName, county, postCode, latitude, longtitude;
+        //string locationName, streetNumberAndName, county, postCode, latitude, longtitude
         //Outputting
         public string OutputLocation()
         {

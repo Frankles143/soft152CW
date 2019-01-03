@@ -31,6 +31,7 @@
             this.dlgOpenData = new System.Windows.Forms.OpenFileDialog();
             this.txtLocationSearch = new System.Windows.Forms.RichTextBox();
             this.grpLocation = new System.Windows.Forms.GroupBox();
+            this.label24 = new System.Windows.Forms.Label();
             this.btnCancelNewLocation = new System.Windows.Forms.Button();
             this.btnSaveLocation = new System.Windows.Forms.Button();
             this.txtLatitude = new System.Windows.Forms.TextBox();
@@ -88,12 +89,17 @@
             this.lblMaxValue = new System.Windows.Forms.Label();
             this.lblMinValue = new System.Windows.Forms.Label();
             this.grpStats = new System.Windows.Forms.GroupBox();
-            this.label21 = new System.Windows.Forms.Label();
-            this.label22 = new System.Windows.Forms.Label();
-            this.label23 = new System.Windows.Forms.Label();
-            this.lblHighestValue = new System.Windows.Forms.Label();
-            this.lblLowestValue = new System.Windows.Forms.Label();
+            this.lblStatsTitle = new System.Windows.Forms.Label();
             this.lblAverage = new System.Windows.Forms.Label();
+            this.lblLowestValue = new System.Windows.Forms.Label();
+            this.lblHighestValue = new System.Windows.Forms.Label();
+            this.label23 = new System.Windows.Forms.Label();
+            this.label22 = new System.Windows.Forms.Label();
+            this.label21 = new System.Windows.Forms.Label();
+            this.lblGraphYear = new System.Windows.Forms.Label();
+            this.label25 = new System.Windows.Forms.Label();
+            this.btnBackgroundColour = new System.Windows.Forms.Button();
+            this.btnOpenFile = new System.Windows.Forms.Button();
             this.grpLocation.SuspendLayout();
             this.grpMonths.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgdMonths)).BeginInit();
@@ -107,11 +113,12 @@
             // 
             // txtLocationSearch
             // 
+            this.txtLocationSearch.Enabled = false;
             this.txtLocationSearch.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtLocationSearch.Location = new System.Drawing.Point(6, 18);
+            this.txtLocationSearch.Location = new System.Drawing.Point(56, 16);
             this.txtLocationSearch.Multiline = false;
             this.txtLocationSearch.Name = "txtLocationSearch";
-            this.txtLocationSearch.Size = new System.Drawing.Size(199, 26);
+            this.txtLocationSearch.Size = new System.Drawing.Size(233, 26);
             this.txtLocationSearch.TabIndex = 1;
             this.txtLocationSearch.Text = "";
             this.txtLocationSearch.TextChanged += new System.EventHandler(this.txtLocationSearch_TextChanged);
@@ -119,6 +126,7 @@
             // grpLocation
             // 
             this.grpLocation.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.grpLocation.Controls.Add(this.label24);
             this.grpLocation.Controls.Add(this.btnCancelNewLocation);
             this.grpLocation.Controls.Add(this.btnSaveLocation);
             this.grpLocation.Controls.Add(this.txtLatitude);
@@ -144,6 +152,16 @@
             this.grpLocation.TabIndex = 3;
             this.grpLocation.TabStop = false;
             this.grpLocation.Text = "Location";
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label24.Location = new System.Drawing.Point(6, 21);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(49, 15);
+            this.label24.TabIndex = 7;
+            this.label24.Text = "Search:";
             // 
             // btnCancelNewLocation
             // 
@@ -181,6 +199,7 @@
             // btnNewLocation
             // 
             this.btnNewLocation.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.btnNewLocation.Enabled = false;
             this.btnNewLocation.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnNewLocation.Location = new System.Drawing.Point(700, 18);
             this.btnNewLocation.Name = "btnNewLocation";
@@ -312,7 +331,7 @@
             // 
             this.btnExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnExit.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnExit.Location = new System.Drawing.Point(1356, 654);
+            this.btnExit.Location = new System.Drawing.Point(1356, 679);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(80, 54);
             this.btnExit.TabIndex = 8;
@@ -325,7 +344,7 @@
             this.lstYears.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.lstYears.FormattingEnabled = true;
             this.lstYears.ItemHeight = 16;
-            this.lstYears.Location = new System.Drawing.Point(6, 21);
+            this.lstYears.Location = new System.Drawing.Point(7, 21);
             this.lstYears.Name = "lstYears";
             this.lstYears.Size = new System.Drawing.Size(283, 132);
             this.lstYears.TabIndex = 0;
@@ -339,9 +358,9 @@
             this.grpMonths.Controls.Add(this.btnSaveMonth);
             this.grpMonths.Controls.Add(this.btnEditMonth);
             this.grpMonths.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grpMonths.Location = new System.Drawing.Point(12, 404);
+            this.grpMonths.Location = new System.Drawing.Point(12, 392);
             this.grpMonths.Name = "grpMonths";
-            this.grpMonths.Size = new System.Drawing.Size(679, 313);
+            this.grpMonths.Size = new System.Drawing.Size(679, 350);
             this.grpMonths.TabIndex = 10;
             this.grpMonths.TabStop = false;
             this.grpMonths.Text = "Months";
@@ -351,7 +370,7 @@
             this.btnCancelEditMonth.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.btnCancelEditMonth.Enabled = false;
             this.btnCancelEditMonth.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCancelEditMonth.Location = new System.Drawing.Point(550, 121);
+            this.btnCancelEditMonth.Location = new System.Drawing.Point(556, 117);
             this.btnCancelEditMonth.Name = "btnCancelEditMonth";
             this.btnCancelEditMonth.Size = new System.Drawing.Size(112, 44);
             this.btnCancelEditMonth.TabIndex = 18;
@@ -377,7 +396,7 @@
             this.dgdMonths.Location = new System.Drawing.Point(3, 18);
             this.dgdMonths.Name = "dgdMonths";
             this.dgdMonths.ReadOnly = true;
-            this.dgdMonths.Size = new System.Drawing.Size(541, 292);
+            this.dgdMonths.Size = new System.Drawing.Size(541, 329);
             this.dgdMonths.TabIndex = 0;
             this.dgdMonths.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgdMonths_CellClick);
             // 
@@ -428,7 +447,7 @@
             this.btnSaveMonth.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.btnSaveMonth.Enabled = false;
             this.btnSaveMonth.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSaveMonth.Location = new System.Drawing.Point(550, 71);
+            this.btnSaveMonth.Location = new System.Drawing.Point(556, 67);
             this.btnSaveMonth.Name = "btnSaveMonth";
             this.btnSaveMonth.Size = new System.Drawing.Size(112, 44);
             this.btnSaveMonth.TabIndex = 16;
@@ -441,7 +460,7 @@
             this.btnEditMonth.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.btnEditMonth.Enabled = false;
             this.btnEditMonth.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnEditMonth.Location = new System.Drawing.Point(550, 21);
+            this.btnEditMonth.Location = new System.Drawing.Point(556, 17);
             this.btnEditMonth.Name = "btnEditMonth";
             this.btnEditMonth.Size = new System.Drawing.Size(112, 44);
             this.btnEditMonth.TabIndex = 17;
@@ -489,9 +508,9 @@
             this.grpYear.Controls.Add(this.btnNewYear);
             this.grpYear.Controls.Add(this.txtDescriptionInput);
             this.grpYear.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grpYear.Location = new System.Drawing.Point(12, 236);
+            this.grpYear.Location = new System.Drawing.Point(9, 230);
             this.grpYear.Name = "grpYear";
-            this.grpYear.Size = new System.Drawing.Size(838, 156);
+            this.grpYear.Size = new System.Drawing.Size(841, 156);
             this.grpYear.TabIndex = 4;
             this.grpYear.TabStop = false;
             this.grpYear.Text = "Year";
@@ -562,7 +581,7 @@
             // 
             this.pnlGraphics.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlGraphics.BackColor = System.Drawing.SystemColors.Window;
-            this.pnlGraphics.Location = new System.Drawing.Point(890, 363);
+            this.pnlGraphics.Location = new System.Drawing.Point(890, 388);
             this.pnlGraphics.Name = "pnlGraphics";
             this.pnlGraphics.Size = new System.Drawing.Size(450, 320);
             this.pnlGraphics.TabIndex = 11;
@@ -579,7 +598,7 @@
             "Days of Air Frost",
             "Rain (mm)",
             "Hours of sunlight"});
-            this.cmbGraphicOptions.Location = new System.Drawing.Point(890, 330);
+            this.cmbGraphicOptions.Location = new System.Drawing.Point(890, 355);
             this.cmbGraphicOptions.Name = "cmbGraphicOptions";
             this.cmbGraphicOptions.Size = new System.Drawing.Size(269, 21);
             this.cmbGraphicOptions.TabIndex = 12;
@@ -589,7 +608,7 @@
             // 
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(912, 689);
+            this.label3.Location = new System.Drawing.Point(912, 714);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(24, 13);
             this.label3.TabIndex = 13;
@@ -599,7 +618,7 @@
             // 
             this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(947, 689);
+            this.label4.Location = new System.Drawing.Point(947, 714);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(25, 13);
             this.label4.TabIndex = 14;
@@ -609,7 +628,7 @@
             // 
             this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(982, 689);
+            this.label5.Location = new System.Drawing.Point(982, 714);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(25, 13);
             this.label5.TabIndex = 15;
@@ -619,7 +638,7 @@
             // 
             this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(1017, 689);
+            this.label6.Location = new System.Drawing.Point(1017, 714);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(23, 13);
             this.label6.TabIndex = 16;
@@ -629,7 +648,7 @@
             // 
             this.label13.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(1052, 689);
+            this.label13.Location = new System.Drawing.Point(1052, 714);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(27, 13);
             this.label13.TabIndex = 17;
@@ -639,7 +658,7 @@
             // 
             this.label14.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(1087, 689);
+            this.label14.Location = new System.Drawing.Point(1087, 714);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(24, 13);
             this.label14.TabIndex = 18;
@@ -649,7 +668,7 @@
             // 
             this.label15.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(1122, 689);
+            this.label15.Location = new System.Drawing.Point(1122, 714);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(20, 13);
             this.label15.TabIndex = 19;
@@ -659,7 +678,7 @@
             // 
             this.label16.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(1157, 689);
+            this.label16.Location = new System.Drawing.Point(1157, 714);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(26, 13);
             this.label16.TabIndex = 20;
@@ -669,7 +688,7 @@
             // 
             this.label17.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(1297, 689);
+            this.label17.Location = new System.Drawing.Point(1297, 714);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(27, 13);
             this.label17.TabIndex = 21;
@@ -679,7 +698,7 @@
             // 
             this.label18.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(1262, 689);
+            this.label18.Location = new System.Drawing.Point(1262, 714);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(27, 13);
             this.label18.TabIndex = 22;
@@ -689,7 +708,7 @@
             // 
             this.label19.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(1227, 689);
+            this.label19.Location = new System.Drawing.Point(1227, 714);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(24, 13);
             this.label19.TabIndex = 23;
@@ -699,7 +718,7 @@
             // 
             this.label20.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(1192, 689);
+            this.label20.Location = new System.Drawing.Point(1192, 714);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(26, 13);
             this.label20.TabIndex = 24;
@@ -709,7 +728,7 @@
             // 
             this.lblMaxValue.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lblMaxValue.AutoSize = true;
-            this.lblMaxValue.Location = new System.Drawing.Point(855, 373);
+            this.lblMaxValue.Location = new System.Drawing.Point(855, 398);
             this.lblMaxValue.Name = "lblMaxValue";
             this.lblMaxValue.Size = new System.Drawing.Size(0, 13);
             this.lblMaxValue.TabIndex = 25;
@@ -718,7 +737,7 @@
             // 
             this.lblMinValue.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lblMinValue.AutoSize = true;
-            this.lblMinValue.Location = new System.Drawing.Point(869, 666);
+            this.lblMinValue.Location = new System.Drawing.Point(869, 691);
             this.lblMinValue.Name = "lblMinValue";
             this.lblMinValue.Size = new System.Drawing.Size(13, 13);
             this.lblMinValue.TabIndex = 26;
@@ -727,6 +746,7 @@
             // grpStats
             // 
             this.grpStats.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.grpStats.Controls.Add(this.lblStatsTitle);
             this.grpStats.Controls.Add(this.lblAverage);
             this.grpStats.Controls.Add(this.lblLowestValue);
             this.grpStats.Controls.Add(this.lblHighestValue);
@@ -741,62 +761,121 @@
             this.grpStats.TabStop = false;
             this.grpStats.Text = "Statistics";
             // 
-            // label21
+            // lblStatsTitle
             // 
-            this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(40, 40);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(148, 16);
-            this.label21.TabIndex = 0;
-            this.label21.Text = "Highest Value this year:";
+            this.lblStatsTitle.AutoSize = true;
+            this.lblStatsTitle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblStatsTitle.Location = new System.Drawing.Point(145, 28);
+            this.lblStatsTitle.Name = "lblStatsTitle";
+            this.lblStatsTitle.Size = new System.Drawing.Size(0, 16);
+            this.lblStatsTitle.TabIndex = 6;
+            // 
+            // lblAverage
+            // 
+            this.lblAverage.AutoSize = true;
+            this.lblAverage.Location = new System.Drawing.Point(232, 154);
+            this.lblAverage.Name = "lblAverage";
+            this.lblAverage.Size = new System.Drawing.Size(0, 16);
+            this.lblAverage.TabIndex = 5;
+            // 
+            // lblLowestValue
+            // 
+            this.lblLowestValue.AutoSize = true;
+            this.lblLowestValue.Location = new System.Drawing.Point(232, 109);
+            this.lblLowestValue.Name = "lblLowestValue";
+            this.lblLowestValue.Size = new System.Drawing.Size(0, 16);
+            this.lblLowestValue.TabIndex = 4;
+            // 
+            // lblHighestValue
+            // 
+            this.lblHighestValue.AutoSize = true;
+            this.lblHighestValue.Location = new System.Drawing.Point(232, 64);
+            this.lblHighestValue.Name = "lblHighestValue";
+            this.lblHighestValue.Size = new System.Drawing.Size(0, 16);
+            this.lblHighestValue.TabIndex = 3;
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(121, 154);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(63, 16);
+            this.label23.TabIndex = 2;
+            this.label23.Text = "Average:";
             // 
             // label22
             // 
             this.label22.AutoSize = true;
             this.label22.Location = new System.Drawing.Point(40, 106);
             this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(144, 16);
+            this.label22.Size = new System.Drawing.Size(142, 16);
             this.label22.TabIndex = 1;
-            this.label22.Text = "Lowest Value this year:";
+            this.label22.Text = "Lowest value this year:";
             // 
-            // label23
+            // label21
             // 
-            this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(121, 164);
-            this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(63, 16);
-            this.label23.TabIndex = 2;
-            this.label23.Text = "Average:";
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(40, 64);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(146, 16);
+            this.label21.TabIndex = 0;
+            this.label21.Text = "Highest value this year:";
             // 
-            // lblHighestValue
+            // lblGraphYear
             // 
-            this.lblHighestValue.AutoSize = true;
-            this.lblHighestValue.Location = new System.Drawing.Point(232, 40);
-            this.lblHighestValue.Name = "lblHighestValue";
-            this.lblHighestValue.Size = new System.Drawing.Size(0, 16);
-            this.lblHighestValue.TabIndex = 3;
+            this.lblGraphYear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblGraphYear.AutoSize = true;
+            this.lblGraphYear.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblGraphYear.Location = new System.Drawing.Point(1297, 360);
+            this.lblGraphYear.Name = "lblGraphYear";
+            this.lblGraphYear.Size = new System.Drawing.Size(0, 16);
+            this.lblGraphYear.TabIndex = 7;
             // 
-            // lblLowestValue
+            // label25
             // 
-            this.lblLowestValue.AutoSize = true;
-            this.lblLowestValue.Location = new System.Drawing.Point(232, 106);
-            this.lblLowestValue.Name = "lblLowestValue";
-            this.lblLowestValue.Size = new System.Drawing.Size(0, 16);
-            this.lblLowestValue.TabIndex = 4;
+            this.label25.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.label25.AutoSize = true;
+            this.label25.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label25.Location = new System.Drawing.Point(1236, 360);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(40, 16);
+            this.label25.TabIndex = 7;
+            this.label25.Text = "Year:";
             // 
-            // lblAverage
+            // btnBackgroundColour
             // 
-            this.lblAverage.AutoSize = true;
-            this.lblAverage.Location = new System.Drawing.Point(232, 164);
-            this.lblAverage.Name = "lblAverage";
-            this.lblAverage.Size = new System.Drawing.Size(0, 16);
-            this.lblAverage.TabIndex = 5;
+            this.btnBackgroundColour.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnBackgroundColour.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnBackgroundColour.Location = new System.Drawing.Point(1356, 610);
+            this.btnBackgroundColour.Name = "btnBackgroundColour";
+            this.btnBackgroundColour.Size = new System.Drawing.Size(80, 54);
+            this.btnBackgroundColour.TabIndex = 28;
+            this.btnBackgroundColour.Text = "Background Colour";
+            this.btnBackgroundColour.UseVisualStyleBackColor = true;
+            this.btnBackgroundColour.Click += new System.EventHandler(this.btnBackgroundColour_Click);
+            // 
+            // btnOpenFile
+            // 
+            this.btnOpenFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnOpenFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnOpenFile.Location = new System.Drawing.Point(709, 398);
+            this.btnOpenFile.Name = "btnOpenFile";
+            this.btnOpenFile.Size = new System.Drawing.Size(128, 71);
+            this.btnOpenFile.TabIndex = 29;
+            this.btnOpenFile.Text = "Open File";
+            this.btnOpenFile.UseVisualStyleBackColor = true;
+            this.btnOpenFile.Click += new System.EventHandler(this.btnOpenFile_Click);
             // 
             // frmHome
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1451, 720);
+            this.BackColor = System.Drawing.SystemColors.Control;
+            this.ClientSize = new System.Drawing.Size(1451, 745);
+            this.Controls.Add(this.btnOpenFile);
+            this.Controls.Add(this.btnBackgroundColour);
+            this.Controls.Add(this.label25);
+            this.Controls.Add(this.lblGraphYear);
             this.Controls.Add(this.grpStats);
             this.Controls.Add(this.lblMinValue);
             this.Controls.Add(this.lblMaxValue);
@@ -818,11 +897,9 @@
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.grpLocation);
             this.Controls.Add(this.grpYear);
-            this.MinimumSize = new System.Drawing.Size(1467, 759);
+            this.MinimumSize = new System.Drawing.Size(1467, 784);
             this.Name = "frmHome";
             this.Text = "Weather Information";
-            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            this.Load += new System.EventHandler(this.frmHome_Load);
             this.grpLocation.ResumeLayout(false);
             this.grpLocation.PerformLayout();
             this.grpMonths.ResumeLayout(false);
@@ -904,6 +981,12 @@
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.Label lblAverage;
         private System.Windows.Forms.Label lblLowestValue;
+        private System.Windows.Forms.Label lblStatsTitle;
+        private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.Label lblGraphYear;
+        private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.Button btnBackgroundColour;
+        private System.Windows.Forms.Button btnOpenFile;
     }
 }
 
