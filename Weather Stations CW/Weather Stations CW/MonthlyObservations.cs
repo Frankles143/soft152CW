@@ -23,7 +23,12 @@ namespace Weather_Stations_CW
             HrsSun = theHrsSun;
         }
 
-        //Properties
+        public MonthlyObservations()
+        {
+
+        }
+
+        //Properties with exception handling
         public int MonthId
         {
             set

@@ -71,6 +71,7 @@ namespace Weather_Stations_CW
             btnNewYear.Enabled = false;
             btnEditYear.Enabled = false;
             btnEditMonth.Enabled = false;
+            pnlGraphics.Refresh();
         }
 
         private void lstLocations_SelectedIndexChanged(object sender, EventArgs e)
@@ -190,6 +191,8 @@ namespace Weather_Stations_CW
             OutputYearList();
             EnableButtonsNewYear();
             lstLocations.SelectedIndex = 0;
+            lstYears.SelectedIndex = 0;
+            OutputMonthList();
         }
 
         private void btnSaveYear_Click(object sender, EventArgs e)
@@ -226,6 +229,7 @@ namespace Weather_Stations_CW
 
         private void dgdMonths_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+            //Checks if I'm editing so I can't activate the button if I'm part way through editing
             if (stillEditing == false)
             {
                 btnEditMonth.Enabled = true;
@@ -234,6 +238,7 @@ namespace Weather_Stations_CW
 
         private void cmbGraphicOptions_SelectedIndexChanged(object sender, EventArgs e)
         {
+            //Update the stats label and update panel
             lblStatsTitle.Text = cmbGraphicOptions.Text;
             pnlGraphics.Refresh();
             PanelUpdates();
@@ -246,6 +251,7 @@ namespace Weather_Stations_CW
 
         private void btnBackgroundColour_Click(object sender, EventArgs e)
         {
+            //Simple background colour switch case
             if (colourCounter > 4)
             {
                 colourCounter = 0;
@@ -283,6 +289,7 @@ namespace Weather_Stations_CW
 
         private void PanelUpdates()
         {
+            //Declare pens, colours and vars
             Pen redPen;
             Pen blackPen;
             int penSize = 2, gapBetweenPoints = 35;
@@ -293,7 +300,7 @@ namespace Weather_Stations_CW
             redPen = new Pen(myColour, penSize);
             blackPen = new Pen(black, penSize);
 
-            //error checking, seeing if the file has been pulled in, whether the user is editing or adding a location and to make sure there is a year of data to output
+            //error checking, seeing if the file has been pulled in, whether the user is editing or adding a location and to make sure there is a year of data selected to output
             if (fileLoaded == true && stillEditing == false && lstYears.SelectedIndex > -1)
             {
                 using (Graphics panelGraphics = pnlGraphics.CreateGraphics())
@@ -321,13 +328,14 @@ namespace Weather_Stations_CW
                             //Make sure that the next point starts from the last point
                             p1 = p2;
 
-                            //p2.X will be increased by a set amount so points are equal distance apart 
+                            //p2.X will be increased by a set amount so points are equal distance apart (length of X axis/12)
                             p2.X = p2.X + gapBetweenPoints;
 
                             //New p2.Y co-ord is made using method and some maths
                             newY = (PercentageCalcAndInvert(value, difference) * onePercent) + topOfGraph;
                             p2.Y = Convert.ToInt32(newY);
 
+                            //Will only draw a line if the X values are not 0
                             if (p1.X != 0 && p2.X != 0)
                             {
                                 panelGraphics.DrawLine(redPen, p1, p2);
@@ -340,6 +348,7 @@ namespace Weather_Stations_CW
                     }
                 }
             }
+            //Clears the pens after use
             redPen.Dispose();
             blackPen.Dispose();
         }
@@ -370,13 +379,10 @@ namespace Weather_Stations_CW
                         {
                             lowestCurrentValue = tempCurrentValue;
                         }
+                        //Keeps a total of values to find the average
                         runningTotal = runningTotal + tempCurrentValue;
                     }
-
                     average = runningTotal / 12;
-
-                    
-                    
 
                     //The difference for the graph is calculated and then 10% is added to make sure there is enough room
                     difference = (highestCurrentValue - 0) * 1.1;
@@ -505,7 +511,7 @@ namespace Weather_Stations_CW
 
             if (txtName.Text != "" && txtStreetNumberAndName.Text != "" && txtCounty.Text != "" && txtPostcode.Text != "" && txtLatitude.Text != "" && txtLongtitude.Text != "")
             {
-                //put everything into an object and return it
+                //put everything from textboxes into an object
                 locationName = txtName.Text;
                 streetNumberAndName = txtStreetNumberAndName.Text;
                 county = txtCounty.Text;
@@ -523,11 +529,9 @@ namespace Weather_Stations_CW
                 //Clears old list to output new one with updated array
                 lstLocations.Items.Clear();
                 OutputLocationList();
-
                 EnableButtonsNewLocation();
 
                 lstLocations.SelectedIndex = 0;
-
                 WriteOutData();
                 stillEditing = false;
                 pnlGraphics.Refresh();
@@ -544,9 +548,10 @@ namespace Weather_Stations_CW
             Location newLocation;
             int selectedLocation = GetLocationIndexFromString();
 
+            //Checks to see if all boxes are full
             if (txtName.Text != "" && txtStreetNumberAndName.Text != "" && txtCounty.Text != "" && txtPostcode.Text != "" && txtLatitude.Text != "" && txtLongtitude.Text != "")
             {
-                //put everything into an object and return it
+                //put everything from textboxes into an object
                 locationName = txtName.Text;
                 streetNumberAndName = txtStreetNumberAndName.Text;
                 county = txtCounty.Text;
@@ -562,9 +567,7 @@ namespace Weather_Stations_CW
                 //Clears old list to output new one with updated array
                 lstLocations.Items.Clear();
                 OutputLocationList();
-
                 EnableButtonsNewLocation();
-
                 lstLocations.SelectedIndex = 0;
                 stillEditing = false;
                 pnlGraphics.Refresh();
@@ -576,7 +579,6 @@ namespace Weather_Stations_CW
             }
         }
 
-        //Gets new year data from user
         private void NewYear()
         {
             Year newYear;
@@ -584,22 +586,23 @@ namespace Weather_Stations_CW
             string yearDescription;
             MonthlyObservations[] newMonthlyObservations = new MonthlyObservations[12];
 
-            // Show testDialog as a modal dialog and determine if DialogResult = OK.
+            //First checks if both boxes are full
             if (txtYearDateInput.Text != "" && txtDescriptionInput.Text != "")
             {
+                //Exception handling for the year, as it needs to be an int
                 try
                 {
-                    // Read from textboxes to create a new object to return
+                    //Read from textboxes to create a new object
                     yearDate = Convert.ToInt32(txtYearDateInput.Text);
                     yearDescription = txtDescriptionInput.Text;
 
                     newYear = new Year(yearDescription, yearDate, newMonthlyObservations);
 
+                    //Pass new object into method to save it to the array
                     SaveNewYear(newYear);
 
                     lstYears.Items.Clear();
                     OutputYearList();
-
                     EnableButtonsNewYear();
 
                     //Remove event handler, change the index and then reattach the handler
@@ -613,6 +616,7 @@ namespace Weather_Stations_CW
                     btnEditMonth.Enabled = false;
                     OutputMonthList();
                     lblGraphYear.Text = txtYearDateInput.Text;
+                    pnlGraphics.Invalidate();
                 }
                 catch (FormatException)
                 {
@@ -651,21 +655,23 @@ namespace Weather_Stations_CW
             int yearIndex = lstYears.SelectedIndex;
             MonthlyObservations[] monthlyObservations = Data.locationArray[locationIndex].YearsOfObservationsArray[yearIndex].MonthlyObservationsArray;
 
+            //Checks to see if both boxes are full
             if (txtYearDateInput.Text != "" && txtDescriptionInput.Text != "")
             {
+                //Exception handling for the year as it needs to be an int
                 try
                 {
-                    // Read from textboxes to create a new object to return
+                    //Read from textboxes to create a new object
                     yearDate = Convert.ToInt32(txtYearDateInput.Text);
                     yearDescription = txtDescriptionInput.Text;
 
                     tempYear = new Year(yearDescription, yearDate, monthlyObservations);
 
+                    //After new object is made replace the index that was being edited with the new object
                     Data.locationArray[locationIndex].YearsOfObservationsArray[yearIndex] = tempYear;
 
                     lstYears.Items.Clear();
                     OutputYearList();
-
                     EnableButtonsNewYear();
                     stillEditing = false;
                     pnlGraphics.Refresh();
@@ -693,12 +699,12 @@ namespace Weather_Stations_CW
                 int locationIndex = GetLocationIndexFromString();
                 int yearIndex = lstYears.SelectedIndex;
                 MonthlyObservations tempMonthlyObservations;
+                //Exception handling, everything needs to be a number
                 try
                 {
                     //Cycle through each row to grab all the data for one month, put that month into it's own index and do that for the whole year - as long as no exception is thrown!
                     for (int i = 0; i < 12; i++)
                     {
-
                         monthId = i + 1;
                         maxTemp = Convert.ToDouble(dgdMonths.Rows[i].Cells["maxTemp"].Value);
                         minTemp = Convert.ToDouble(dgdMonths.Rows[i].Cells["minTemp"].Value);
@@ -828,6 +834,7 @@ namespace Weather_Stations_CW
 
         private void DisableButtonsEditMonth()
         {
+            //Disable/enable listboxes, buttons etc.
             grpLocation.Enabled = false;
             grpYear.Enabled = false;
 
@@ -840,6 +847,7 @@ namespace Weather_Stations_CW
 
         private void EnableButtonsEditMonth()
         {
+            //Disable/enable listboxes, buttons etc.
             grpLocation.Enabled = true;
             grpYear.Enabled = true;
             grpMonths.Enabled = true;
@@ -850,7 +858,6 @@ namespace Weather_Stations_CW
             dgdMonths.ReadOnly = true;
         }
 
-        //Method to search through the locations
         private void SearchLocations()
         {
             //Declare vars
@@ -868,7 +875,7 @@ namespace Weather_Stations_CW
                 //Take the location index and put all of the data into a formatted string
                 tempLocationData = ($"{Data.locationArray[location].LocationName} {Data.locationArray[location].StreetNumberAndName} {Data.locationArray[location].County} {Data.locationArray[location].PostCode} {Data.locationArray[location].Latitude} {Data.locationArray[location].Longtitude}");
 
-                //Make that that and the searchTerm capitals
+                //Take that formatted string and the user input and make it all uppercase
                 tempLocationDataCapitals = tempLocationData.ToUpper();
                 searchTermCapitals = searchTerm.ToUpper();
 
@@ -885,7 +892,7 @@ namespace Weather_Stations_CW
             int matchedIndex = 0;
             string locationToCheck, locationInput;
             locationInput = lstLocations.SelectedItem.ToString();
-            //loop through locations, find a match and return that object
+            //loop through locations, find a match and return the index of that location
             for (int i = 0; i < Data.locationArray.Length; i++)
             {
                 //Output every location into a string, with the exact same formatting as the input
@@ -902,6 +909,7 @@ namespace Weather_Stations_CW
 
         private void ClearLocationForm()
         {
+            //Clears all the values from the location textboxes
             txtName.Clear();
             txtStreetNumberAndName.Clear();
             txtCounty.Clear();
@@ -912,21 +920,24 @@ namespace Weather_Stations_CW
 
         private void ClearYearForm()
         {
+            //Clear the year textboxes
             txtDescriptionInput.Clear();
             txtYearDateInput.Clear();
-
-            //You need this one for when you create a new location, if the array size of the new location is 0 then clear the boxes
         }
 
         //Output locations
         private void OutputLocationList()
         {
+            //Clear the location list first
             lstLocations.Items.Clear();
+
+            //Calls output location for every location
             for (int location = 0; location < Data.locationArray.Length; location++)
             {
-                //Calls output location for every location
                 lstLocations.Items.Add(Data.locationArray[location].OutputLocation());
             }
+
+            //Changes selected index back to top result
             lstLocations.SelectedIndex = 0;
         }
 
@@ -934,6 +945,7 @@ namespace Weather_Stations_CW
         {
             int locationIndex = GetLocationIndexFromString();
 
+            //Take the values from the array and put them into the corresponding textboxes
             txtName.Text = Data.locationArray[locationIndex].LocationName;
             txtStreetNumberAndName.Text = Data.locationArray[locationIndex].StreetNumberAndName;
             txtCounty.Text = Data.locationArray[locationIndex].County;
@@ -942,11 +954,11 @@ namespace Weather_Stations_CW
             txtLatitude.Text = Data.locationArray[locationIndex].Latitude;
         }
 
-        //Output all years for one location
         private void OutputYearList()
         {
             int locationIndex = GetLocationIndexFromString();
 
+            //As long as there is a valid location selected it will output all the years for that location
             if (lstLocations.SelectedItem != null)
             {
                 dgdMonths.Rows.Clear();
@@ -966,13 +978,14 @@ namespace Weather_Stations_CW
             int locationIndex = GetLocationIndexFromString();
             int yearIndex = lstYears.SelectedIndex;
 
+            //Output data from specified year index into the text boxes
             txtYearDateInput.Text = Data.locationArray[locationIndex].YearsOfObservationsArray[yearIndex].YearDate.ToString();
             txtDescriptionInput.Text = Data.locationArray[locationIndex].YearsOfObservationsArray[yearIndex].YearDescription;
         }
 
-        //Output all months in a year for a specific location
         private void OutputMonthList()
         {
+            //If the rows have loaded correctly
             if (dgdMonths.Rows.Count > 0)
             {
                 try
@@ -1000,6 +1013,7 @@ namespace Weather_Stations_CW
                     MessageBox.Show("Null reference exception!" + e.Message);
                 }
             }
+            //If no rows yet then load blank rows with just the month name
             else
             {
                 for (int i = 0; i < 12; i++)
@@ -1010,7 +1024,6 @@ namespace Weather_Stations_CW
 
         }
 
-        //Pulls in data from text file
         private void ReadInData()
         {
             //Declare variables
@@ -1051,7 +1064,6 @@ namespace Weather_Stations_CW
             }
         }
 
-        //Reads in location data
         private void ReadLocation(ref Location[] locationArray, ref Year[] yearArray, ref MonthlyObservations[] monthlyArray, StreamReader inputData, ref int locationIndex)
         {
             //Delcare vars
@@ -1065,7 +1077,7 @@ namespace Weather_Stations_CW
             latitude = inputData.ReadLine();
             longtitude = inputData.ReadLine();
 
-            //Call the other methods, passing the arrays in by ref so that I can input all the data into the object
+            //Call the other methods, as I need a complete year array before creating the new location object
             ReadYear(ref yearArray, ref monthlyArray, inputData);
 
             //New location object to put into array, then increase the index for the next time around
@@ -1075,7 +1087,6 @@ namespace Weather_Stations_CW
             locationIndex++;
         }
 
-        //Reads in year data
         private void ReadYear(ref Year[] yearArray, ref MonthlyObservations[] monthlyArray, StreamReader inputData)
         {
             //Delcare vars
@@ -1088,13 +1099,11 @@ namespace Weather_Stations_CW
 
             for (int year = 1; year <= numberOfYears; year++)
             {
-                //GrowArray(ref yearArray);
-
                 //Read in data
                 yearDescription = inputData.ReadLine();
                 yearDate = Convert.ToInt32(inputData.ReadLine());
 
-                //Call monthly
+                //Call monthly, as I need a full month array before creating the year object
                 ReadMonth(ref monthlyArray, inputData);
 
                 //Create temp year object to pass data into year array, grow the array and increase the index for the next time around
@@ -1104,18 +1113,18 @@ namespace Weather_Stations_CW
             }
         }
 
-        //Reads in month data
         private void ReadMonth(ref MonthlyObservations[] monthlyArray, StreamReader inputData)
         {
             //Delcare variables
             int monthID, daysAirFrost, year;
             double maxTemp, minTemp, mmRain, hrsSun;
             monthlyArray = new MonthlyObservations[12];
-            //One for loop for years, second for loop for 12 months of that year
+
+            //Loop for each month
             for (int months = 0; months < 12; months++)
             {
-
                 //Read in data
+                //First time around it will read the year date but will skip it on the next go round
                 if (months != 0)
                 {
                     year = Convert.ToInt32(inputData.ReadLine());
@@ -1133,7 +1142,6 @@ namespace Weather_Stations_CW
             }
         }
 
-        //Saves all the locations, years and months to a file
         private void WriteOutData()
         {
             //Choosing where to save - only have to do this once
@@ -1154,8 +1162,10 @@ namespace Weather_Stations_CW
                 //Loop for how many locations there are before closing the streamwriter
                 for (int location = 0; location < numberOfLocations; location++)
                 {
+                    //Calls location method, which calls the rest of the methods needed
                     WriteLocation(fileOutput, location);
                 }
+                //Confirmation message if everything was successfull
                 MessageBox.Show("Saved successfully");
             }
         }
@@ -1206,30 +1216,16 @@ namespace Weather_Stations_CW
             fileOutput.WriteLine(Data.locationArray[location].YearsOfObservationsArray[year].MonthlyObservationsArray[month].HrsSun);
         }
 
-        //Growing arrays with polymorphism
         private void GrowArray(ref Location[] arrayToChange)
         {
             int arraySize;
 
+            //If the array is empty
             if (arrayToChange == null)
             {
                 arraySize = 0;
             }
-            else
-            {
-                arraySize = arrayToChange.Length;
-            }
-            Array.Resize(ref arrayToChange, arraySize + 1);
-        }
-
-        private void GrowArray(ref Year[] arrayToChange)
-        {
-            int arraySize;
-
-            if (arrayToChange == null)
-            {
-                arraySize = 0;
-            }
+            //Otherwise grabs length
             else
             {
                 arraySize = arrayToChange.Length;
